@@ -6,6 +6,7 @@ import GitHubAnalyzer from "./components/GitHubAnalyzer";
 import RejectionDetector from "./components/Ats-score-with-rejection-detector";
 import SecurityAuditor from "./components/SecurityAuditor";
 import ExperienceAuthenticityAgent from "./components/ExperienceAuthenticityAgent";
+import CodeToUmlDiagram from "./components/CodeToUmlDiagram";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/github-analyzer" element={<GitHubAnalyzer />} />
         <Route path="/security-auditor" element={<SecurityAuditor />} />
         <Route path="/experience-authenticity" element={<ExperienceAuthenticityAgent />} />
+        <Route path="/code-to-uml" element={<CodeToUmlDiagram />} />
       </Routes>
     </div>
   );

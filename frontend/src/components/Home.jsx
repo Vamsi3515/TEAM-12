@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Github, FileText, Shield, ArrowRight, Sparkles, TrendingUp, Users, Award } from 'lucide-react';
+import { Github, FileText, Shield, ArrowRight, Sparkles, TrendingUp, Users, Award, Workflow } from 'lucide-react';
 import Navbar from './Navbar';
 import Card from './Card';
 import Button from './Button';
@@ -59,6 +59,19 @@ const Home = () => {
         { label: 'Accuracy', value: '95%' },
         { label: 'Platforms', value: '5+' },
         { label: 'Verified', value: '1K+' }
+      ]
+    },
+    {
+      id: 'code-to-uml',
+      icon: Workflow,
+      title: 'Code to UML Diagrams',
+      description: 'Transform code into interactive UML diagrams with AI-powered analysis',
+      gradient: 'from-violet-500 to-fuchsia-600',
+      route: '/code-to-uml',
+      stats: [
+        { label: 'Diagram Types', value: '5+' },
+        { label: 'Languages', value: '7+' },
+        { label: 'Interactive', value: '100%' }
       ]
     }
   ];
