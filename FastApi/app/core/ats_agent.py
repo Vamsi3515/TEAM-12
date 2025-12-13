@@ -9,7 +9,7 @@ from typing import List, Tuple, Optional
 from app.core.embeddings import embed
 from app.core.vectorstore import get_or_create_collection
 from app.core.ats_data import ats_data
-from app.core.llm_client import _call_gemini, _call_huggingface, _call_huggingface
+from app.core.llm_client import _call_gemini, _call_huggingface, _call_groq
 from app.models.ats import ATSAnalyzeOutput
 
 
@@ -81,11 +81,10 @@ Return ONLY valid JSON with this exact schema:
 }}
 
 Rules:
-- Keep ats_score integer 0-100.
-- Use concise, specific bullet points for lists (max 5 items each).
-- Keep each string under 180 characters.
-- Do not wrap in markdown or code fences.
-- Do not add commentary outside the JSON.
+- Use concise bullets (max 3 items per list).
+- Keep each string ≤ 140 characters; do not use ellipses.
+- Keep the entire JSON under ~400 tokens.
+- Return compact JSON only (no markdown/code fences, no commentary).
 """
 
 
@@ -111,6 +110,49 @@ def _strip_code_fences(text: str) -> str:
         text = text[4:].strip()
     
     return text
+
+
+def _truncate(text: str, limit: int) -> str:
+    """Trim long text to keep prompt size bounded."""
+    if not text:
+        return ""
+    if len(text) <= limit:
+        return text
+    return text[:limit] + "..."
+
+
+def _repair_json(text: str) -> Optional[dict]:
+    """Attempt to repair truncated/unclosed JSON by closing braces/brackets."""
+    if not text:
+        return None
+
+    candidate = text.strip()
+    # ensure we start at the first '{'
+    if "{" in candidate:
+        candidate = candidate[candidate.find("{"):]
+
+    # track braces/brackets
+    stack = []
+    out_chars: List[str] = []
+    for ch in candidate:
+        out_chars.append(ch)
+        if ch == "{":
+            stack.append("}")
+        elif ch == "[":
+            stack.append("]")
+        elif ch in ["}", "]"]:
+            if stack:
+                stack.pop()
+
+    # close any unclosed structures
+    while stack:
+        out_chars.append(stack.pop())
+
+    repaired = "".join(out_chars)
+    try:
+        return json.loads(repaired)
+    except Exception:
+        return None
 
 
 def _send_email(to_email: str, summary: str, rejection_reasons: List[str], suggestions: List[str], ats_score: int) -> bool:
@@ -160,14 +202,16 @@ def _send_email(to_email: str, summary: str, rejection_reasons: List[str], sugge
 async def analyze_ats(resume_text: str, job_description: Optional[str] = None, email: Optional[str] = None) -> ATSAnalyzeOutput:
     """Main ATS analysis pipeline using RAG + Gemini."""
     # Step 1: retrieve context
-    ids, docs = retrieve_ats_context(resume_text, job_description, n_results=4)
+    ids, docs = retrieve_ats_context(resume_text, job_description, n_results=2)
 
     # Step 2: build prompt
-    prompt = build_prompt(resume_text, job_description, docs)
+    truncated_resume = _truncate(resume_text, 2200)
+    truncated_jd = _truncate(job_description or "", 1200) if job_description else None
+    truncated_docs = [_truncate(doc, 600) for doc in docs]
+    prompt = build_prompt(truncated_resume, truncated_jd, truncated_docs)
 
     # Step 3: call Gemini
-    print(f"[ATS DEBUG] Calling Gemini API...")
-    raw = await _call_huggingface(prompt, model="Qwen/Qwen2.5-7B-Instruct", max_tokens=2000, temperature=0.3)
+    raw = await _call_groq(prompt, model="llama-3.1-8b-instant", max_tokens=1200, temperature=0.2)
     print(f"[ATS DEBUG] Raw LLM response length: {len(raw) if raw else 0}")
     print(f"[ATS DEBUG] Raw LLM response: {raw[:500] if raw else 'None'}...")  # Log first 500 chars
 
@@ -181,15 +225,29 @@ async def analyze_ats(resume_text: str, job_description: Optional[str] = None, e
         print("[ATS DEBUG] Successfully parsed JSON")
     except Exception as e:
         print(f"[ATS DEBUG] JSON parse failed: {e}")
-        # Try trimming to the last closing brace in case of truncation
-        trimmed = cleaned
-        if "{" in cleaned and "}" in cleaned:
-            trimmed = cleaned[cleaned.find("{"): cleaned.rfind("}") + 1]
-            try:
-                data = json.loads(trimmed)
-                print("[ATS DEBUG] Parsed JSON after trimming trailing content")
-            except Exception as e2:
-                print(f"[ATS DEBUG] Secondary parse failed: {e2}")
+        repaired = _repair_json(cleaned)
+        if repaired is not None:
+            data = repaired
+            print("[ATS DEBUG] Parsed JSON after repair")
+        else:
+            # Try trimming to the last closing brace in case of truncation
+            trimmed = cleaned
+            if "{" in cleaned and "}" in cleaned:
+                trimmed = cleaned[cleaned.find("{"): cleaned.rfind("}") + 1]
+                try:
+                    data = json.loads(trimmed)
+                    print("[ATS DEBUG] Parsed JSON after trimming trailing content")
+                except Exception as e2:
+                    print(f"[ATS DEBUG] Secondary parse failed: {e2}")
+                    data = {
+                        "ats_score": 50,
+                        "rejection_reasons": ["Could not parse LLM response"],
+                        "strengths": [],
+                        "issues": [],
+                        "actionable_suggestions": ["Retry analysis"],
+                        "summary": "Partial analysis; parsing failed.",
+                    }
+            else:
                 data = {
                     "ats_score": 50,
                     "rejection_reasons": ["Could not parse LLM response"],
@@ -198,15 +256,6 @@ async def analyze_ats(resume_text: str, job_description: Optional[str] = None, e
                     "actionable_suggestions": ["Retry analysis"],
                     "summary": "Partial analysis; parsing failed.",
                 }
-        else:
-            data = {
-                "ats_score": 50,
-                "rejection_reasons": ["Could not parse LLM response"],
-                "strengths": [],
-                "issues": [],
-                "actionable_suggestions": ["Retry analysis"],
-                "summary": "Partial analysis; parsing failed.",
-            }
 
     # Ensure required fields with defaults
     data.setdefault("ats_score", 50)

@@ -21,7 +21,7 @@ async def call_chat(prompt, model=None, max_tokens=800, temperature=0.7):
     if provider == "openai":
         return await _call_openai(prompt, model or "gpt-3.5-turbo", max_tokens, temperature)
     elif provider == "groq":
-        return await _call_groq(prompt, model or "llama-3.1-8b", max_tokens, temperature)
+        return await _call_groq(prompt, model or "llama-3.1-8b-instant", max_tokens, temperature)
     elif provider == "gemini":
         return await _call_gemini(prompt, model or "gemini-2.5-flash", max_tokens, temperature)
     else:  # huggingface (default)
