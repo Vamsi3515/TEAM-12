@@ -1,0 +1,156 @@
+name: AI Agent Evaluations
+
+on:
+  # Run on pull requests
+  pull_request:
+    branches: [main, develop]
+  
+  # Run on pushes to main
+  push:
+    branches: [main]
+  
+  # Run nightly
+  schedule:
+    - cron: '0 2 * * *'  # 2 AM UTC daily
+  
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      agent:
+        description: 'Which agent to evaluate (ats, github, all)'
+        required: false
+        default: 'all'
+
+jobs:
+  evaluate-agents:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        agent: [ats, github]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          cd FastApi
+          pip install -r requirements.txt
+      
+      - name: Run evaluations
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd FastApi
+          python -m app.eval_runner --agent ${{ matrix.agent }} --save-results --verbose
+      
+      - name: Check for regressions
+        if: github.event_name == 'pull_request'
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd FastApi
+          python -m app.eval_runner --agent ${{ matrix.agent }} --compare-with-baseline
+      
+      - name: Upload evaluation reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: eval-report-${{ matrix.agent }}
+          path: FastApi/eval_results/
+          retention-days: 30
+      
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Find latest report
+            const resultsDir = 'FastApi/eval_results';
+            const files = fs.readdirSync(resultsDir);
+            const jsonFiles = files.filter(f => f.startsWith('eval_${{ matrix.agent }}') && f.endsWith('.json'));
+            
+            if (jsonFiles.length === 0) {
+              console.log('No report found');
+              return;
+            }
+            
+            const latestReport = jsonFiles.sort().reverse()[0];
+            const reportPath = path.join(resultsDir, latestReport);
+            const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+            
+            const stats = report.statistics;
+            const summary = report.summary;
+            
+            const comment = `## 🤖 Evaluation Results - ${{ matrix.agent }} Agent
+            
+${summary}
+
+### Statistics
+- **Total Tests:** ${stats.total_tests}
+- **Passed:** ${stats.passed} ✅
+- **Failed:** ${stats.failed} ❌
+- **Pass Rate:** ${(stats.pass_rate * 100).toFixed(1)}%
+- **Avg Score Accuracy:** ${(stats.average_score_accuracy * 100).toFixed(1)}%
+
+[View detailed report in artifacts]
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+  
+  continuous-eval-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          cd FastApi
+          pip install -r requirements.txt
+      
+      - name: Run continuous evaluation tests
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd FastApi
+          pytest tests/test_continuous_eval.py -v
+      
+      - name: Fail if quality thresholds not met
+        if: failure()
+        run: |
+          echo "❌ Quality thresholds not met!"
+          echo "Review evaluation results and fix issues before merging."
+          exit 1

@@ -1,0 +1,476 @@
+[
+  {
+    "test_case_name": "excellent_match_senior_engineer",
+    "description": "Senior software engineer with perfect match to job requirements",
+    "resume_text": "SENIOR SOFTWARE ENGINEER\n\nProfessional Summary:\nHighly skilled Senior Software Engineer with 8 years of experience in full-stack development. Expert in Python, JavaScript, React, and cloud technologies (AWS, Azure). Proven track record of leading teams and delivering scalable solutions.\n\nTechnical Skills:\n- Languages: Python, JavaScript, TypeScript, Java\n- Frameworks: React, Node.js, Django, FastAPI\n- Cloud: AWS (EC2, S3, Lambda), Azure, Docker, Kubernetes\n- Databases: PostgreSQL, MongoDB, Redis\n- Tools: Git, Jenkins, Terraform\n\nExperience:\nSenior Software Engineer | TechCorp Inc | 2019-Present\n- Led team of 5 developers to build microservices architecture serving 1M+ users\n- Implemented CI/CD pipelines reducing deployment time by 60%\n- Architected real-time data processing system using Kafka and Python\n- Mentored junior developers and conducted code reviews\n\nSoftware Engineer | StartupXYZ | 2016-2019\n- Developed RESTful APIs using Django and FastAPI\n- Built responsive web applications with React and TypeScript\n- Optimized database queries improving performance by 40%\n\nEducation:\nB.S. Computer Science | Stanford University | 2016\n\nCertifications:\n- AWS Certified Solutions Architect\n- Kubernetes Administrator (CKA)",
+    "job_description": "Senior Software Engineer\n\nRequirements:\n- 5+ years of software development experience\n- Strong proficiency in Python and JavaScript\n- Experience with React and modern frontend frameworks\n- Cloud platform experience (AWS or Azure)\n- Experience with microservices and containerization\n- Strong communication and leadership skills\n- Bachelor's degree in Computer Science or related field\n\nPreferred:\n- Experience with FastAPI or Django\n- Kubernetes experience\n- AWS certification",
+    "expected_score_range": {
+      "min": 85,
+      "max": 100
+    },
+    "expected_rejection_reasons": [],
+    "expected_strengths": [
+      "years of experience",
+      "technical skills",
+      "leadership",
+      "cloud",
+      "python",
+      "react",
+      "microservices"
+    ],
+    "expected_issues": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "junior_developer_missing_experience",
+    "description": "Junior developer applying for senior role - experience mismatch",
+    "resume_text": "JUNIOR WEB DEVELOPER\n\nRecent graduate with 1 year of experience building websites. Passionate about learning new technologies.\n\nSkills:\n- HTML, CSS, JavaScript\n- Basic React knowledge\n- Git\n\nExperience:\nJunior Web Developer | Small Agency | 2023-Present\n- Created landing pages using HTML/CSS\n- Fixed bugs in existing codebases\n- Learned React through online courses\n\nEducation:\nB.A. in English Literature | Local College | 2023\n\nProjects:\n- Built a to-do list app with React\n- Created personal portfolio website",
+    "job_description": "Senior Software Engineer\n\nRequirements:\n- 5+ years of software development experience\n- Strong proficiency in Python and JavaScript\n- Experience with React and modern frontend frameworks\n- Cloud platform experience (AWS or Azure)\n- Experience with microservices and containerization\n- Strong communication and leadership skills\n- Bachelor's degree in Computer Science or related field",
+    "expected_score_range": {
+      "min": 15,
+      "max": 35
+    },
+    "expected_rejection_reasons": [
+      "experience",
+      "years",
+      "senior",
+      "python",
+      "cloud",
+      "microservices"
+    ],
+    "expected_strengths": [
+      "react",
+      "javascript"
+    ],
+    "expected_issues": [
+      "experience",
+      "skills",
+      "education"
+    ],
+    "expected_suggestions": [
+      "gain more experience",
+      "learn python",
+      "cloud",
+      "education"
+    ]
+  },
+  {
+    "test_case_name": "career_changer_transferable_skills",
+    "description": "Career changer with transferable skills but lacking direct experience",
+    "resume_text": "PROJECT MANAGER TRANSITIONING TO SOFTWARE DEVELOPMENT\n\nSummary:\nExperienced Project Manager with 6 years in tech companies, recently completed coding bootcamp. Strong analytical skills and team leadership experience. Seeking to leverage project management background in software development role.\n\nTechnical Skills:\n- Python (bootcamp training)\n- JavaScript, HTML, CSS\n- Basic React and Node.js\n- Git, Agile methodologies\n\nProfessional Experience:\nTechnical Project Manager | Tech Solutions Inc | 2018-2024\n- Managed software development projects for enterprise clients\n- Coordinated with engineering teams of 10+ developers\n- Defined product requirements and technical specifications\n- Experience with JIRA, Confluence, Git workflows\n\nEducation:\nFull Stack Web Development Bootcamp | Code Academy | 2024\nB.S. Business Administration | State University | 2018\n\nProjects:\n- E-commerce platform (React + Node.js)\n- Weather app with API integration\n- Task management application",
+    "job_description": "Mid-Level Software Engineer\n\nRequirements:\n- 3+ years of professional software development experience\n- Proficiency in Python or JavaScript\n- Experience with web frameworks\n- Understanding of software development lifecycle\n- Strong problem-solving skills\n- Bachelor's degree preferred",
+    "expected_score_range": {
+      "min": 45,
+      "max": 65
+    },
+    "expected_rejection_reasons": [
+      "professional development experience",
+      "years coding"
+    ],
+    "expected_strengths": [
+      "project management",
+      "team",
+      "agile",
+      "technical background"
+    ],
+    "expected_issues": [
+      "direct coding experience",
+      "professional development"
+    ],
+    "expected_suggestions": [
+      "gain professional coding experience",
+      "build portfolio",
+      "contribute to open source"
+    ]
+  },
+  {
+    "test_case_name": "data_scientist_for_backend_role",
+    "description": "Data scientist applying for backend engineering role - skill mismatch",
+    "resume_text": "DATA SCIENTIST\n\nSummary:\nData Scientist with 4 years of experience in machine learning and statistical analysis. Expert in Python, R, and data visualization.\n\nTechnical Skills:\n- Python (NumPy, Pandas, Scikit-learn, TensorFlow)\n- R, SQL\n- Machine Learning, Deep Learning\n- Data Visualization (Matplotlib, Tableau)\n- Jupyter Notebooks\n\nExperience:\nData Scientist | Analytics Corp | 2020-Present\n- Developed predictive models achieving 92% accuracy\n- Analyzed large datasets to derive business insights\n- Created data pipelines using Python\n- Built dashboards for stakeholder reporting\n\nEducation:\nM.S. Statistics | University of California | 2020\nB.S. Mathematics | University of California | 2018",
+    "job_description": "Backend Software Engineer\n\nRequirements:\n- 3+ years backend development experience\n- Strong knowledge of Python or Java\n- Experience with RESTful API development\n- Database design and optimization (PostgreSQL, MySQL)\n- Experience with Docker and containerization\n- Understanding of microservices architecture\n- Knowledge of testing frameworks",
+    "expected_score_range": {
+      "min": 35,
+      "max": 55
+    },
+    "expected_rejection_reasons": [
+      "backend development",
+      "api",
+      "microservices",
+      "docker"
+    ],
+    "expected_strengths": [
+      "python",
+      "data pipelines",
+      "sql"
+    ],
+    "expected_issues": [
+      "backend experience",
+      "api development",
+      "containerization"
+    ],
+    "expected_suggestions": [
+      "learn api development",
+      "study microservices",
+      "gain backend experience"
+    ]
+  },
+  {
+    "test_case_name": "overqualified_principal_engineer",
+    "description": "Principal engineer applying for mid-level role - overqualified",
+    "resume_text": "PRINCIPAL SOFTWARE ENGINEER\n\nSummary:\nPrincipal Engineer with 15+ years of experience architecting large-scale distributed systems. Led engineering organizations of 50+ engineers. Expert in system design, cloud architecture, and technical leadership.\n\nTechnical Skills:\n- Languages: Python, Java, Go, C++, JavaScript\n- Cloud: AWS (all services), GCP, Azure\n- Architecture: Microservices, Event-driven, Distributed Systems\n- Leadership: Technical Strategy, Team Building, Mentorship\n\nExperience:\nPrincipal Engineer | BigTech Corp | 2015-Present\n- Architected platform serving 100M+ users\n- Led technical direction for 5 engineering teams\n- Designed distributed data processing system handling 10TB/day\n- Speaker at multiple tech conferences\n\nSenior Staff Engineer | Cloud Company | 2010-2015\n- Built cloud infrastructure platform\n- Mentored senior engineers\n- Patented 3 cloud technologies\n\nEducation:\nPh.D. Computer Science | MIT | 2010\nM.S. Computer Science | MIT | 2007\nB.S. Computer Science | MIT | 2005\n\nPublications: 15+ peer-reviewed papers\nPatents: 8 granted patents",
+    "job_description": "Mid-Level Software Engineer\n\nRequirements:\n- 3-5 years of software development experience\n- Proficiency in Python or JavaScript\n- Experience with web frameworks (Django, Flask, FastAPI)\n- Basic cloud knowledge\n- Team collaboration skills\n- Bachelor's degree in Computer Science",
+    "expected_score_range": {
+      "min": 90,
+      "max": 100
+    },
+    "expected_rejection_reasons": [
+      "overqualified",
+      "principal",
+      "too senior"
+    ],
+    "expected_strengths": [
+      "technical skills",
+      "experience",
+      "leadership",
+      "education"
+    ],
+    "expected_issues": [
+      "overqualified for position",
+      "may seek higher level role"
+    ],
+    "expected_suggestions": [
+      "consider senior or principal roles",
+      "may not be challenged"
+    ]
+  },
+  {
+    "test_case_name": "missing_keywords_good_experience",
+    "description": "Good experience but resume lacks ATS keywords",
+    "resume_text": "SOFTWARE DEVELOPER\n\nI have been working in software for 5 years at various companies. I know how to code in several languages and have worked on many projects.\n\nWhat I've done:\n- Made websites\n- Fixed bugs\n- Worked with databases\n- Helped with deployments\n\nCompanies:\nSoftware Developer | Company A | 2019-2024\nDeveloper | Company B | 2017-2019\n\nSchool:\nGraduated from university in 2017 with computer degree",
+    "job_description": "Full Stack Developer\n\nRequirements:\n- 3+ years of full-stack development experience\n- Proficiency in JavaScript/TypeScript and Python\n- Experience with React, Node.js, or similar frameworks\n- RESTful API design and implementation\n- Database experience (SQL and NoSQL)\n- Version control (Git)\n- Agile development experience",
+    "expected_score_range": {
+      "min": 25,
+      "max": 45
+    },
+    "expected_rejection_reasons": [
+      "lacks specific keywords",
+      "vague descriptions",
+      "no technologies mentioned"
+    ],
+    "expected_strengths": [
+      "years of experience",
+      "databases"
+    ],
+    "expected_issues": [
+      "no specific technologies",
+      "vague job descriptions",
+      "missing keywords",
+      "no framework experience listed"
+    ],
+    "expected_suggestions": [
+      "add specific technologies",
+      "use industry keywords",
+      "quantify achievements",
+      "list frameworks and tools"
+    ]
+  },
+  {
+    "test_case_name": "strong_education_weak_experience",
+    "description": "Recent PhD graduate with limited industry experience",
+    "resume_text": "COMPUTER SCIENCE PH.D. GRADUATE\n\nEducation:\nPh.D. Computer Science | Top University | 2024\nDissertation: \"Advanced Machine Learning Techniques for Natural Language Processing\"\nM.S. Computer Science | Top University | 2021\nB.S. Computer Science | State University | 2019\n\nResearch Experience:\nGraduate Research Assistant | 2019-2024\n- Conducted research in deep learning and NLP\n- Published 8 papers in top-tier conferences (NeurIPS, ICML, ACL)\n- Developed novel algorithms for text classification\n- Implemented research prototypes in Python (PyTorch, TensorFlow)\n\nTechnical Skills:\n- Python, C++, Java\n- Machine Learning: PyTorch, TensorFlow, Scikit-learn\n- NLP: Transformers, BERT, GPT\n- Research: Statistical Analysis, Experimentation\n\nInternship:\nML Research Intern | AI Lab | Summer 2022\n- Developed prototype for sentiment analysis\n- Collaborated with research team\n\nProjects:\n- Open source NLP library (500+ GitHub stars)\n- Research code for published papers",
+    "job_description": "Machine Learning Engineer\n\nRequirements:\n- 2+ years of ML engineering experience in production\n- Strong Python programming skills\n- Experience deploying ML models to production\n- Knowledge of MLOps, CI/CD for ML\n- Experience with cloud platforms (AWS, GCP)\n- Ability to work with cross-functional teams\n- Master's degree preferred",
+    "expected_score_range": {
+      "min": 60,
+      "max": 75
+    },
+    "expected_rejection_reasons": [
+      "limited production experience",
+      "mostly research"
+    ],
+    "expected_strengths": [
+      "strong education",
+      "phd",
+      "machine learning",
+      "python",
+      "publications"
+    ],
+    "expected_issues": [
+      "limited industry experience",
+      "no production deployment experience",
+      "mlops experience"
+    ],
+    "expected_suggestions": [
+      "gain production experience",
+      "learn mlops",
+      "cloud platforms",
+      "industry projects"
+    ]
+  },
+  {
+    "test_case_name": "frontend_specialist_fullstack_role",
+    "description": "Frontend specialist applying for full-stack role",
+    "resume_text": "SENIOR FRONTEND ENGINEER\n\nSummary:\nSenior Frontend Engineer with 6 years specializing in React, TypeScript, and modern web development. Expert in creating responsive, accessible user interfaces.\n\nTechnical Skills:\n- JavaScript, TypeScript, HTML5, CSS3\n- React, Next.js, Vue.js, Angular\n- State Management: Redux, MobX, Zustand\n- Styling: Tailwind CSS, Styled Components, SASS\n- Testing: Jest, React Testing Library, Cypress\n- Build Tools: Webpack, Vite, ESBuild\n- Design: Figma, responsive design, accessibility\n\nExperience:\nSenior Frontend Engineer | Web Agency | 2021-Present\n- Led frontend architecture for 10+ client projects\n- Built responsive SPAs serving 500K+ users\n- Improved web performance (90+ Lighthouse scores)\n- Mentored 3 junior frontend developers\n\nFrontend Engineer | Startup | 2018-2021\n- Developed React applications from scratch\n- Implemented design systems and component libraries\n- Optimized bundle size reducing load time by 50%\n\nEducation:\nB.S. Computer Science | University | 2018",
+    "job_description": "Full Stack Engineer\n\nRequirements:\n- 4+ years full-stack development experience\n- Frontend: React, TypeScript, modern web tech\n- Backend: Node.js, Python, or Java\n- Database: PostgreSQL, MongoDB\n- RESTful API design and implementation\n- Experience with cloud deployments\n- DevOps basics: Docker, CI/CD",
+    "expected_score_range": {
+      "min": 55,
+      "max": 70
+    },
+    "expected_rejection_reasons": [
+      "limited backend experience",
+      "no api development",
+      "database experience"
+    ],
+    "expected_strengths": [
+      "frontend",
+      "react",
+      "typescript",
+      "years of experience"
+    ],
+    "expected_issues": [
+      "backend skills",
+      "api development",
+      "database",
+      "devops"
+    ],
+    "expected_suggestions": [
+      "learn backend development",
+      "api design",
+      "database management",
+      "gain full-stack experience"
+    ]
+  },
+  {
+    "test_case_name": "perfect_keywords_limited_depth",
+    "description": "Resume with all keywords but shallow experience",
+    "resume_text": "FULL STACK DEVELOPER\n\nTechnical Skills:\nPython, JavaScript, TypeScript, Java, C++, Go, Ruby, PHP, Swift, Kotlin, React, Angular, Vue.js, Node.js, Django, Flask, FastAPI, Spring Boot, Express.js, AWS, Azure, GCP, Docker, Kubernetes, Jenkins, Git, PostgreSQL, MongoDB, Redis, MySQL, Elasticsearch, Kafka, RabbitMQ, GraphQL, REST API, Microservices, CI/CD, Terraform, Ansible\n\nExperience:\nFull Stack Developer | Tech Company | 2022-Present\n- Used Python, JavaScript, and various frameworks\n- Worked with AWS and Docker\n- Built APIs and databases\n- Implemented features\n\nIntern | Another Company | 2021-2022\n- Learned multiple technologies\n- Assisted senior developers\n\nEducation:\nB.S. Computer Science | 2021",
+    "job_description": "Full Stack Developer\n\nRequirements:\n- 3+ years development experience\n- Python and JavaScript\n- React and Node.js\n- AWS cloud experience\n- Docker and containerization\n- Database design\n- RESTful APIs",
+    "expected_score_range": {
+      "min": 50,
+      "max": 65
+    },
+    "expected_rejection_reasons": [
+      "shallow experience",
+      "keyword stuffing",
+      "limited years"
+    ],
+    "expected_strengths": [
+      "many technologies",
+      "keywords"
+    ],
+    "expected_issues": [
+      "lacks depth",
+      "too many technologies",
+      "vague descriptions",
+      "insufficient years"
+    ],
+    "expected_suggestions": [
+      "focus on specific skills",
+      "provide detailed examples",
+      "quantify achievements",
+      "gain more experience"
+    ]
+  },
+  {
+    "test_case_name": "freelancer_diverse_projects",
+    "description": "Freelancer with diverse project experience",
+    "resume_text": "FREELANCE SOFTWARE ENGINEER\n\nSummary:\nFreelance Software Engineer with 5 years building custom solutions for 30+ clients. Specialized in web applications, APIs, and automation tools.\n\nTechnical Skills:\n- Python, JavaScript, TypeScript\n- React, Next.js, Django, FastAPI\n- PostgreSQL, MongoDB\n- AWS, Heroku, Vercel\n- Git, Docker\n\nFreelance Projects:\n\nE-commerce Platform | Client: Retail Company | 2023\n- Built full-stack e-commerce site with React and Django\n- Integrated payment processing (Stripe)\n- Handled 1000+ daily transactions\n- Technologies: React, Django, PostgreSQL, AWS\n\nInventory Management System | Client: Manufacturing Co | 2023\n- Developed custom inventory tracking application\n- REST API with FastAPI\n- Real-time updates using WebSockets\n- Technologies: FastAPI, React, MongoDB\n\nAutomation Tools | Multiple Clients | 2022-2023\n- Created data scraping and processing scripts\n- Automated reporting workflows\n- Reduced manual work by 80%\n- Technologies: Python, Selenium, Pandas\n\nMarketing Website | Client: Startup | 2022\n- Built responsive marketing site with Next.js\n- SEO optimization, 90+ Lighthouse score\n- Technologies: Next.js, TypeScript, Tailwind\n\nPrevious:\n10+ additional client projects (2020-2022)\n- Web applications, APIs, integrations\n- Various tech stacks based on client needs\n\nEducation:\nB.S. Software Engineering | 2019",
+    "job_description": "Software Engineer\n\nRequirements:\n- 3+ years software development experience\n- Full-stack web development\n- Python and/or JavaScript\n- API development experience\n- Database knowledge\n- Experience with modern frameworks\n- Self-motivated and independent",
+    "expected_score_range": {
+      "min": 75,
+      "max": 90
+    },
+    "expected_rejection_reasons": [],
+    "expected_strengths": [
+      "diverse experience",
+      "full-stack",
+      "python",
+      "javascript",
+      "api",
+      "multiple projects"
+    ],
+    "expected_issues": [
+      "freelance vs full-time",
+      "team experience"
+    ],
+    "expected_suggestions": [
+      "highlight collaboration",
+      "team experience"
+    ]
+  },
+  {
+    "test_case_name": "bootcamp_graduate_entry_level",
+    "description": "Recent bootcamp graduate applying for entry-level position",
+    "resume_text": "ASPIRING SOFTWARE DEVELOPER\n\nSummary:\nRecent coding bootcamp graduate passionate about web development. Quick learner with strong problem-solving skills and eagerness to grow in tech industry.\n\nEducation:\nFull Stack Web Development Bootcamp | Code School | 2024\n- 12-week intensive program\n- Built 5 full-stack projects\n- Learned modern web technologies\n\nB.A. Psychology | State University | 2022\n\nTechnical Skills:\n- JavaScript, HTML, CSS\n- React, Node.js, Express\n- MongoDB, SQL basics\n- Git, GitHub\n\nBootcamp Projects:\n\nSocial Media App (Final Project)\n- Full-stack application with user authentication\n- Technologies: React, Node.js, Express, MongoDB\n- Features: posts, comments, likes, user profiles\n- Deployed on Heroku\n\nRecipe Finder App\n- API integration with external recipe database\n- Technologies: React, REST APIs\n- Responsive design\n\nTask Management App\n- CRUD operations with backend\n- Technologies: JavaScript, Node.js, PostgreSQL\n\nPrevious Experience:\nCustomer Service Representative | Retail Company | 2022-2024\n- Strong communication skills\n- Problem-solving in fast-paced environment\n- Team collaboration",
+    "job_description": "Junior Software Developer\n\nRequirements:\n- Bachelor's degree or bootcamp certificate\n- Knowledge of JavaScript and web development\n- Familiarity with React or similar framework\n- Understanding of databases\n- Git version control\n- Willingness to learn\n- Good communication skills",
+    "expected_score_range": {
+      "min": 70,
+      "max": 85
+    },
+    "expected_rejection_reasons": [],
+    "expected_strengths": [
+      "education",
+      "bootcamp",
+      "projects",
+      "javascript",
+      "react",
+      "node.js",
+      "willing to learn"
+    ],
+    "expected_issues": [
+      "limited professional experience",
+      "no production code"
+    ],
+    "expected_suggestions": [
+      "contribute to open source",
+      "build more projects",
+      "seek internship"
+    ]
+  },
+  {
+    "test_case_name": "devops_engineer_backend_role",
+    "description": "DevOps engineer applying for backend development role",
+    "resume_text": "DEVOPS ENGINEER\n\nSummary:\nDevOps Engineer with 5 years experience in infrastructure automation, CI/CD, and cloud operations. Strong scripting skills and system administration background.\n\nTechnical Skills:\n- Cloud: AWS (EC2, S3, RDS, Lambda), Azure, GCP\n- Infrastructure as Code: Terraform, CloudFormation, Ansible\n- Containers: Docker, Kubernetes, Helm\n- CI/CD: Jenkins, GitLab CI, GitHub Actions, ArgoCD\n- Scripting: Python, Bash, PowerShell\n- Monitoring: Prometheus, Grafana, ELK Stack\n- Version Control: Git, GitLab\n\nExperience:\nDevOps Engineer | Cloud Tech Co | 2021-Present\n- Automated infrastructure deployment using Terraform\n- Managed Kubernetes clusters serving 50+ microservices\n- Built CI/CD pipelines reducing deployment time by 70%\n- Implemented monitoring and alerting solutions\n- Wrote Python scripts for automation tasks\n\nDevOps Engineer | Startup | 2019-2021\n- Set up AWS infrastructure from scratch\n- Configured Jenkins pipelines\n- Managed Linux servers\n- Automated backup and recovery procedures\n\nEducation:\nB.S. Information Technology | 2019",
+    "job_description": "Backend Software Engineer\n\nRequirements:\n- 3+ years backend development experience\n- Proficiency in Python, Java, or Go\n- RESTful API design and development\n- Database design (SQL and NoSQL)\n- Microservices architecture\n- Testing and code quality\n- Experience with web frameworks (Django, Flask, Spring)",
+    "expected_score_range": {
+      "min": 45,
+      "max": 60
+    },
+    "expected_rejection_reasons": [
+      "devops not backend development",
+      "limited api development",
+      "web framework experience"
+    ],
+    "expected_strengths": [
+      "python",
+      "cloud",
+      "microservices",
+      "automation"
+    ],
+    "expected_issues": [
+      "backend development experience",
+      "api design",
+      "web frameworks",
+      "database design"
+    ],
+    "expected_suggestions": [
+      "build backend applications",
+      "learn web frameworks",
+      "api development",
+      "focus on software engineering"
+    ]
+  },
+  {
+    "test_case_name": "strong_github_weak_resume",
+    "description": "Strong open source contributions but poorly written resume",
+    "resume_text": "Developer\n\nI code a lot. Check my GitHub.\n\nSkills:\npython javascript react\n\nWork:\nSoftware person at company (3 years)\n\nSchool:\nCS degree\n\nGitHub: github.com/awesomedev (5000+ contributions, 20 repos, 50+ stars)",
+    "job_description": "Software Engineer\n\nRequirements:\n- 3+ years development experience\n- Strong programming skills\n- Open source contributions valued\n- Full-stack development\n- Computer Science degree",
+    "expected_score_range": {
+      "min": 30,
+      "max": 50
+    },
+    "expected_rejection_reasons": [
+      "unprofessional resume",
+      "lacks detail",
+      "poor formatting"
+    ],
+    "expected_strengths": [
+      "github",
+      "open source",
+      "years of experience"
+    ],
+    "expected_issues": [
+      "resume formatting",
+      "lacks professionalism",
+      "no details",
+      "vague descriptions"
+    ],
+    "expected_suggestions": [
+      "rewrite resume professionally",
+      "add detailed descriptions",
+      "proper formatting",
+      "quantify achievements",
+      "list specific technologies"
+    ]
+  },
+  {
+    "test_case_name": "international_candidate_strong_skills",
+    "description": "International candidate with strong skills, work authorization needed",
+    "resume_text": "SOFTWARE ENGINEER\n\nSummary:\nSoftware Engineer with 6 years experience in enterprise software development. Strong background in Java, Spring Boot, and microservices architecture.\n\nTechnical Skills:\n- Languages: Java, Python, JavaScript, SQL\n- Frameworks: Spring Boot, Spring Cloud, Hibernate\n- Cloud: AWS (EC2, S3, RDS, Lambda)\n- Databases: PostgreSQL, MySQL, Oracle, MongoDB\n- Tools: Docker, Kubernetes, Jenkins, Git, Maven\n- Microservices, REST APIs, Message Queues (Kafka, RabbitMQ)\n\nExperience:\nSenior Software Engineer | Tech Solutions Ltd (India) | 2020-Present\n- Developed microservices architecture serving 2M+ users\n- Led team of 4 developers\n- Implemented RESTful APIs and message-driven architecture\n- Optimized database performance (40% improvement)\n- Migrated legacy monolith to microservices\n\nSoftware Engineer | Software Company (India) | 2018-2020\n- Built enterprise Java applications\n- Developed REST APIs using Spring Boot\n- Integrated third-party payment systems\n- Implemented unit and integration tests\n\nEducation:\nB.Tech Computer Science | Indian Institute of Technology | 2018\n\nNote: Require H1-B visa sponsorship for US positions",
+    "job_description": "Senior Software Engineer\n\nRequirements:\n- 5+ years software engineering experience\n- Strong Java and Spring Boot experience\n- Microservices architecture\n- AWS cloud experience\n- Database design and optimization\n- RESTful API development\n- Must be authorized to work in US",
+    "expected_score_range": {
+      "min": 80,
+      "max": 95
+    },
+    "expected_rejection_reasons": [
+      "visa sponsorship",
+      "work authorization"
+    ],
+    "expected_strengths": [
+      "java",
+      "spring boot",
+      "microservices",
+      "aws",
+      "experience",
+      "technical skills"
+    ],
+    "expected_issues": [
+      "requires sponsorship",
+      "work authorization"
+    ],
+    "expected_suggestions": [
+      "verify sponsorship availability",
+      "check work authorization requirements"
+    ]
+  },
+  {
+    "test_case_name": "gap_in_employment_good_skills",
+    "description": "Candidate with employment gap but strong skills",
+    "resume_text": "SENIOR SOFTWARE ENGINEER\n\nSummary:\nSenior Software Engineer with 8 years of experience in full-stack development. Recently returned to workforce after career break. Strong technical skills and passion for building quality software.\n\nTechnical Skills:\n- Python, JavaScript, TypeScript, Java\n- React, Node.js, Django, FastAPI\n- PostgreSQL, MongoDB, Redis\n- AWS, Docker, Kubernetes\n- Git, CI/CD, Agile\n\nExperience:\nCareer Break | 2022-2024\n- Personal family matters (sabbatical)\n- Stayed current: completed online courses (AWS, React, TypeScript)\n- Built personal projects (portfolio on GitHub)\n- Contributed to open source projects\n\nSenior Software Engineer | Tech Corp | 2018-2022\n- Led development of customer-facing web applications\n- Architected microservices using Python and Node.js\n- Mentored 3 junior developers\n- Improved system performance by 50%\n- Technologies: Python, React, AWS, PostgreSQL\n\nSoftware Engineer | Startup XYZ | 2015-2018\n- Full-stack development using Django and React\n- Built RESTful APIs serving 100K+ users\n- Implemented CI/CD pipelines\n- Database optimization and query tuning\n\nEducation:\nB.S. Computer Science | State University | 2015\n\nRecent Projects (during break):\n- Task management app (React + FastAPI)\n- Open source contributions to 3 projects\n- Completed 5 advanced technical courses",
+    "job_description": "Senior Software Engineer\n\nRequirements:\n- 5+ years software development experience\n- Full-stack development (Python/JavaScript)\n- React and modern frameworks\n- Cloud experience (AWS preferred)\n- Microservices architecture\n- Strong problem-solving skills\n- Bachelor's degree in CS",
+    "expected_score_range": {
+      "min": 75,
+      "max": 90
+    },
+    "expected_rejection_reasons": [
+      "employment gap"
+    ],
+    "expected_strengths": [
+      "years of experience",
+      "technical skills",
+      "full-stack",
+      "leadership",
+      "stayed current"
+    ],
+    "expected_issues": [
+      "gap in employment",
+      "time away"
+    ],
+    "expected_suggestions": [
+      "explain gap in interview",
+      "highlight recent learning",
+      "emphasize current skills"
+    ]
+  },
+  {
+    "test_case_name": "no_job_description_provided",
+    "description": "Test case with no job description - should still analyze resume",
+    "resume_text": "FULL STACK DEVELOPER\n\nSummary:\nFull Stack Developer with 4 years of experience building web applications. Proficient in JavaScript, Python, and modern frameworks.\n\nTechnical Skills:\n- Frontend: React, Vue.js, TypeScript, HTML, CSS\n- Backend: Node.js, Python, Django, Express\n- Databases: PostgreSQL, MongoDB\n- Cloud: AWS, Docker\n- Tools: Git, Jenkins, Jest\n\nExperience:\nFull Stack Developer | Web Agency | 2020-Present\n- Developed 15+ client web applications\n- Built RESTful APIs with Node.js and Django\n- Implemented responsive UIs with React\n- Managed AWS deployments\n\nJunior Developer | Startup | 2019-2020\n- Created web features using JavaScript\n- Fixed bugs and wrote tests\n- Collaborated with design team\n\nEducation:\nB.S. Computer Science | 2019",
+    "job_description": null,
+    "expected_score_range": {
+      "min": 60,
+      "max": 80
+    },
+    "expected_rejection_reasons": [],
+    "expected_strengths": [
+      "full-stack",
+      "experience",
+      "technical skills",
+      "frameworks"
+    ],
+    "expected_issues": [],
+    "expected_suggestions": [
+      "tailor to specific job",
+      "add more quantifiable metrics"
+    ]
+  }
+]
