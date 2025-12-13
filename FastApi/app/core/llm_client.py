@@ -107,10 +107,20 @@ async def _call_gemini(prompt, model, max_tokens, temperature):
             print(f"[LLM Client] Gemini finish_reason: {finish_reason}")
             if finish_reason != 1:  # 1 = STOP (natural completion)
                 print(f"[LLM Client] WARNING: Response may be truncated. finish_reason={finish_reason}")
+                # Try to handle incomplete JSON
+                if hasattr(response, 'text') and response.text:
+                    print(f"[LLM Client] Partial response received: {len(response.text)} chars")
         
+        if not response.text or len(response.text.strip()) == 0:
+            print(f"[LLM Client] ERROR: Empty response from Gemini")
+            return _mock_response()
+        
+        print(f"[LLM Client] Gemini response length: {len(response.text)}")
         return response.text
     except Exception as e:
         print(f"Gemini API error: {e}")
+        import traceback
+        traceback.print_exc()
         return _mock_response()
 
 async def _call_huggingface(prompt, model, max_tokens, temperature):

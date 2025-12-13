@@ -16,12 +16,17 @@ import {
   Target,
   Lightbulb
 } from 'lucide-react';
+import * as pdfjsLib from 'pdfjs-dist';
 import Navbar from './Navbar';
 import Card from './Card';
 import Button from './Button';
 
+// Set PDF worker from unpkg CDN matching the installed version
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+
 const ExperienceAuthenticityAgent = () => {
   const [resumeFile, setResumeFile] = useState(null);
+  const [resumeText, setResumeText] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
   const [leetcodeUrl, setLeetcodeUrl] = useState('');
   const [additionalLinks, setAdditionalLinks] = useState([]);
@@ -29,17 +34,76 @@ const ExperienceAuthenticityAgent = () => {
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
 
+  // Parse resume file (PDF or TXT)
+  const parseResumeFile = async (file) => {
+    try {
+      if (file.type === 'application/pdf') {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+        let fullText = '';
+        for (let i = 0; i < pdf.numPages; i++) {
+          const page = await pdf.getPage(i + 1);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items.map((item) => item.str).join(' ');
+          fullText += pageText + ' ';
+        }
+        let extractedText = fullText.trim();
+        
+        // Validate extracted text
+        if (!extractedText || extractedText.length < 10) {
+          setError('Could not extract text from PDF. The file may be scanned or empty.');
+          return null;
+        }
+        
+        // Clean the text by removing problematic control characters but keeping common ones
+        extractedText = extractedText.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ' ');
+        
+        // Check if we have actual text content after cleaning
+        const alphanumericCount = (extractedText.match(/[a-zA-Z0-9]/g) || []).length;
+        if (alphanumericCount < 20) {
+          setError('PDF does not contain enough readable text. Please use a text-based PDF.');
+          return null;
+        }
+        
+        setResumeText(extractedText);
+        return extractedText;
+      } else if (file.type === 'text/plain') {
+        const text = await file.text();
+        if (!text || text.trim().length < 10) {
+          setError('Text file is empty or too short.');
+          return null;
+        }
+        setResumeText(text);
+        return text;
+      } else {
+        setError('Unsupported file type. Please use PDF or TXT.');
+        return null;
+      }
+    } catch (err) {
+      setError('Failed to parse resume file: ' + err.message);
+      console.error('Error parsing file:', err);
+      return null;
+    }
+  };
+
   // Handle file upload
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.type === 'application/pdf' || file.type === 'application/msword' || 
-          file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-        setResumeFile(file);
-        setError(null);
-      } else {
-        setError('Please upload a PDF or Word document');
+      setResumeFile(file);
+      setError(null);
+      
+      if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || 
+          file.name.endsWith('.docx')) {
+        setError('DOCX parsing requires Word document library. Please use PDF or TXT instead.');
         setResumeFile(null);
+        setResumeText('');
+      } else if (file.type === 'application/pdf' || file.type === 'text/plain') {
+        await parseResumeFile(file);
+      } else {
+        setError('Unsupported file type. Please upload PDF or TXT.');
+        setResumeFile(null);
+        setResumeText('');
       }
     }
   };
@@ -63,8 +127,14 @@ const ExperienceAuthenticityAgent = () => {
 
   // Handle form submission
   const handleAnalyze = async () => {
-    if (!resumeFile) {
+    if (!resumeFile || !resumeText) {
       setError('Please upload a resume');
+      return;
+    }
+
+    // Validate resume text before sending
+    if (resumeText.trim().length < 50) {
+      setError('Resume text is too short. Please upload a valid resume.');
       return;
     }
 
@@ -72,27 +142,70 @@ const ExperienceAuthenticityAgent = () => {
     setError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('resume', resumeFile);
+      // Build evidences array from URLs
+      const evidences = [];
       
-      if (githubUrl) formData.append('github_url', githubUrl);
-      if (leetcodeUrl) formData.append('leetcode_url', leetcodeUrl);
+      if (githubUrl) {
+        evidences.push({
+          type: 'github_profile',
+          url: githubUrl,
+          title: githubUrl.split('/').pop() || 'GitHub Profile',
+          metadata: {}
+        });
+      }
       
-      // Add additional links
-      additionalLinks.forEach((link, index) => {
+      if (leetcodeUrl) {
+        evidences.push({
+          type: 'leetcode_profile',
+          url: leetcodeUrl,
+          title: leetcodeUrl.split('/').pop() || 'LeetCode Profile',
+          metadata: {}
+        });
+      }
+      
+      // Add additional links as evidences
+      additionalLinks.forEach((link) => {
         if (link.url && link.label) {
-          formData.append(`additional_links[${index}][url]`, link.url);
-          formData.append(`additional_links[${index}][label]`, link.label);
+          evidences.push({
+            type: 'link',
+            url: link.url,
+            title: link.label,
+            description: link.label,
+            metadata: {}
+          });
         }
       });
 
-      const response = await fetch('http://localhost:8000/api/authenticity/analyze', {
+      // Truncate very long text (limit to ~10k chars to prevent API issues)
+      const sanitizedResumeText = resumeText.slice(0, 10000);
+      
+      // Construct request payload matching AuthenticityExtendedInput schema
+      const requestBody = {
+        resume: {
+          raw_text: sanitizedResumeText,
+          skills: [],
+          experience: [],
+          projects: [],
+          education: [],
+          certifications: []
+        },
+        evidences: evidences,
+        additional_context: `Resume file: ${resumeFile.name}`
+      };
+      
+      console.log('Sending analysis request with resume text length:', sanitizedResumeText.length);
+
+      const response = await fetch('http://localhost:8000/api/analyze-authenticity', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
-        throw new Error('Analysis failed. Please try again.');
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Analysis failed. Please try again.');
       }
 
       const data = await response.json();
@@ -208,7 +321,7 @@ const ExperienceAuthenticityAgent = () => {
                 <div className="relative">
                   <input
                     type="file"
-                    accept=".pdf,.doc,.docx"
+                    accept=".pdf,.txt"
                     onChange={handleFileChange}
                     className="hidden"
                     id="resume-upload"
@@ -219,7 +332,7 @@ const ExperienceAuthenticityAgent = () => {
                   >
                     <FileText className="w-6 h-6 text-slate-400 group-hover:text-purple-500 transition-colors" />
                     <span className="text-slate-600 group-hover:text-purple-600 transition-colors">
-                      {resumeFile ? resumeFile.name : 'Click to upload PDF or Word document'}
+                      {resumeFile ? resumeFile.name : 'Click to upload PDF or TXT document'}
                     </span>
                   </label>
                   {resumeFile && (
@@ -452,13 +565,13 @@ const ExperienceAuthenticityAgent = () => {
                     <h3 className="text-lg font-bold text-slate-900">Skill Alignments</h3>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    {results.skill_alignments.map((skill, index) => (
+                    {results.skill_alignments && results.skill_alignments.map((skill, index) => (
                       <div key={index} className="p-3 bg-slate-50 rounded-lg border border-slate-200">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm font-semibold text-slate-900">{skill.skill}</span>
                           <span className={`w-2 h-2 rounded-full ${getSkillConfidenceColor(skill.confidence)}`}></span>
                         </div>
-                        <div className="w-full bg-slate-200 rounded-full h-1.5">
+                        <div className="w-full bg-slate-200 rounded-full h-1.5 mb-2">
                           <div 
                             className={`h-1.5 rounded-full ${getSkillConfidenceColor(skill.confidence)}`}
                             style={{ 
@@ -467,7 +580,22 @@ const ExperienceAuthenticityAgent = () => {
                             }}
                           ></div>
                         </div>
-                        <span className="text-xs text-slate-600 mt-1 block">{skill.confidence} Confidence</span>
+                        <span className="text-xs text-slate-600 block mb-1">{skill.confidence} Confidence</span>
+                        {skill.evidence_source && skill.evidence_source.length > 0 && (
+                          <div className="text-xs text-slate-500 mt-1">
+                            Sources: {skill.evidence_source.join(', ')}
+                          </div>
+                        )}
+                        {skill.supporting_evidence && skill.supporting_evidence.length > 0 && (
+                          <div className="text-xs text-slate-600 mt-2">
+                            {skill.supporting_evidence.slice(0, 2).map((evidence, idx) => (
+                              <div key={idx} className="flex items-start gap-1 mt-1">
+                                <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5" />
+                                <span>{evidence}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

@@ -173,6 +173,22 @@ async def analyze_authenticity(
     Returns supportive, ethical assessment with confidence levels and improvement suggestions.
     """
     
+    # Validate resume text
+    if input_data.resume and input_data.resume.raw_text:
+        raw_text = input_data.resume.raw_text
+        
+        # Check for binary data in resume text
+        if any(ord(c) < 32 and c not in '\n\r\t' for c in raw_text[:1000]):
+            print("[Authenticity Agent] ERROR: Binary data detected in resume text")
+            return _fallback_response(
+                "Resume contains binary data. Please ensure text was properly extracted from PDF."
+            )
+        
+        # Truncate very long text
+        if len(raw_text) > 20000:
+            print(f"[Authenticity Agent] WARNING: Resume text truncated from {len(raw_text)} to 20000 chars")
+            input_data.resume.raw_text = raw_text[:20000] + "... [truncated]"
+    
     # Generate analysis prompt
     system_prompt = _create_authenticity_system_prompt()
     analysis_prompt = _create_authenticity_analysis_prompt(
@@ -186,9 +202,12 @@ async def analyze_authenticity(
     try:
         llm_response = await call_chat(
             prompt=system_prompt + "\n\n" + analysis_prompt,
-            max_tokens=2000,
+            max_tokens=4000,  # Increased for complete response
             temperature=0.6,  # Slightly lower for more consistency
         )
+        
+        print(f"[Authenticity Agent] LLM Response length: {len(llm_response)}")
+        print(f"[Authenticity Agent] LLM Response preview: {llm_response[:500]}...")
         
         # Parse JSON response
         analysis_result = _parse_json_response(llm_response)
@@ -223,13 +242,15 @@ async def analyze_authenticity(
         
         return output
     
-    except json.JSONDecodeError as e:
-        print(f"JSON parsing error: {e}")
+    except (json.JSONDecodeError, ValueError) as e:
+        print(f"[Authenticity Agent] JSON parsing error: {e}")
         return _fallback_response(
             "Unable to parse LLM response. Returning default supportive assessment."
         )
     except Exception as e:
-        print(f"Agent error: {e}")
+        print(f"[Authenticity Agent] Agent error: {e}")
+        import traceback
+        traceback.print_exc()
         return _fallback_response(
             f"Analysis encountered an issue: {str(e)}"
         )
@@ -239,22 +260,37 @@ async def analyze_authenticity(
 
 def _parse_json_response(response: str) -> Dict[str, Any]:
     """Extract and parse JSON from LLM response."""
+    if not response or not response.strip():
+        print("[Authenticity Agent] ERROR: Empty response from LLM")
+        raise ValueError("Empty LLM response")
+    
     # Try direct parse first
     try:
-        return json.loads(response)
-    except json.JSONDecodeError:
-        pass
+        parsed = json.loads(response)
+        print(f"[Authenticity Agent] Successfully parsed JSON directly")
+        return parsed
+    except json.JSONDecodeError as e:
+        print(f"[Authenticity Agent] Direct JSON parse failed: {e}")
     
-    # Try extracting JSON block
-    json_match = re.search(r'\{.*\}', response, re.DOTALL)
+    # Try extracting JSON block with markdown code blocks
+    json_match = re.search(r'```json\s*({.*?})\s*```', response, re.DOTALL)
+    if not json_match:
+        json_match = re.search(r'```\s*({.*?})\s*```', response, re.DOTALL)
+    if not json_match:
+        json_match = re.search(r'\{.*\}', response, re.DOTALL)
+    
     if json_match:
         try:
-            return json.loads(json_match.group(0))
-        except json.JSONDecodeError:
-            pass
+            parsed = json.loads(json_match.group(1) if len(json_match.groups()) > 0 else json_match.group(0))
+            print(f"[Authenticity Agent] Successfully extracted and parsed JSON from response")
+            return parsed
+        except json.JSONDecodeError as e:
+            print(f"[Authenticity Agent] JSON extraction parse failed: {e}")
     
-    # Fallback
-    raise json.JSONDecodeError(f"Could not parse JSON from: {response[:200]}", response, 0)
+    # Log the failure with more context
+    print(f"[Authenticity Agent] ERROR: Could not parse JSON from response")
+    print(f"[Authenticity Agent] Response preview: {response[:500]}")
+    raise ValueError(f"Could not parse JSON from LLM response")
 
 
 def _parse_skill_alignments(alignments_data: List[Dict[str, Any]]) -> List[SkillAlignment]:
