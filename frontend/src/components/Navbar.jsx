@@ -10,10 +10,7 @@ const Navbar = () => {
 
   const isActive = (path) => location.pathname === path;
 
-  const navLinks = [
-    { path: '/home', label: 'Home', icon: Home },
-    { path: '/features', label: 'Features', icon: Zap },
-  ];
+  const navLinks = [];
 
   return (
     <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-sm">

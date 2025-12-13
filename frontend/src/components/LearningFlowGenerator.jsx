@@ -397,12 +397,12 @@ const LearningFlowGenerator = () => {
                   )}
                 </Button>
                 
-                <Button
+                {/* <Button
                   onClick={loadSampleData}
                   className="px-6 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-3 rounded-lg transition-all"
                 >
                   Sample
-                </Button>
+                </Button> */}
               </div>
             </Card>
           </div>

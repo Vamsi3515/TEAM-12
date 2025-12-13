@@ -1,0 +1,364 @@
+[
+  {
+    "test_case_name": "strong_evidence_match",
+    "description": "Resume claims strongly supported by GitHub and LeetCode evidence",
+    "resume_data": {
+      "skills": ["Python", "JavaScript", "React", "Django", "PostgreSQL", "Docker"],
+      "experience": [
+        {
+          "title": "Senior Software Engineer",
+          "company": "TechCorp",
+          "duration": "3 years",
+          "description": "Built microservices with Python and Django"
+        },
+        {
+          "title": "Frontend Developer",
+          "company": "WebStart",
+          "duration": "2 years",
+          "description": "Created React applications"
+        }
+      ],
+      "projects": [
+        {
+          "name": "E-commerce Platform",
+          "description": "Full-stack app with React and Django REST API"
+        },
+        {
+          "name": "Task Management System",
+          "description": "React frontend with Node.js backend"
+        }
+      ],
+      "education": [
+        {
+          "degree": "B.S. Computer Science",
+          "institution": "State University"
+        }
+      ],
+      "certifications": ["AWS Solutions Architect"],
+      "raw_text": "Senior Software Engineer with 5+ years building scalable web applications"
+    },
+    "github_evidence": {
+      "languages": ["Python", "JavaScript", "TypeScript", "HTML", "CSS"],
+      "repo_count": 25,
+      "commit_frequency": "Very Active - 500+ commits in last year",
+      "readme_quality": "Excellent - detailed documentation",
+      "contribution_pattern": "Consistent - daily commits",
+      "top_projects": [
+        {"name": "django-ecommerce", "language": "Python", "stars": 45, "description": "Full-stack e-commerce platform"},
+        {"name": "react-task-manager", "language": "JavaScript", "stars": 32, "description": "Task management SPA"}
+      ]
+    },
+    "leetcode_evidence": {
+      "problems_solved": 250,
+      "difficulty_breakdown": {"easy": 80, "medium": 140, "hard": 30},
+      "contest_rating": 1850,
+      "languages_used": ["Python", "JavaScript"]
+    },
+    "expected_authenticity_score": {
+      "min": 65,
+      "max": 85
+    },
+    "expected_confidence_level": "High",
+    "expected_risk_flags": [],
+    "expected_strengths": ["strong github presence", "consistent coding", "diverse projects", "leetcode performance"],
+    "expected_gaps": []
+  },
+  {
+    "test_case_name": "moderate_evidence_some_gaps",
+    "description": "Resume claims partially supported, some skills lack evidence",
+    "resume_data": {
+      "skills": ["Python", "Java", "Spring Boot", "AWS", "Kubernetes", "Machine Learning"],
+      "experience": [
+        {
+          "title": "Software Engineer",
+          "company": "DataCo",
+          "duration": "2 years",
+          "description": "Built ML pipelines with Python"
+        },
+        {
+          "title": "Backend Developer",
+          "company": "StartupXYZ",
+          "duration": "1 year",
+          "description": "Java microservices"
+        }
+      ],
+      "projects": [
+        {
+          "name": "ML Model for Prediction",
+          "description": "Python, TensorFlow"
+        },
+        {
+          "name": "REST API Service",
+          "description": "Java, Spring Boot"
+        }
+      ],
+      "education": [
+        {
+          "degree": "B.S. Computer Science"
+        }
+      ],
+      "certifications": [],
+      "raw_text": "Software Engineer skilled in Python, Java, and cloud technologies"
+    },
+    "github_evidence": {
+      "languages": ["Python", "Jupyter Notebook"],
+      "repo_count": 8,
+      "commit_frequency": "Moderate - 100 commits in last year",
+      "readme_quality": "Good - basic documentation",
+      "contribution_pattern": "Periodic - weekly commits",
+      "top_projects": [
+        {"name": "ml-predictions", "language": "Python", "stars": 5, "description": "Machine learning experiments"}
+      ]
+    },
+    "leetcode_evidence": {
+      "problems_solved": 50,
+      "difficulty_breakdown": {"easy": 35, "medium": 15, "hard": 0},
+      "contest_rating": 0,
+      "languages_used": ["Python"]
+    },
+    "expected_authenticity_score": {
+      "min": 60,
+      "max": 75
+    },
+    "expected_confidence_level": "Medium",
+    "expected_risk_flags": ["limited java evidence", "no kubernetes projects", "aws not visible"],
+    "expected_strengths": ["python skills verified", "ml interest shown"],
+    "expected_gaps": ["java/spring boot projects", "cloud deployments", "kubernetes work"]
+  },
+  {
+    "test_case_name": "no_github_leetcode",
+    "description": "Candidate with no GitHub or LeetCode presence (should NOT be penalized)",
+    "resume_data": {
+      "skills": ["Python", "Django", "PostgreSQL", "Docker", "AWS"],
+      "experience": [
+        {
+          "title": "Backend Developer",
+          "company": "Enterprise Corp",
+          "duration": "4 years",
+          "description": "Internal systems development"
+        },
+        {
+          "title": "Junior Developer",
+          "company": "FinTech",
+          "duration": "1 year",
+          "description": "Backend APIs"
+        }
+      ],
+      "projects": [
+        {
+          "name": "Internal Payment System",
+          "description": "Django, PostgreSQL"
+        },
+        {
+          "name": "Customer Portal",
+          "description": "Django, React"
+        }
+      ],
+      "education": [
+        {
+          "degree": "M.S. Computer Science",
+          "institution": "Top University"
+        }
+      ],
+      "certifications": ["AWS Certified Developer"],
+      "raw_text": "Backend Developer with 5 years in enterprise software development"
+    },
+    "github_evidence": null,
+    "leetcode_evidence": null,
+    "expected_authenticity_score": {
+      "min": 55,
+      "max": 70
+    },
+    "expected_confidence_level": "Medium",
+    "expected_risk_flags": ["no public code portfolio"],
+    "expected_strengths": ["strong education", "certifications", "enterprise experience"],
+    "expected_gaps": ["no public code examples", "suggest creating github portfolio"]
+  },
+  {
+    "test_case_name": "skill_mismatch_inflated_claims",
+    "description": "Resume claims don't match evidence - possible skill inflation",
+    "resume_data": {
+      "skills": ["Python", "Java", "C++", "Rust", "Go", "Kubernetes", "AWS", "GCP", "Azure", "Machine Learning", "Blockchain", "AI"],
+      "experience": [
+        {
+          "title": "Senior Full Stack Engineer",
+          "duration": "5 years",
+          "description": "Led teams, architected systems"
+        },
+        {
+          "title": "Principal Engineer",
+          "duration": "2 years",
+          "description": "Cloud infrastructure"
+        }
+      ],
+      "projects": [
+        {
+          "name": "Distributed AI System",
+          "description": "Python, TensorFlow, Kubernetes"
+        },
+        {
+          "name": "Blockchain Platform",
+          "description": "Rust, Solidity"
+        }
+      ],
+      "education": [
+        {
+          "degree": "B.S. Information Technology"
+        }
+      ],
+      "certifications": [],
+      "raw_text": "Senior engineer with deep expertise across multiple tech stacks"
+    },
+    "github_evidence": {
+      "languages": ["HTML", "CSS", "JavaScript"],
+      "repo_count": 4,
+      "commit_frequency": "Low - 20 commits in last year",
+      "readme_quality": "Poor - minimal documentation",
+      "contribution_pattern": "Sporadic - monthly commits",
+      "top_projects": [
+        {"name": "hello-world", "language": "HTML", "stars": 0, "description": "Basic website"},
+        {"name": "todo-app", "language": "JavaScript", "stars": 1, "description": "Simple todo list"}
+      ]
+    },
+    "leetcode_evidence": {
+      "problems_solved": 5,
+      "difficulty_breakdown": {"easy": 5, "medium": 0, "hard": 0},
+      "contest_rating": 0,
+      "languages_used": ["Python"]
+    },
+    "expected_authenticity_score": {
+      "min": 25,
+      "max": 45
+    },
+    "expected_confidence_level": "Low",
+    "expected_risk_flags": ["major skill mismatch", "claimed languages not in github", "limited coding evidence", "inflated experience claims"],
+    "expected_strengths": ["shows some coding ability"],
+    "expected_gaps": ["python projects", "advanced language projects", "ml/ai work", "cloud infrastructure", "kubernetes"]
+  },
+  {
+    "test_case_name": "entry_level_growing_portfolio",
+    "description": "Junior developer with growing skills, limited but honest evidence",
+    "resume_data": {
+      "skills": ["JavaScript", "React", "Node.js", "HTML", "CSS", "Git"],
+      "experience": [
+        {
+          "title": "Junior Frontend Developer",
+          "company": "WebAgency",
+          "duration": "1 year",
+          "description": "Built responsive websites"
+        }
+      ],
+      "projects": [
+        {
+          "name": "Portfolio Website",
+          "description": "React, deployed on Vercel"
+        },
+        {
+          "name": "Weather App",
+          "description": "JavaScript, API integration"
+        },
+        {
+          "name": "To-Do List",
+          "description": "React hooks practice"
+        }
+      ],
+      "education": [
+        {
+          "degree": "Bootcamp Graduate",
+          "institution": "Full Stack Web Development"
+        }
+      ],
+      "certifications": [],
+      "raw_text": "Junior developer passionate about web development, actively learning"
+    },
+    "github_evidence": {
+      "languages": ["JavaScript", "HTML", "CSS"],
+      "repo_count": 12,
+      "commit_frequency": "Active - 200 commits in last year",
+      "readme_quality": "Good - learning documentation",
+      "contribution_pattern": "Growing - increasing activity",
+      "top_projects": [
+        {"name": "portfolio-site", "language": "JavaScript", "stars": 2, "description": "Personal portfolio"},
+        {"name": "weather-app", "language": "JavaScript", "stars": 5, "description": "Weather API integration"},
+        {"name": "react-todo", "language": "JavaScript", "stars": 3, "description": "React practice project"}
+      ]
+    },
+    "leetcode_evidence": {
+      "problems_solved": 45,
+      "difficulty_breakdown": {"easy": 40, "medium": 5, "hard": 0},
+      "contest_rating": 0,
+      "languages_used": ["JavaScript"]
+    },
+    "expected_authenticity_score": {
+      "min": 60,
+      "max": 75
+    },
+    "expected_confidence_level": "Medium-High",
+    "expected_risk_flags": [],
+    "expected_strengths": ["honest claims", "active learning", "consistent growth", "good portfolio"],
+    "expected_gaps": ["backend experience", "more complex projects"]
+  },
+  {
+    "test_case_name": "experienced_no_public_code",
+    "description": "Senior engineer with corporate background, minimal public presence",
+    "resume_data": {
+      "skills": ["Java", "Spring Boot", "Microservices", "Oracle", "Jenkins", "Maven"],
+      "experience": [
+        {
+          "title": "Senior Java Developer",
+          "company": "BigCorp",
+          "duration": "8 years",
+          "description": "Enterprise applications"
+        },
+        {
+          "title": "Java Developer",
+          "company": "FinanceInc",
+          "duration": "4 years",
+          "description": "Banking systems"
+        }
+      ],
+      "projects": [
+        {
+          "name": "Payment Processing System",
+          "description": "Java, Spring Boot"
+        },
+        {
+          "name": "Customer Management Platform",
+          "description": "Java EE, Oracle"
+        }
+      ],
+      "education": [
+        {
+          "degree": "B.S. Computer Engineering"
+        },
+        {
+          "degree": "M.S. Software Engineering"
+        }
+      ],
+      "certifications": ["Oracle Certified Professional", "AWS Solutions Architect"],
+      "raw_text": "Senior Java engineer specializing in enterprise system architecture"
+    },
+    "github_evidence": {
+      "languages": [],
+      "repo_count": 0,
+      "commit_frequency": "None",
+      "readme_quality": "N/A",
+      "contribution_pattern": "No public activity",
+      "top_projects": []
+    },
+    "leetcode_evidence": {
+      "problems_solved": 0,
+      "difficulty_breakdown": {"easy": 0, "medium": 0, "hard": 0},
+      "contest_rating": 0,
+      "languages_used": []
+    },
+    "expected_authenticity_score": {
+      "min": 55,
+      "max": 70
+    },
+    "expected_confidence_level": "Medium",
+    "expected_risk_flags": ["no public portfolio"],
+    "expected_strengths": ["strong education", "multiple certifications", "extensive experience", "enterprise background"],
+    "expected_gaps": ["create public portfolio", "contribute to open source", "share knowledge"]
+  }
+]

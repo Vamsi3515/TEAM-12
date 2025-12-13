@@ -13,6 +13,13 @@ import pytest
 
 from app.core.ats_agent import analyze_ats
 from app.core.github_agent import analyze_github_repo
+from app.core.authenticity_agent import analyze_authenticity
+from app.models.authenticity import (
+    ResumeData,
+    GitHubEvidence,
+    LeetCodeEvidence,
+    AuthenticityExtendedInput
+)
 from app.core.eval_metrics import (
     score_accuracy,
     keyword_overlap,
@@ -27,6 +34,7 @@ from app.core.eval_metrics import (
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 ATS_FIXTURES = FIXTURES_DIR / "ats_test_cases.json"
 GITHUB_FIXTURES = FIXTURES_DIR / "github_test_cases.json"
+AUTHENTICITY_FIXTURES = FIXTURES_DIR / "authenticity_test_cases.json"
 RESPONSE_TIME_THRESHOLD_MS = 30000  # 30 seconds
 
 
@@ -42,8 +50,8 @@ class TestATSAgent:
     """Test suite for ATS analysis agent."""
     
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("test_idx", range(2))  # Start with 2 test cases for quick validation
-    async def test_ats_analysis(self, test_idx):
+    @pytest.mark.parametrize("test_idx", range(16))  # Run all 16 test cases
+    async def test_ats_analysis(self, test_idx, record_property):
         """Test ATS analysis against expected outputs."""
         ats_test_cases = load_test_cases(ATS_FIXTURES)
         
@@ -52,6 +60,10 @@ class TestATSAgent:
         
         test_case = ats_test_cases[test_idx]
         test_name = test_case["test_case_name"]
+        
+        # Record test name for reporting
+        record_property("test_case_name", test_name)
+        record_property("description", test_case["description"])
         
         print(f"\n{'='*60}")
         print(f"Testing: {test_name}")
@@ -69,6 +81,7 @@ class TestATSAgent:
         )
         
         duration_ms = (time.time() - start_time) * 1000
+        record_property("duration_ms", duration_ms)
         
         # Convert result to dict for easier testing
         result_dict = {
@@ -91,6 +104,10 @@ class TestATSAgent:
             expected_range["max"]
         )
         metrics["score_accuracy"] = score_metric
+        record_property("score_accuracy", score_metric['accuracy'])
+        record_property("actual_score", result.ats_score)
+        record_property("expected_min", expected_range["min"])
+        record_property("expected_max", expected_range["max"])
         print(f"\n✓ Score: {result.ats_score} (expected {expected_range['min']}-{expected_range['max']})")
         print(f"  Accuracy: {score_metric['accuracy']:.2%}")
         
@@ -101,6 +118,7 @@ class TestATSAgent:
                 test_case["expected_rejection_reasons"]
             )
             metrics["rejection_reasons"] = rejection_metric
+            record_property("rejection_reasons_match", rejection_metric['match_rate'])
             print(f"\n✓ Rejection Reasons Match: {rejection_metric['match_rate']:.2%}")
             if rejection_metric["missing"]:
                 print(f"  Missing: {rejection_metric['missing']}")
@@ -112,6 +130,7 @@ class TestATSAgent:
                 test_case["expected_strengths"]
             )
             metrics["strengths"] = strengths_metric
+            record_property("strengths_match", strengths_metric['match_rate'])
             print(f"\n✓ Strengths Match: {strengths_metric['match_rate']:.2%}")
             if strengths_metric["missing"]:
                 print(f"  Missing: {strengths_metric['missing']}")
@@ -123,6 +142,7 @@ class TestATSAgent:
                 test_case["expected_issues"]
             )
             metrics["issues"] = issues_metric
+            record_property("issues_match", issues_metric['match_rate'])
             print(f"\n✓ Issues Match: {issues_metric['match_rate']:.2%}")
         
         # 5. Test suggestions
@@ -132,6 +152,7 @@ class TestATSAgent:
                 test_case["expected_suggestions"]
             )
             metrics["suggestions"] = suggestions_metric
+            record_property("suggestions_match", suggestions_metric['match_rate'])
             print(f"\n✓ Suggestions Match: {suggestions_metric['match_rate']:.2%}")
         
         # 6. Test JSON structure
@@ -147,11 +168,13 @@ class TestATSAgent:
             ]
         )
         metrics["structure"] = structure_metric
+        record_property("structure_valid", structure_metric['valid'])
         print(f"\n✓ Structure Valid: {structure_metric['valid']}")
         
         # 7. Test response time
         time_metric = response_time_check(duration_ms, RESPONSE_TIME_THRESHOLD_MS)
         metrics["response_time"] = time_metric
+        record_property("response_time_ok", time_metric['passed'])
         print(f"\n✓ Response Time: {duration_ms:.0f}ms (threshold: {RESPONSE_TIME_THRESHOLD_MS}ms)")
         
         # Store metrics for reporting
@@ -271,6 +294,127 @@ class TestGitHubAgent:
             raise
 
 
+# Authenticity Agent Tests
+class TestAuthenticityAgent:
+    """Test suite for Experience Authenticity agent."""
+    
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("test_idx", range(6))  # 6 comprehensive test cases
+    async def test_authenticity_analysis(self, test_idx, record_property):
+        """Test authenticity analysis against expected outputs."""
+        auth_test_cases = load_test_cases(AUTHENTICITY_FIXTURES)
+        
+        if test_idx >= len(auth_test_cases):
+            pytest.skip(f"Test case {test_idx} not found")
+        
+        test_case = auth_test_cases[test_idx]
+        test_name = test_case["test_case_name"]
+        
+        # Record test info
+        record_property("test_case_name", test_name)
+        record_property("description", test_case["description"])
+        
+        print(f"\n{'='*60}")
+        print(f"Testing: {test_name}")
+        print(f"Description: {test_case['description']}")
+        print(f"{'='*60}")
+        
+        # Measure response time
+        start_time = time.time()
+        
+        # Build input from test case
+        resume = ResumeData(**test_case["resume_data"])
+        
+        github = None
+        if test_case.get("github_evidence"):
+            github = GitHubEvidence(**test_case["github_evidence"])
+        
+        leetcode = None
+        if test_case.get("leetcode_evidence"):
+            leetcode = LeetCodeEvidence(**test_case["leetcode_evidence"])
+        
+        auth_input = AuthenticityExtendedInput(
+            resume=resume,
+            github=github,
+            leetcode=leetcode
+        )
+        
+        # Run authenticity analysis
+        result = await analyze_authenticity(auth_input)
+        
+        duration_ms = (time.time() - start_time) * 1000
+        record_property("duration_ms", duration_ms)
+        
+        # Collect metrics
+        metrics = {}
+        
+        # 1. Test authenticity score accuracy
+        expected_range = test_case["expected_authenticity_score"]
+        score_metric = score_accuracy(
+            result.authenticity_score,
+            expected_range["min"],
+            expected_range["max"]
+        )
+        metrics["score_accuracy"] = score_metric
+        record_property("score_accuracy", score_metric['accuracy'])
+        record_property("actual_score", result.authenticity_score)
+        record_property("expected_min", expected_range["min"])
+        record_property("expected_max", expected_range["max"])
+        print(f"\n✓ Authenticity Score: {result.authenticity_score} (expected {expected_range['min']}-{expected_range['max']})")
+        print(f"  Accuracy: {score_metric['accuracy']:.2%}")
+        
+        # 2. Test confidence level match
+        expected_confidence = test_case.get("expected_confidence_level", "")
+        actual_confidence = result.confidence_level
+        confidence_match = 1.0 if expected_confidence.lower() in actual_confidence.lower() else 0.0
+        record_property("confidence_match", confidence_match)
+        print(f"\n✓ Confidence Level: {actual_confidence} (expected: {expected_confidence})")
+        
+        # 3. Test risk indicators
+        if test_case.get("expected_risk_flags"):
+            risk_metric = substring_match(
+                result.risk_indicators,
+                test_case["expected_risk_flags"]
+            )
+            metrics["risk_flags"] = risk_metric
+            record_property("risk_flags_match", risk_metric['match_rate'])
+            print(f"\n✓ Risk Indicators Match: {risk_metric['match_rate']:.2%}")
+            if risk_metric["missing"]:
+                print(f"  Missing: {risk_metric['missing']}")
+        
+        # 4. Test strong evidence
+        if test_case.get("expected_strengths"):
+            strengths_metric = substring_match(
+                result.strong_evidence,
+                test_case["expected_strengths"]
+            )
+            metrics["strengths"] = strengths_metric
+            record_property("strengths_match", strengths_metric['match_rate'])
+            print(f"\n✓ Strong Evidence Match: {strengths_metric['match_rate']:.2%}")
+        
+        # 5. Test improvement suggestions (gaps)
+        if test_case.get("expected_gaps"):
+            gaps_metric = substring_match(
+                result.improvement_suggestions,
+                test_case["expected_gaps"]
+            )
+            metrics["gaps"] = gaps_metric
+            record_property("gaps_match", gaps_metric['match_rate'])
+            print(f"\n✓ Improvement Suggestions Match: {gaps_metric['match_rate']:.2%}")
+        
+        # 6. Test response time
+        time_metric = response_time_check(duration_ms, RESPONSE_TIME_THRESHOLD_MS)
+        metrics["response_time"] = time_metric
+        record_property("response_time_ok", time_metric['passed'])
+        print(f"\n✓ Response Time: {duration_ms:.0f}ms (threshold: {RESPONSE_TIME_THRESHOLD_MS}ms)")
+        
+        # Overall test pass criteria
+        assert score_metric["passed"], f"Score {result.authenticity_score} not in expected range {expected_range}"
+        
+        print(f"\n✅ Test '{test_name}' PASSED")
+
+
+# 
 # Integration Tests
 class TestIntegration:
     """Integration tests for the evaluation framework."""

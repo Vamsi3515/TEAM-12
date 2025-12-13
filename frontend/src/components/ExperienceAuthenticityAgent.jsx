@@ -424,12 +424,12 @@ const ExperienceAuthenticityAgent = () => {
                 </div>
               )}
 
-              {/* Action Buttons */}
-              <div className="flex gap-3">
+              {/* Action Button */}
+              <div>
                 <Button
                   onClick={handleAnalyze}
                   disabled={analyzing || !resumeFile}
-                  className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {analyzing ? (
                     <>
@@ -443,13 +443,6 @@ const ExperienceAuthenticityAgent = () => {
                     </>
                   )}
                 </Button>
-                
-                <Button
-                  onClick={loadSampleData}
-                  className="px-6 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-3 rounded-lg transition-all"
-                >
-                  View Sample
-                </Button>
               </div>
             </Card>
           </div>
@@ -460,41 +453,44 @@ const ExperienceAuthenticityAgent = () => {
               <>
                 {/* Overall Score Card */}
                 <Card className="animate-slide-up bg-gradient-to-br from-purple-600 to-blue-600 text-white" style={{ animationDelay: '0.2s' }}>
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-1">Authenticity Score</h3>
-                      <p className="text-purple-100 text-sm">Overall verification result</p>
-                    </div>
-                    <div className="w-20 h-20 relative">
-                      <svg className="transform -rotate-90 w-20 h-20">
-                        <circle
-                          cx="40"
-                          cy="40"
-                          r="32"
-                          stroke="rgba(255,255,255,0.2)"
-                          strokeWidth="8"
-                          fill="none"
-                        />
-                        <circle
-                          cx="40"
-                          cy="40"
-                          r="32"
-                          stroke="white"
-                          strokeWidth="8"
-                          fill="none"
-                          strokeDasharray={`${(results.authenticity_score / 100) * 201} 201`}
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-2xl font-bold">{results.authenticity_score}</span>
+                  <div className="text-center py-8">
+                    <h3 className="text-2xl font-bold mb-2">Authenticity Score</h3>
+                    <p className="text-purple-100 text-sm mb-6">Overall verification result</p>
+                    
+                    <div className="flex items-center justify-center mb-6">
+                      <div className="w-48 h-48 relative">
+                        <svg className="transform -rotate-90 w-48 h-48">
+                          <circle
+                            cx="96"
+                            cy="96"
+                            r="88"
+                            stroke="rgba(255,255,255,0.2)"
+                            strokeWidth="12"
+                            fill="none"
+                          />
+                          <circle
+                            cx="96"
+                            cy="96"
+                            r="88"
+                            stroke="white"
+                            strokeWidth="12"
+                            fill="none"
+                            strokeDasharray={`${(results.authenticity_score / 100) * 553} 553`}
+                            strokeLinecap="round"
+                            className="transition-all duration-1000"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <span className="text-6xl font-extrabold">{results.authenticity_score}</span>
+                          <span className="text-xl font-semibold text-purple-100">/ 100</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center gap-2 pt-4 border-t border-white/20">
                     <span className="text-sm font-medium">Confidence Level:</span>
-                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getConfidenceColor(results.confidence_level)}`}>
+                    <span className={`px-4 py-1.5 rounded-full text-sm font-bold ${getConfidenceColor(results.confidence_level)}`}>
                       {results.confidence_level}
                     </span>
                   </div>

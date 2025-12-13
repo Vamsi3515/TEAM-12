@@ -208,9 +208,9 @@ const RejectionDetector = () => {
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {[
-            { icon: CheckCircle, title: 'ATS Score', desc: 'Get your compatibility score', color: 'from-green-500 to-emerald-500' },
-            { icon: AlertCircle, title: 'Issue Detection', desc: 'Find potential problems', color: 'from-orange-500 to-red-500' },
-            { icon: TrendingUp, title: 'Improvement Tips', desc: 'Actionable suggestions', color: 'from-purple-500 to-pink-500' },
+            { icon: CheckCircle, title: 'ATS Score', desc: 'Get instant compatibility score analysis', color: 'from-green-500 to-emerald-500' },
+            { icon: Mail, title: 'Email Rejection Alerts', desc: 'Receive detailed rejection reasons via email - unique to our platform!', color: 'from-blue-500 to-cyan-500' },
+            { icon: TrendingUp, title: 'Improvement Tips', desc: 'Actionable suggestions to optimize your resume', color: 'from-purple-500 to-pink-500' },
           ].map((feature, idx) => {
             const Icon = feature.icon;
             return (
