@@ -70,7 +70,7 @@ BEST-PRACTICE CONTEXT (RAG):
 {context_block}
 
 Return ONLY valid JSON with this exact schema:
-{
+{{
     "ats_score": 0-100,
     "rejection_reasons": ["string"],
     "strengths": ["string"],
@@ -78,7 +78,7 @@ Return ONLY valid JSON with this exact schema:
     "actionable_suggestions": ["string"],
     "summary": "string",
     "sent_to_email": true
-}
+}}
 
 Rules:
 - Keep ats_score integer 0-100.
@@ -165,8 +165,10 @@ async def analyze_ats(resume_text: str, job_description: Optional[str] = None, e
     prompt = build_prompt(resume_text, job_description, docs)
 
     # Step 3: call Gemini
+    print(f"[ATS DEBUG] Calling Gemini API...")
     raw = await _call_gemini(prompt, model="gemini-2.0-flash-exp", max_tokens=1000, temperature=0.3)
-    print(f"[ATS DEBUG] Raw LLM response: {raw[:500]}...")  # Log first 500 chars
+    print(f"[ATS DEBUG] Raw LLM response length: {len(raw) if raw else 0}")
+    print(f"[ATS DEBUG] Raw LLM response: {raw[:500] if raw else 'None'}...")  # Log first 500 chars
 
     # Step 4: clean fences
     cleaned = _strip_code_fences(raw or "")
@@ -197,15 +199,16 @@ async def analyze_ats(resume_text: str, job_description: Optional[str] = None, e
     data.setdefault("sent_to_email", False)
 
     # Optionally send email
-    # sent_flag = False
-    # if email:
-    #     sent_flag = _send_email(
-    #         to_email=email,
-    #         summary=str(data.get("summary", "")),
-    #         rejection_reasons=list(data.get("rejection_reasons", [])),
-    #         suggestions=list(data.get("actionable_suggestions", [])),
-    #         ats_score=int(data.get("ats_score", 50)),
-    #     )
+    sent_flag = False
+    if email:
+        sent_flag = _send_email(
+            to_email=email,
+            summary=str(data.get("summary", "")),
+            rejection_reasons=list(data.get("rejection_reasons", [])),
+            suggestions=list(data.get("actionable_suggestions", [])),
+            ats_score=int(data.get("ats_score", 50)),
+        )
+        print(f"[ATS DEBUG] Email sent: {sent_flag}")
 
     return ATSAnalyzeOutput(
         ats_score=int(data.get("ats_score", 50)),
@@ -214,4 +217,5 @@ async def analyze_ats(resume_text: str, job_description: Optional[str] = None, e
         issues=list(data.get("issues", [])),
         actionable_suggestions=list(data.get("actionable_suggestions", [])),
         summary=str(data.get("summary", "")),
+        sent_to_email=sent_flag,
     )
