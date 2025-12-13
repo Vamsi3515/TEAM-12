@@ -34,3 +34,4 @@ class ATSAnalyzeOutput(BaseModel):
     issues: List[str]
     actionable_suggestions: List[str]
     summary: str
+    sent_to_email: bool = False
