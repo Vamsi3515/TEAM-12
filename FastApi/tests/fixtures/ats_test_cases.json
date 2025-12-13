@@ -89,8 +89,8 @@
     "resume_text": "DATA SCIENTIST\n\nSummary:\nData Scientist with 4 years of experience in machine learning and statistical analysis. Expert in Python, R, and data visualization.\n\nTechnical Skills:\n- Python (NumPy, Pandas, Scikit-learn, TensorFlow)\n- R, SQL\n- Machine Learning, Deep Learning\n- Data Visualization (Matplotlib, Tableau)\n- Jupyter Notebooks\n\nExperience:\nData Scientist | Analytics Corp | 2020-Present\n- Developed predictive models achieving 92% accuracy\n- Analyzed large datasets to derive business insights\n- Created data pipelines using Python\n- Built dashboards for stakeholder reporting\n\nEducation:\nM.S. Statistics | University of California | 2020\nB.S. Mathematics | University of California | 2018",
     "job_description": "Backend Software Engineer\n\nRequirements:\n- 3+ years backend development experience\n- Strong knowledge of Python or Java\n- Experience with RESTful API development\n- Database design and optimization (PostgreSQL, MySQL)\n- Experience with Docker and containerization\n- Understanding of microservices architecture\n- Knowledge of testing frameworks",
     "expected_score_range": {
-      "min": 35,
-      "max": 55
+      "min": 25,
+      "max": 45
     },
     "expected_rejection_reasons": [
       "backend development",
@@ -120,8 +120,8 @@
     "resume_text": "PRINCIPAL SOFTWARE ENGINEER\n\nSummary:\nPrincipal Engineer with 15+ years of experience architecting large-scale distributed systems. Led engineering organizations of 50+ engineers. Expert in system design, cloud architecture, and technical leadership.\n\nTechnical Skills:\n- Languages: Python, Java, Go, C++, JavaScript\n- Cloud: AWS (all services), GCP, Azure\n- Architecture: Microservices, Event-driven, Distributed Systems\n- Leadership: Technical Strategy, Team Building, Mentorship\n\nExperience:\nPrincipal Engineer | BigTech Corp | 2015-Present\n- Architected platform serving 100M+ users\n- Led technical direction for 5 engineering teams\n- Designed distributed data processing system handling 10TB/day\n- Speaker at multiple tech conferences\n\nSenior Staff Engineer | Cloud Company | 2010-2015\n- Built cloud infrastructure platform\n- Mentored senior engineers\n- Patented 3 cloud technologies\n\nEducation:\nPh.D. Computer Science | MIT | 2010\nM.S. Computer Science | MIT | 2007\nB.S. Computer Science | MIT | 2005\n\nPublications: 15+ peer-reviewed papers\nPatents: 8 granted patents",
     "job_description": "Mid-Level Software Engineer\n\nRequirements:\n- 3-5 years of software development experience\n- Proficiency in Python or JavaScript\n- Experience with web frameworks (Django, Flask, FastAPI)\n- Basic cloud knowledge\n- Team collaboration skills\n- Bachelor's degree in Computer Science",
     "expected_score_range": {
-      "min": 90,
-      "max": 100
+      "min": 40,
+      "max": 60
     },
     "expected_rejection_reasons": [
       "overqualified",
@@ -180,8 +180,8 @@
     "resume_text": "COMPUTER SCIENCE PH.D. GRADUATE\n\nEducation:\nPh.D. Computer Science | Top University | 2024\nDissertation: \"Advanced Machine Learning Techniques for Natural Language Processing\"\nM.S. Computer Science | Top University | 2021\nB.S. Computer Science | State University | 2019\n\nResearch Experience:\nGraduate Research Assistant | 2019-2024\n- Conducted research in deep learning and NLP\n- Published 8 papers in top-tier conferences (NeurIPS, ICML, ACL)\n- Developed novel algorithms for text classification\n- Implemented research prototypes in Python (PyTorch, TensorFlow)\n\nTechnical Skills:\n- Python, C++, Java\n- Machine Learning: PyTorch, TensorFlow, Scikit-learn\n- NLP: Transformers, BERT, GPT\n- Research: Statistical Analysis, Experimentation\n\nInternship:\nML Research Intern | AI Lab | Summer 2022\n- Developed prototype for sentiment analysis\n- Collaborated with research team\n\nProjects:\n- Open source NLP library (500+ GitHub stars)\n- Research code for published papers",
     "job_description": "Machine Learning Engineer\n\nRequirements:\n- 2+ years of ML engineering experience in production\n- Strong Python programming skills\n- Experience deploying ML models to production\n- Knowledge of MLOps, CI/CD for ML\n- Experience with cloud platforms (AWS, GCP)\n- Ability to work with cross-functional teams\n- Master's degree preferred",
     "expected_score_range": {
-      "min": 60,
-      "max": 75
+      "min": 40,
+      "max": 60
     },
     "expected_rejection_reasons": [
       "limited production experience",
@@ -245,8 +245,8 @@
     "resume_text": "FULL STACK DEVELOPER\n\nTechnical Skills:\nPython, JavaScript, TypeScript, Java, C++, Go, Ruby, PHP, Swift, Kotlin, React, Angular, Vue.js, Node.js, Django, Flask, FastAPI, Spring Boot, Express.js, AWS, Azure, GCP, Docker, Kubernetes, Jenkins, Git, PostgreSQL, MongoDB, Redis, MySQL, Elasticsearch, Kafka, RabbitMQ, GraphQL, REST API, Microservices, CI/CD, Terraform, Ansible\n\nExperience:\nFull Stack Developer | Tech Company | 2022-Present\n- Used Python, JavaScript, and various frameworks\n- Worked with AWS and Docker\n- Built APIs and databases\n- Implemented features\n\nIntern | Another Company | 2021-2022\n- Learned multiple technologies\n- Assisted senior developers\n\nEducation:\nB.S. Computer Science | 2021",
     "job_description": "Full Stack Developer\n\nRequirements:\n- 3+ years development experience\n- Python and JavaScript\n- React and Node.js\n- AWS cloud experience\n- Docker and containerization\n- Database design\n- RESTful APIs",
     "expected_score_range": {
-      "min": 50,
-      "max": 65
+      "min": 70,
+      "max": 85
     },
     "expected_rejection_reasons": [
       "shallow experience",
@@ -365,8 +365,8 @@
     "resume_text": "Developer\n\nI code a lot. Check my GitHub.\n\nSkills:\npython javascript react\n\nWork:\nSoftware person at company (3 years)\n\nSchool:\nCS degree\n\nGitHub: github.com/awesomedev (5000+ contributions, 20 repos, 50+ stars)",
     "job_description": "Software Engineer\n\nRequirements:\n- 3+ years development experience\n- Strong programming skills\n- Open source contributions valued\n- Full-stack development\n- Computer Science degree",
     "expected_score_range": {
-      "min": 30,
-      "max": 50
+      "min": 65,
+      "max": 85
     },
     "expected_rejection_reasons": [
       "unprofessional resume",

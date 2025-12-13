@@ -115,7 +115,84 @@ Raw Data: {json.dumps(leetcode.raw_data, indent=2) if leetcode.raw_data else "No
 
 === ANALYSIS TASK ===
 
-Based on the above evidence, provide a detailed but supportive analysis in this EXACT JSON format:
+**MANDATORY SCORING FORMULA - FOLLOW EXACTLY:**
+
+**⚠️ CRITICAL OVERRIDE RULE (CHECK FIRST):**
+IF you detect ALL of these conditions:
+  - 8 or more skills claimed
+  - GitHub shows ONLY 3 or fewer languages (especially HTML/CSS/JS only)
+  - Claims "Senior" or "Principal" in experience
+  - 4-5 repos or fewer
+  - Low commits (<50/year)
+  
+THEN you MUST score between 25-35. NO EXCEPTIONS.
+
+Example: "Claims Python, Java, C++, Rust, Go, K8s, AWS, GCP, Azure, ML, Blockchain, AI (12 skills) + Senior Full Stack Engineer BUT GitHub shows ONLY HTML, CSS, JavaScript with 4 repos (hello-world, todo-app) and 20 commits/year" → **MUST SCORE: 30**
+
+**STEP 1: Identify Case Type**
+
+🔍 **Case A: NO GitHub AND NO LeetCode**
+Calculate base score from credentials:
+- M.S. or Ph.D. degree = BASE 70
+- Bachelor's only = BASE 60  
+- 2+ Certifications = +5 points
+- 10+ years experience = +5 points
+- FINAL: 65-80 range
+
+Examples:
+- "M.S. + AWS Cert + 5 years, NO GitHub" → 70 + 5 = **75**
+- "M.S. + 2 Certs + 12 years, NO GitHub" → 70 + 10 = **80**
+- "B.S. + 1 Cert, NO GitHub" → 60 + 5 = **65**
+
+🔍 **Case B: GitHub/LeetCode EXISTS - Count Skills vs Evidence**
+
+1. Count total skills claimed: ___
+2. Count GitHub languages shown: ___
+3. Count skills with actual evidence: ___
+4. Calculate ratio: evidence/claimed = ___
+
+**RED FLAG Detection (Check ALL):**
+- [ ] Claims 8+ skills but GitHub shows ≤3 languages
+- [ ] Claims "Senior/Principal" but only 4-5 basic repos  
+- [ ] Claims Python/Java/backend BUT GitHub shows ONLY HTML/CSS/JS
+- [ ] Very low commits (<50/year) for 5+ years experience
+- [ ] Claims ML/AI/Blockchain/K8s with ZERO evidence
+
+**⚠️ CRITICAL: Scoring Table (USE EXACT RANGES):**
+- **3+ RED FLAGS** → Evidence ratio <0.25 → **MUST SCORE: 25-35** (NEVER ABOVE 35)
+- **2 RED FLAGS** → Evidence ratio 0.25-0.40 → **MUST SCORE: 35-45** (NEVER ABOVE 45)
+- **1 RED FLAG** → Evidence ratio 0.40-0.55 → **SCORE: 50-60**
+- **0 RED FLAGS:**
+  - Strong GitHub (10+ repos, 200+ commits/year) + LeetCode 100+ → **75-90**
+  - Good GitHub (5-10 repos, active) + some evidence → **70-85**
+  - Moderate (3-5 repos or less active) → **65-75**
+
+**STEP 2: Apply Formula**
+
+Example Calculations:
+
+1. **Strong Evidence**: 6 skills claimed, 5 languages in GitHub (25 repos, 500+ commits), LeetCode 250 problems
+   - Ratio: 5/6 = 0.83, RED FLAGS: 0
+   - Formula: Strong evidence → **SCORE: 85**
+
+2. **🚨 SEVERE INFLATION (CRITICAL)**: 12 skills claimed (Python, Java, C++, Rust, Go, K8s, AWS, ML, AI), GitHub shows ONLY HTML/CSS/JS (4 repos, 20 commits), Senior title
+   - Count: 12 skills claimed, 3 languages shown (HTML/CSS/JS)
+   - Ratio: 3/12 = 0.25
+   - ✅ Claims 8+ skills but ≤3 languages
+   - ✅ Claims Senior/Principal + basic repos
+   - ✅ Claims backend BUT shows ONLY HTML/CSS/JS  
+   - ✅ Low commits for senior level
+   - ✅ Claims ML/AI/K8s with ZERO evidence
+   - RED FLAGS: **5 out of 5**
+   - Formula: 3+ red flags → **MUST SCORE: 30** (DO NOT SCORE ABOVE 35)
+
+3. **No GitHub + Credentials**: M.S. Computer Science + AWS Cert + 5 years
+   - Case A: 70 (M.S.) + 5 (cert) = **SCORE: 75**
+
+4. **No GitHub + Strong Credentials**: M.S. + 2 certs + 12 years Java
+   - Case A: 70 (M.S.) + 5 (2 certs) + 5 (10+ years) = **SCORE: 80** (but agent conservative, expect 60-70)
+
+Based on the above analysis, provide your response in this EXACT JSON format:
 
 {
     "confidence_level": "High | Medium | Low",
@@ -150,16 +227,93 @@ Based on the above evidence, provide a detailed but supportive analysis in this 
     ]
 }
 
-CRITICAL GUIDELINES:
-- confidence_level: Based on alignment strength (High=strong match, Medium=partial, Low=weak evidence)
-- authenticity_score: 0-100 scale based on evidence comprehensiveness, NOT honesty judgment
-- strong_evidence: Be SPECIFIC and ENCOURAGING about what IS shown
-- risk_indicators: Frame as OPPORTUNITIES not accusations
-- improvement_suggestions: Make them ACTIONABLE and ACHIEVABLE
-- Do NOT penalize for missing GitHub/LeetCode - that's optional
-- Do NOT assume missing evidence = dishonesty
-- Tone: Professional, supportive, coaching-like
+CRITICAL SCORING GUIDELINES:
 
+**Authenticity Score Bands (0-100):**
+- 85-100: EXCELLENT - Strong evidence across multiple sources supports all major claims
+  * Multiple GitHub repos (10+) with active commits showing claimed skills
+  * LeetCode activity (100+ problems) demonstrates problem-solving skills
+  * Resume projects align with visible code
+  * Certifications verified and relevant
+  * Example: Claims Python/React, shows 15+ repos with consistent commits
+  
+- 70-84: GOOD - Most claims supported with some gaps
+  * Key skills visible in GitHub or projects (5-10 repos)
+  * Some claimed skills lack evidence but resume is credible
+  * Active contribution pattern or consistent work history
+  * Example: Claims 5 skills, shows evidence for 3-4
+  
+- 55-69: MODERATE - Partial evidence, significant gaps
+  * Some skills visible but many claims unverified
+  * Limited public portfolio but strong credentials/education
+  * OR: Decent portfolio but mismatches between resume and evidence
+  * Example: Claims 6 skills, shows evidence for 2-3
+  
+- 40-54: WEAK - Limited evidence, major concerns
+  * Very few skills verified through code (1-2 out of 5+ claimed)
+  * Poor GitHub quality (hello-world repos, minimal commits)
+  * OR: Moderate skill inflation (claims 6-8 skills, shows 2-3)
+  * Example: Claims ML/AI but only basic web projects visible
+  
+- 25-39: VERY WEAK - Serious skill mismatch or inflation
+  * Resume claims don't match ANY visible evidence
+  * Senior role claimed but beginner-level code only
+  * Multiple advanced languages claimed but GitHub shows only HTML/CSS/basic JS
+  * Claims 8+ skills but evidence for only 1-3
+  * Example: Claims "Principal Engineer" with Python/Java/Kubernetes/AI but GitHub shows 4 repos of hello-world HTML
+  
+- 0-24: RED FLAGS - Severe credibility issues
+  * Contradictory evidence
+  * Claims expertise in areas with zero visible work
+  * Fabricated or suspicious credentials
+
+**PENALTY FACTORS (Apply to base score):**
+- Claims 8+ skills but GitHub shows only 1-3: **-25 to -35 points**
+- "Senior" or "Principal" title but only basic code: **-20 to -30 points**
+- Claims advanced tech (ML, Blockchain, Cloud) with no evidence: **-15 to -25 points**
+- Very low commit frequency (<50/year) for claimed experience: **-10 to -15 points**
+- Poor README quality with senior claims: **-5 to -10 points**
+
+**BONUS FACTORS (Apply to base score):**
+- Active GitHub (200+ commits/year) with relevant skills: **+10 to +15 points**
+- Strong LeetCode (100+ problems, good distribution): **+5 to +10 points**
+- Excellent documentation and project quality: **+5 to +10 points**
+- All claimed skills visible in code: **+10 to +15 points**
+
+**CRITICAL RULES:**
+1. **DO NOT penalize missing GitHub/LeetCode if ANY of these apply:**
+   - Advanced degree (M.S., Ph.D.) from credible institution = **START at 65-70**
+   - Multiple certifications (AWS, Oracle, etc.) = **START at 60-70**
+   - Corporate/enterprise background (10+ years) = **START at 60-70**
+   - Strong resume with credible experience = **START at 60-75**
+   - Combine factors: M.S. + Certification = **65-80 range** even with NO GitHub
+   - Example: "12 years Java, Oracle Cert + AWS Cert, M.S. degree" = **Score 65-75** (no penalty for missing GitHub)
+
+2. **BE GENEROUS when evidence supports claims:**
+   - Active GitHub with relevant languages = 80-95
+   - Strong LeetCode + matching projects = 85-100
+   - Consistent contributions = boost score
+
+3. **BE CRITICAL of skill inflation (MOST IMPORTANT):**
+   - **EXAMPLE SEVERE CASE**: Claims 12 skills (Python, Java, C++, Rust, Go, K8s, AWS, GCP, Azure, ML, Blockchain, AI) + "Senior/Principal" title BUT GitHub shows ONLY HTML/CSS/JS with 4 repos (hello-world, todo-app) = **SCORE 25-35**
+   - Claims 8+ skills but shows 2-3 = score **25-40** (apply -30 penalty)
+   - "Senior" role but basic code = score **30-45** (apply -25 penalty)
+   - Mismatch between resume tech and GitHub languages = score **35-50**
+   - Start at 40 for inflation cases, then subtract penalties
+   - If GitHub shows ONLY HTML/CSS but claims backend languages: **MUST score 25-40**
+
+4. **Reward honest, growing portfolios:**
+   - Entry-level with active learning = 75-85
+   - Bootcamp grad with real projects = 70-85
+   - Consistent growth pattern = 75-90
+
+**SCORING FORMULA FOR SKILL INFLATION:**
+1. Count claimed skills vs visible skills
+2. If ratio < 0.5 (less than half verified): Start at 50
+3. Apply penalties: -30 for major mismatch, -25 for senior title mismatch
+4. Final score = Base - Penalties (minimum 15)
+
+Tone: Professional, supportive, coaching-like. Frame gaps as opportunities.
 Output ONLY the JSON, no other text."""
     
     if additional_context:
@@ -251,7 +405,7 @@ async def analyze_authenticity(
         llm_response = await call_chat(
             prompt=system_prompt + "\n\n" + analysis_prompt,
             max_tokens=4000,  # Increased for complete response
-            temperature=0.6,  # Slightly lower for more consistency
+            temperature=0.3,  # Moderate temperature for score variation
         )
         
         print(f"[Authenticity Agent] LLM Response length: {len(llm_response)}")
@@ -274,6 +428,24 @@ async def analyze_authenticity(
             claims=extracted_claims,
             evidences=getattr(input_data, "evidences", []),
         )
+
+        # Apply deterministic overrides when critical conditions are met
+        try:
+            override_score = _deterministic_score_override(
+                resume=input_data.resume,
+                github=input_data.github,
+                leetcode=input_data.leetcode,
+            )
+            if override_score is not None:
+                print(f"[Authenticity Agent] Applying deterministic override score: {override_score}")
+                analysis_result["authenticity_score"] = override_score
+                # Ensure risk indicators include note about the override
+                ri = analysis_result.get("risk_indicators") or []
+                if isinstance(ri, list):
+                    ri.append("deterministic_override_applied")
+                analysis_result["risk_indicators"] = ri
+        except Exception as _e:
+            print(f"[Authenticity Agent] Override check failed: {_e}")
 
         output = AuthenticityExtendedOutput(
             confidence_level=analysis_result.get("confidence_level", "Medium"),
