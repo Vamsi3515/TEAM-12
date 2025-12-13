@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Github, FileText, ArrowRight, Sparkles, TrendingUp, Users } from 'lucide-react';
+import { Github, FileText, Shield, ArrowRight, Sparkles, TrendingUp, Users } from 'lucide-react';
 import Navbar from './Navbar';
 import Card from './Card';
 import Button from './Button';
@@ -33,6 +33,19 @@ const Home = () => {
         { label: 'Success Rate', value: '95%' },
         { label: 'Analyzed', value: '10K+' },
         { label: 'Keywords', value: '500+' }
+      ]
+    },
+    {
+      id: 'security-auditor',
+      icon: Shield,
+      title: 'Security Auditor',
+      description: 'Detect OWASP vulnerabilities using hybrid AI analysis with static patterns and RAG',
+      gradient: 'from-indigo-500 to-purple-600',
+      route: '/security-auditor',
+      stats: [
+        { label: 'OWASP Top 10', value: '8/10' },
+        { label: 'Vulnerabilities', value: '13+' },
+        { label: 'CWE Mapped', value: '100%' }
       ]
     }
   ];
@@ -68,7 +81,7 @@ const Home = () => {
 
       {/* Main Cards Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (

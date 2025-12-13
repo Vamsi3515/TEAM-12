@@ -35,3 +35,45 @@ class ATSAnalyzeOutput(BaseModel):
     actionable_suggestions: List[str]
     summary: str
     sent_to_email: bool = False
+
+
+# Security Audit (legacy)
+class SecurityAuditRequest(BaseModel):
+    code: str
+
+class SecurityAuditResponse(BaseModel):
+    findings: List[str]
+
+# Security Audit (UI-facing)
+class SecurityAuditInput(BaseModel):
+    code: Optional[str] = ""
+    repoUrl: Optional[str] = ""
+    inputType: Optional[str] = "code"  # code | repo
+
+class SecurityAuditSummary(BaseModel):
+    critical: int
+    high: int
+    medium: int
+    low: int
+
+class SecurityVulnerability(BaseModel):
+    title: str
+    severity: str
+    description: str
+    fixes: List[str] = []
+    cwe: Optional[str] = None
+
+class SecurityAuditUIResponse(BaseModel):
+    summary: SecurityAuditSummary
+    vulnerabilities: List[SecurityVulnerability]
+    recommendations: List[str]
+
+class SecurityAuditOutput(BaseModel):
+    """Output schema for security analysis matching agent return structure."""
+    vulnerabilities: List[Dict]
+    security_score: float  # 0-100, higher is better
+    risk_score: float  # Risk points accumulated
+    risk_level: str  # low, medium, high, critical
+    summary: str
+    evidence_ids: List[str]
+    evidence_snippets: List[Dict]

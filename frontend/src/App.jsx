@@ -4,6 +4,7 @@ import Landing from "./components/Landing";
 import Home from "./components/Home";
 import GitHubAnalyzer from "./components/GitHubAnalyzer";
 import RejectionDetector from "./components/Ats-score-with-rejection-detector";
+import SecurityAuditor from "./components/SecurityAuditor";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/Ats-score-with-rejection-detector" element={<RejectionDetector />} />
         <Route path="/github-analyzer" element={<GitHubAnalyzer />} />
+        <Route path="/security-auditor" element={<SecurityAuditor />} />
       </Routes>
     </div>
   );

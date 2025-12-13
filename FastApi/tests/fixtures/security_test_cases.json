@@ -1,0 +1,252 @@
+[
+  {
+    "test_case_name": "sql_injection_f_string",
+    "description": "SQL injection using f-string interpolation - Critical vulnerability",
+    "code": "def get_user(user_id):\n    cursor.execute(f\"SELECT * FROM users WHERE id = {user_id}\")\n    return cursor.fetchone()",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "sql_injection"
+    ],
+    "expected_severity": "critical",
+    "expected_score_range": {
+      "min": 0,
+      "max": 30
+    },
+    "expected_cwe": "CWE-89",
+    "expected_owasp": "A03:2021"
+  },
+  {
+    "test_case_name": "command_injection_shell_true",
+    "description": "Command injection using subprocess with shell=True",
+    "code": "import subprocess\ndef ping_host(hostname):\n    subprocess.run(f\"ping {hostname}\", shell=True)",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "command_injection"
+    ],
+    "expected_severity": "critical",
+    "expected_score_range": {
+      "min": 0,
+      "max": 25
+    },
+    "expected_cwe": "CWE-78",
+    "expected_owasp": "A03:2021"
+  },
+  {
+    "test_case_name": "hardcoded_api_key",
+    "description": "Hardcoded API key in source code",
+    "code": "API_KEY = \"sk-1234567890abcdefghijklmnopqrstuvwxyz123456\"\nGROQ_API_KEY = \"gsk_abcdefghijklmnop1234567890\"\ndef authenticate():\n    return API_KEY",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "hardcoded_secrets"
+    ],
+    "expected_severity": "critical",
+    "expected_score_range": {
+      "min": 10,
+      "max": 40
+    },
+    "expected_cwe": "CWE-798",
+    "expected_recommendations": [
+      "environment variables",
+      "secret manager"
+    ]
+  },
+  {
+    "test_case_name": "path_traversal_user_input",
+    "description": "Path traversal allowing arbitrary file access",
+    "code": "def read_file(filename):\n    with open(f\"/app/files/{filename}\", 'r') as f:\n        return f.read()",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "path_traversal"
+    ],
+    "expected_severity": "high",
+    "expected_score_range": {
+      "min": 20,
+      "max": 50
+    },
+    "expected_cwe": "CWE-22"
+  },
+  {
+    "test_case_name": "insecure_deserialization_pickle",
+    "description": "Insecure deserialization using pickle on untrusted data",
+    "code": "import pickle\ndef load_data(user_data):\n    return pickle.loads(user_data)",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "insecure_deserialization"
+    ],
+    "expected_severity": "critical",
+    "expected_score_range": {
+      "min": 0,
+      "max": 30
+    },
+    "expected_cwe": "CWE-502"
+  },
+  {
+    "test_case_name": "weak_crypto_md5_password",
+    "description": "Weak cryptography using MD5 for password hashing",
+    "code": "import hashlib\ndef hash_password(password):\n    return hashlib.md5(password.encode()).hexdigest()",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "weak_crypto"
+    ],
+    "expected_severity": "medium",
+    "expected_score_range": {
+      "min": 40,
+      "max": 70
+    },
+    "expected_cwe": "CWE-327",
+    "expected_recommendations": [
+      "bcrypt",
+      "argon2",
+      "SHA-256"
+    ]
+  },
+  {
+    "test_case_name": "debug_mode_enabled",
+    "description": "Debug mode enabled in production",
+    "code": "from flask import Flask\napp = Flask(__name__)\nDEBUG = True\napp.config['DEBUG'] = True\napp.run(debug=True)",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "debug_enabled"
+    ],
+    "expected_severity": "high",
+    "expected_score_range": {
+      "min": 30,
+      "max": 60
+    },
+    "expected_recommendations": [
+      "DEBUG=False",
+      "production"
+    ]
+  },
+  {
+    "test_case_name": "xss_inner_html",
+    "description": "XSS vulnerability using innerHTML with user data",
+    "code": "function displayUser(username) {\n    document.getElementById('user').innerHTML = username;\n}",
+    "language": "javascript",
+    "expected_vulnerabilities": [
+      "xss_vulnerability"
+    ],
+    "expected_severity": "high",
+    "expected_score_range": {
+      "min": 20,
+      "max": 50
+    },
+    "expected_cwe": "CWE-79"
+  },
+  {
+    "test_case_name": "ssrf_user_url",
+    "description": "SSRF allowing requests to arbitrary URLs",
+    "code": "import requests\ndef fetch_url(user_url):\n    response = requests.get(user_url)\n    return response.text",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "ssrf_vulnerability"
+    ],
+    "expected_severity": "high",
+    "expected_score_range": {
+      "min": 20,
+      "max": 50
+    },
+    "expected_cwe": "CWE-918"
+  },
+  {
+    "test_case_name": "idor_no_authorization",
+    "description": "IDOR vulnerability without authorization check",
+    "code": "@app.route('/api/user/<user_id>/profile')\ndef get_profile(user_id):\n    user = db.query(User).filter(User.id == user_id).first()\n    return jsonify(user.to_dict())",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "idor_vulnerability"
+    ],
+    "expected_severity": "high",
+    "expected_score_range": {
+      "min": 20,
+      "max": 50
+    },
+    "expected_cwe": "CWE-639"
+  },
+  {
+    "test_case_name": "multiple_critical_vulnerabilities",
+    "description": "Code with multiple critical security issues",
+    "code": "import subprocess\nimport pickle\nAPI_KEY = \"sk-test123456789\"\ndef process_user_input(user_cmd, user_data):\n    subprocess.run(f\"bash -c {user_cmd}\", shell=True)\n    data = pickle.loads(user_data)\n    return data",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "command_injection",
+      "insecure_deserialization",
+      "hardcoded_secrets"
+    ],
+    "expected_severity": "critical",
+    "expected_score_range": {
+      "min": 0,
+      "max": 20
+    },
+    "expected_recommendations": [
+      "shell",
+      "pickle",
+      "environment"
+    ]
+  },
+  {
+    "test_case_name": "secure_code_example",
+    "description": "Well-written secure code with proper practices",
+    "code": "from sqlalchemy import text\nimport bcrypt\n\ndef get_user_secure(user_id: int, db_session):\n    # Using parameterized query\n    query = text(\"SELECT * FROM users WHERE id = :user_id\")\n    result = db_session.execute(query, {\"user_id\": user_id})\n    return result.fetchone()\n\ndef hash_password_secure(password: str) -> str:\n    # Using bcrypt for password hashing\n    salt = bcrypt.gensalt()\n    return bcrypt.hashpw(password.encode(), salt).decode()",
+    "language": "python",
+    "expected_vulnerabilities": [],
+    "expected_severity": "low",
+    "expected_score_range": {
+      "min": 80,
+      "max": 100
+    },
+    "expected_strengths": [
+      "parameterized",
+      "bcrypt",
+      "secure"
+    ]
+  },
+  {
+    "test_case_name": "sensitive_data_logging",
+    "description": "Logging sensitive information like passwords",
+    "code": "import logging\ndef login(username, password):\n    logging.info(f\"Login attempt: {username} with password {password}\")\n    print(f\"Debug: API token is {api_token}\")",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "sensitive_data_exposure"
+    ],
+    "expected_severity": "medium",
+    "expected_score_range": {
+      "min": 40,
+      "max": 70
+    },
+    "expected_cwe": "CWE-532"
+  },
+  {
+    "test_case_name": "csrf_missing_protection",
+    "description": "POST endpoint without CSRF protection",
+    "code": "@app.route('/api/delete-account', methods=['POST'])\ndef delete_account():\n    user_id = request.form.get('user_id')\n    db.delete_user(user_id)\n    return {'status': 'deleted'}",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "csrf_vulnerability"
+    ],
+    "expected_severity": "medium",
+    "expected_score_range": {
+      "min": 40,
+      "max": 70
+    },
+    "expected_cwe": "CWE-352"
+  },
+  {
+    "test_case_name": "eval_code_execution",
+    "description": "Code injection using eval() on user input",
+    "code": "def calculate(expression):\n    result = eval(expression)\n    return result",
+    "language": "python",
+    "expected_vulnerabilities": [
+      "command_injection"
+    ],
+    "expected_severity": "critical",
+    "expected_score_range": {
+      "min": 0,
+      "max": 25
+    },
+    "expected_recommendations": [
+      "ast.literal_eval",
+      "safe"
+    ]
+  }
+]
