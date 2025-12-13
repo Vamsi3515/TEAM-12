@@ -1,9 +1,50 @@
 import json
-from app.core.llm_client import _call_gemini, _call_groq
+from typing import List, Optional
 
+from pydantic import BaseModel, Field, ValidationError
+
+from app.core.llm_client import _call_gemini, _call_groq
 from app.core.vectorstore import get_or_create_collection
 from app.core.embeddings import embed
 from app.core.uml_rag_data import uml_knowledge
+
+# --------- Limits & Defaults ---------
+MAX_DESC_LEN = 2000
+MAX_RAG_LEN = 2000
+MAX_RAW_LEN = 4000
+MAX_MERMAID_LEN = 1200
+MAX_TEXT_LEN = 200
+MAX_DIAGRAMS = 4
+
+
+# --------- Pydantic Schemas ---------
+class DiagramModel(BaseModel):
+    type: str = Field(..., pattern="^(class|sequence|flowchart|erd|dependency)$")
+    title: str = Field("", max_length=MAX_TEXT_LEN)
+    mermaid: str = Field("", max_length=MAX_MERMAID_LEN)
+    description: str = Field("", max_length=MAX_TEXT_LEN)
+
+
+class ApiRouteModel(BaseModel):
+    method: str = Field("GET", max_length=10)
+    path: str = Field("/", max_length=200)
+    description: str = Field("", max_length=MAX_TEXT_LEN)
+
+
+class SummaryModel(BaseModel):
+    classesCount: int = Field(0, ge=0)
+    endpointsCount: int = Field(0, ge=0)
+    dependenciesCount: int = Field(0, ge=0)
+    architectureType: str = Field("unknown", max_length=50)
+    complexity: str = Field("unknown", max_length=20)
+    languages: List[str] = Field(default_factory=list)
+
+
+class UMLResponseModel(BaseModel):
+    diagrams: List[DiagramModel] = Field(default_factory=list, max_items=MAX_DIAGRAMS)
+    apiRoutes: List[ApiRouteModel] = Field(default_factory=list)
+    folderStructure: str = Field("", max_length=1000)
+    summary: SummaryModel = Field(default_factory=SummaryModel)
 
 # seed UML knowledge into vector DB
 def seed_uml_collection():
@@ -16,27 +57,31 @@ def seed_uml_collection():
     return col
 
 def retrieve_uml_context(query: str, k=3):
-    col = seed_uml_collection()
-    q_emb = embed([query])[0]
-    res = col.query(query_embeddings=[q_emb], n_results=k)
+    try:
+        col = seed_uml_collection()
+        q_emb = embed([query])[0]
+        res = col.query(query_embeddings=[q_emb], n_results=k)
 
-    docs = res["documents"][0]
-    ids = res["ids"][0]
-
-    rag_context = "\n\n".join([f"ID:{ids[i]}\n{docs[i]}" for i in range(len(docs))])
-    return rag_context
+        docs = res.get("documents", [[]])[0] if res else []
+        ids = res.get("ids", [[]])[0] if res else []
+        if not docs:
+            return ""
+        rag_context = "\n\n".join([f"ID:{ids[i] if i < len(ids) else f'kb-{i}'}\n{docs[i]}" for i in range(len(docs))])
+        return rag_context[:MAX_RAG_LEN]
+    except Exception:
+        return ""
 
 
 async def generate_uml(description: str, uml_type: str = "auto"):
+    # Retrieve grounding context (best effort)
+    safe_description = (description or "").strip()[:MAX_DESC_LEN]
+    rag_context = retrieve_uml_context(safe_description)
 
-    # Retrieve grounding context
-    rag_context = retrieve_uml_context(description)
-
-        # Build LLM prompt asking for multiple diagrams and architecture summary
+    # Build LLM prompt asking for multiple diagrams and architecture summary
     prompt = f"""You are an expert software architect and UML designer.
 
 User Description:
-{description}
+{safe_description}
 
 Requested UML type: {uml_type}
 
@@ -67,30 +112,87 @@ Produce a comprehensive architecture analysis and multiple Mermaid diagrams cove
 }}
 
 Rules:
-1) Return ONLY the JSON object exactly matching the schema.
+1) Return ONLY the JSON object exactly matching the schema (no markdown, no code fences).
 2) Provide at least two diagrams (if possible): one structural (class/dependency) and one behavioral (sequence/flowchart).
-3) For mermaid diagrams, escape newlines as \n.
-4) Populate summary fields with best-effort counts and inferred architectureType and complexity.
-5) If repository URL was provided, include repository-specific notes in explanation fields.
+3) Limit diagrams to at most 4 items; each mermaid string <= 1200 characters; titles/descriptions <= 200 characters.
+4) Escape newlines in mermaid as \n; do not include backticks or fencing.
+5) Populate summary fields with best-effort counts and inferred architectureType and complexity.
+6) Do NOT invent external URLs or secrets; only use info provided by the user or grounding context.
 
 Begin.
 """
 
     raw = await _call_groq(prompt, model="llama-3.3-70b-versatile", max_tokens=1600, temperature=0.15)
 
-    cleaned = raw.strip()
+    cleaned = raw.strip()[:MAX_RAW_LEN]
     if cleaned.startswith("```"):
         lines = cleaned.split("\n")
         lines = [l for l in lines if not l.strip().startswith("```")]
         cleaned = "\n".join(lines).strip()
 
     # Try to parse JSON; if parsing fails, attempt a repair call; otherwise provide minimal fallback
+    def _fallback_payload():
+        return {
+            "diagrams": [
+                {
+                    "type": "class",
+                    "title": "Class Diagram",
+                    "mermaid": "classDiagram\\n  class A {\\n    +method()\\n  }\\n",
+                    "description": "Fallback class diagram"
+                },
+                {
+                    "type": "flowchart",
+                    "title": "Flow Diagram",
+                    "mermaid": "flowchart TD\\n  A[Start] --> B[Process]\\n  B --> C[End]",
+                    "description": "Fallback flow diagram"
+                }
+            ],
+            "apiRoutes": [],
+            "folderStructure": "",
+            "summary": {
+                "classesCount": 0,
+                "endpointsCount": 0,
+                "dependenciesCount": 0,
+                "architectureType": "unknown",
+                "complexity": "unknown",
+                "languages": ["unknown"]
+            }
+        }
+
+    def _coerce_and_bound(data: dict) -> dict:
+        try:
+            validated = UMLResponseModel(**data)
+        except ValidationError:
+            # Attempt best-effort clipping then retry
+            data = data or {}
+            data.setdefault("diagrams", [])
+            data["diagrams"] = data["diagrams"][:MAX_DIAGRAMS]
+            for d in data["diagrams"]:
+                if isinstance(d, dict):
+                    d["title"] = str(d.get("title", ""))[:MAX_TEXT_LEN]
+                    d["description"] = str(d.get("description", ""))[:MAX_TEXT_LEN]
+                    d["mermaid"] = str(d.get("mermaid", ""))[:MAX_MERMAID_LEN]
+            data.setdefault("apiRoutes", [])
+            data.setdefault("folderStructure", "")
+            data.setdefault("summary", {})
+            data["folderStructure"] = str(data["folderStructure"])[:1000]
+            try:
+                validated = UMLResponseModel(**data)
+            except ValidationError:
+                validated = UMLResponseModel(**_fallback_payload())
+        # Convert back to primitive dict
+        return json.loads(validated.model_dump_json())
+
     try:
         parsed = json.loads(cleaned)
     except json.JSONDecodeError:
-        repair_prompt = f"The previous response was not valid JSON. Reformat it strictly as JSON matching the schema. Previous response:\n{cleaned}"
+        repair_prompt = (
+            "The previous response was not valid JSON. Reformat it strictly as JSON matching the schema. "
+            "Return only JSON, no markdown."
+            f" Previous response:\n{cleaned}"
+        )
         repaired = await _call_groq(repair_prompt, model="llama-3.3-70b-versatile", max_tokens=800, temperature=0.0)
-        repaired_clean = repaired.strip()
+        repaired_clean = repaired.strip()[:MAX_RAW_LEN]
         if repaired_clean.startswith("```"):
             lines = repaired_clean.split("\n")
             lines = [l for l in lines if not l.strip().startswith("```")]
@@ -98,45 +200,7 @@ Begin.
         try:
             parsed = json.loads(repaired_clean)
         except Exception:
-            # fallback: return minimal set with two simple diagrams
-            parsed = {
-                "diagrams": [
-                    {
-                        "type": "class",
-                        "title": "Class Diagram",
-                        "mermaid": "classDiagram\\n  class A {\\n    +method()\\n  }\\n",
-                        "description": "Fallback class diagram"
-                    },
-                    {
-                        "type": "flowchart",
-                        "title": "Flow Diagram",
-                        "mermaid": "flowchart TD\\n  A[Start] --> B[Process]\\n  B --> C[End]",
-                        "description": "Fallback flow diagram"
-                    }
-                ],
-                "apiRoutes": [],
-                "folderStructure": "",
-                "summary": {
-                    "classesCount": 0,
-                    "endpointsCount": 0,
-                    "dependenciesCount": 0,
-                    "architectureType": "unknown",
-                    "complexity": "unknown",
-                    "languages": ["unknown"]
-                }
-            }
+            parsed = _fallback_payload()
 
-    # Normalize minimal fields to avoid runtime errors
-    parsed.setdefault("diagrams", parsed.get("diagrams", []))
-    parsed.setdefault("apiRoutes", parsed.get("apiRoutes", []))
-    parsed.setdefault("folderStructure", parsed.get("folderStructure", ""))
-    parsed.setdefault("summary", parsed.get("summary", {
-        "classesCount": 0,
-        "endpointsCount": 0,
-        "dependenciesCount": 0,
-        "architectureType": "unknown",
-        "complexity": "unknown",
-        "languages": ["unknown"]
-    }))
-
-    return parsed
+    bounded = _coerce_and_bound(parsed)
+    return bounded

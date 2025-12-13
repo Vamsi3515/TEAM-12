@@ -161,11 +161,60 @@ CRITICAL GUIDELINES:
 - Tone: Professional, supportive, coaching-like
 
 Output ONLY the JSON, no other text."""
-    
-    if additional_context:
-        prompt += f"\n=== ADDITIONAL CONTEXT ===\n{additional_context}\n"
-    
+
     return prompt
+
+
+def _extract_evidences_from_resume(resume: ResumeData) -> List[EvidenceItem]:
+    """Lightweight URL/user-handle extraction from resume raw text.
+
+    Produces EvidenceItems for known platforms so downstream claim verification can use them.
+    Best-effort and safe: ignores binary, de-duplicates by URL.
+    """
+    evidences: List[EvidenceItem] = []
+    raw = (resume.raw_text or "").strip()
+    if not raw:
+        return evidences
+
+    # Simple URL regex (greedy but bounded by whitespace)
+    url_pattern = re.compile(r"(https?://[^\s]+|www\.[^\s]+)", re.IGNORECASE)
+    seen: set[str] = set()
+
+    def _norm(url: str) -> str:
+        u = url.strip().rstrip(').,;')
+        if u.startswith("www."):
+            u = "https://" + u
+        return u
+
+    for match in url_pattern.findall(raw):
+        url = _norm(match)
+        key = url.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+
+        etype = "link"
+        title = "External Link"
+        if "github.com" in key:
+            etype = "github_profile"
+            title = "GitHub Profile"
+        elif "leetcode.com" in key:
+            etype = "leetcode_profile"
+            title = "LeetCode Profile"
+        elif "linkedin.com" in key:
+            etype = "profile"
+            title = "LinkedIn Profile"
+        elif any(dom in key for dom in ["kaggle.com", "codeforces.com", "hackerrank.com"]):
+            etype = "link"
+            title = "Coding Profile"
+        elif any(dom in key for dom in ["medium.com", "dev.to", "hashnode.com"]):
+            etype = "blog"
+            title = "Blog"
+
+        evidences.append(EvidenceItem(type=etype, url=url, title=title, description=None, metadata={}))
+
+    # Also capture bare platform handles (e.g., github.com/username) already covered by URL regex
+    return evidences
 
 
 # ==================== AGENT LOGIC ====================
@@ -195,6 +244,23 @@ async def analyze_authenticity(
             print(f"[Authenticity Agent] WARNING: Resume text truncated from {len(raw_text)} to 20000 chars")
             input_data.resume.raw_text = raw_text[:20000] + "... [truncated]"
     
+    # Extract evidences from resume text (links/handles) and merge with provided evidences
+    provided_evidences = list(getattr(input_data, "evidences", []) or [])
+    auto_evidences = _extract_evidences_from_resume(input_data.resume)
+
+    def _dedup_evidences(items: List[EvidenceItem]) -> List[EvidenceItem]:
+        seen = set()
+        out = []
+        for ev in items:
+            key = f"{ev.type}|{(ev.url or '').lower()}|{(ev.title or '').lower()}"
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append(ev)
+        return out
+
+    all_evidences = _dedup_evidences(provided_evidences + auto_evidences)
+
     # Prepare lightweight RAG context (best-effort; non-fatal on failure)
     rag_snippets: List[Dict[str, str]] = []
     try:
@@ -264,7 +330,7 @@ async def analyze_authenticity(
         # Extract claims
         extracted_claims = _extract_claims(
             resume=input_data.resume,
-            evidences=getattr(input_data, "evidences", []),
+            evidences=all_evidences,
             github=input_data.github,
             leetcode=input_data.leetcode,
         )
@@ -272,7 +338,7 @@ async def analyze_authenticity(
         # Evidence mapping and verification
         claim_verifications = _verify_claims(
             claims=extracted_claims,
-            evidences=getattr(input_data, "evidences", []),
+            evidences=all_evidences,
         )
 
         output = AuthenticityExtendedOutput(
