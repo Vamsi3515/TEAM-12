@@ -235,7 +235,7 @@ Edit `app/core/eval_reporter.py`:
 ✅ Update test cases as needed  
 ✅ Monitor trends over time  
 ✅ Use CI/CD integration  
-✅ Keep baselines in version control  
+✅ Keep baselines in version control
 
 ---
 

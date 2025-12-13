@@ -48,6 +48,62 @@ class RepoAnalyzeRequest(BaseModel):
 
 class RepoAnalyzeResponse(BaseModel):
     summary: str
+
+
+# Learning Flow Generator
+class LearningFlowRequest(BaseModel):
+    topic: str
+    experience_level: str  # beginner, intermediate, advanced
+    weekly_hours: str      # 1-5, 5-10, 10-20, 20+
+
+
+class LearningPhase(BaseModel):
+    name: str
+    duration: str
+    description: str
+    topics: List[str]
+
+
+class YouTubeChannel(BaseModel):
+    name: str
+    url: str
+    focus: str
+    recommended_playlists: List[str]
+
+
+class ProjectRecommendation(BaseModel):
+    name: str
+    description: str
+    difficulty: str  # beginner, intermediate, advanced
+    estimated_hours: int
+
+
+class LearningResources(BaseModel):
+    books: List[str]
+    websites: List[str]
+    communities: List[str]
+
+
+class TimelineInfo(BaseModel):
+    weeks: float
+    total_hours: int
+    avg_hours_per_week: float
+
+
+class RAGEvidence(BaseModel):
+    title: str
+    snippet: str
+
+
+class LearningFlowResponse(BaseModel):
+    phases: List[LearningPhase]
+    mermaid_flowchart: str
+    youtube_channels: List[YouTubeChannel]
+    projects: List[ProjectRecommendation]
+    prerequisites: List[str]
+    resources: LearningResources
+    timeline: TimelineInfo
+    rag_evidence: Optional[List[RAGEvidence]] = []
     languages: Optional[Dict[str, int]] = None
 
 

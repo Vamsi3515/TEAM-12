@@ -7,6 +7,7 @@ import RejectionDetector from "./components/Ats-score-with-rejection-detector";
 import SecurityAuditor from "./components/SecurityAuditor";
 import ExperienceAuthenticityAgent from "./components/ExperienceAuthenticityAgent";
 import CodeToUmlDiagram from "./components/CodeToUmlDiagram";
+import LearningFlowGenerator from "./components/LearningFlowGenerator";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/security-auditor" element={<SecurityAuditor />} />
         <Route path="/experience-authenticity" element={<ExperienceAuthenticityAgent />} />
         <Route path="/code-to-uml" element={<CodeToUmlDiagram />} />
+        <Route path="/learning-flow" element={<LearningFlowGenerator />} />
       </Routes>
     </div>
   );

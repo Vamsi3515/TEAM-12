@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Github, FileText, Shield, ArrowRight, Sparkles, TrendingUp, Users, Award, Workflow } from 'lucide-react';
+import { Github, FileText, Shield, ArrowRight, Sparkles, TrendingUp, Users, Award, Workflow, BookOpen } from 'lucide-react';
 import Navbar from './Navbar';
 import Card from './Card';
 import Button from './Button';
@@ -72,6 +72,19 @@ const Home = () => {
         { label: 'Diagram Types', value: '5+' },
         { label: 'Languages', value: '7+' },
         { label: 'Interactive', value: '100%' }
+      ]
+    },
+    {
+      id: 'learning-flow',
+      icon: BookOpen,
+      title: 'Learning Flow Generator',
+      description: 'Create personalized learning roadmaps with AI-curated resources',
+      gradient: 'from-sky-500 to-cyan-600',
+      route: '/learning-flow',
+      stats: [
+        { label: 'Phases', value: '4+' },
+        { label: 'Resources', value: '50+' },
+        { label: 'Projects', value: '10+' }
       ]
     }
   ];
