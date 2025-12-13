@@ -1,0 +1,376 @@
+[
+  {
+    "test_case_name": "well_maintained_open_source",
+    "description": "Popular well-maintained open source project with great practices",
+    "repo_url": "fastapi/fastapi",
+    "expected_tech_stack": [
+      "python",
+      "fastapi",
+      "pydantic",
+      "starlette",
+      "uvicorn"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 80, "max": 100},
+      "documentation": {"min": 85, "max": 100},
+      "activity": {"min": 90, "max": 100},
+      "community": {"min": 85, "max": 100},
+      "maintenance": {"min": 85, "max": 100}
+    },
+    "expected_strengths": [
+      "excellent documentation",
+      "active",
+      "community",
+      "well-maintained",
+      "tests",
+      "ci/cd"
+    ],
+    "expected_weaknesses": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "personal_portfolio_project",
+    "description": "Personal portfolio project with basic setup",
+    "repo_url": "octocat/Hello-World",
+    "expected_tech_stack": [],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 30, "max": 60},
+      "documentation": {"min": 20, "max": 50},
+      "activity": {"min": 10, "max": 40},
+      "community": {"min": 10, "max": 40},
+      "maintenance": {"min": 20, "max": 50}
+    },
+    "expected_strengths": [],
+    "expected_weaknesses": [
+      "limited documentation",
+      "low activity",
+      "no tests",
+      "minimal structure"
+    ],
+    "expected_suggestions": [
+      "add readme",
+      "add tests",
+      "documentation",
+      "ci/cd"
+    ]
+  },
+  {
+    "test_case_name": "active_nodejs_project",
+    "description": "Active Node.js project with good practices",
+    "repo_url": "expressjs/express",
+    "expected_tech_stack": [
+      "javascript",
+      "node.js",
+      "express"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 75, "max": 95},
+      "documentation": {"min": 75, "max": 95},
+      "activity": {"min": 70, "max": 90},
+      "community": {"min": 80, "max": 100},
+      "maintenance": {"min": 75, "max": 90}
+    },
+    "expected_strengths": [
+      "documentation",
+      "active community",
+      "well-structured",
+      "tests"
+    ],
+    "expected_weaknesses": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "abandoned_project",
+    "description": "Project with no recent activity or updates",
+    "repo_url": "rails/rails",
+    "expected_tech_stack": [
+      "ruby",
+      "rails"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 60, "max": 85},
+      "documentation": {"min": 65, "max": 90},
+      "activity": {"min": 60, "max": 90},
+      "community": {"min": 70, "max": 95},
+      "maintenance": {"min": 60, "max": 85}
+    },
+    "expected_strengths": [
+      "documentation",
+      "community",
+      "established"
+    ],
+    "expected_weaknesses": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "react_component_library",
+    "description": "React component library with TypeScript",
+    "repo_url": "facebook/react",
+    "expected_tech_stack": [
+      "javascript",
+      "typescript",
+      "react"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 85, "max": 100},
+      "documentation": {"min": 80, "max": 100},
+      "activity": {"min": 85, "max": 100},
+      "community": {"min": 90, "max": 100},
+      "maintenance": {"min": 85, "max": 100}
+    },
+    "expected_strengths": [
+      "excellent code quality",
+      "comprehensive tests",
+      "active development",
+      "large community",
+      "well-documented"
+    ],
+    "expected_weaknesses": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "python_data_science",
+    "description": "Python data science library",
+    "repo_url": "pandas-dev/pandas",
+    "expected_tech_stack": [
+      "python",
+      "pandas",
+      "numpy"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 75, "max": 95},
+      "documentation": {"min": 80, "max": 100},
+      "activity": {"min": 75, "max": 95},
+      "community": {"min": 80, "max": 100},
+      "maintenance": {"min": 75, "max": 90}
+    },
+    "expected_strengths": [
+      "comprehensive documentation",
+      "active community",
+      "extensive tests",
+      "well-maintained"
+    ],
+    "expected_weaknesses": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "minimal_microservice",
+    "description": "Minimal microservice with basic structure",
+    "repo_url": "kubernetes/kubernetes",
+    "expected_tech_stack": [
+      "go",
+      "kubernetes"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 80, "max": 95},
+      "documentation": {"min": 75, "max": 95},
+      "activity": {"min": 85, "max": 100},
+      "community": {"min": 85, "max": 100},
+      "maintenance": {"min": 80, "max": 95}
+    },
+    "expected_strengths": [
+      "active",
+      "community",
+      "documentation",
+      "tests"
+    ],
+    "expected_weaknesses": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "machine_learning_project",
+    "description": "Machine learning project with notebooks",
+    "repo_url": "tensorflow/tensorflow",
+    "expected_tech_stack": [
+      "python",
+      "c++",
+      "tensorflow",
+      "machine learning"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 80, "max": 95},
+      "documentation": {"min": 80, "max": 100},
+      "activity": {"min": 85, "max": 100},
+      "community": {"min": 90, "max": 100},
+      "maintenance": {"min": 80, "max": 95}
+    },
+    "expected_strengths": [
+      "extensive documentation",
+      "active development",
+      "large community",
+      "comprehensive tests"
+    ],
+    "expected_weaknesses": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "mobile_app_flutter",
+    "description": "Flutter mobile application",
+    "repo_url": "flutter/flutter",
+    "expected_tech_stack": [
+      "dart",
+      "flutter"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 80, "max": 95},
+      "documentation": {"min": 85, "max": 100},
+      "activity": {"min": 85, "max": 100},
+      "community": {"min": 85, "max": 100},
+      "maintenance": {"min": 80, "max": 95}
+    },
+    "expected_strengths": [
+      "documentation",
+      "active",
+      "community",
+      "tests"
+    ],
+    "expected_weaknesses": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "cli_tool_rust",
+    "description": "CLI tool written in Rust",
+    "repo_url": "rust-lang/rust",
+    "expected_tech_stack": [
+      "rust"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 85, "max": 100},
+      "documentation": {"min": 75, "max": 95},
+      "activity": {"min": 85, "max": 100},
+      "community": {"min": 80, "max": 95},
+      "maintenance": {"min": 85, "max": 100}
+    },
+    "expected_strengths": [
+      "code quality",
+      "active development",
+      "tests"
+    ],
+    "expected_weaknesses": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "web_framework_django",
+    "description": "Django web framework",
+    "repo_url": "django/django",
+    "expected_tech_stack": [
+      "python",
+      "django"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 80, "max": 95},
+      "documentation": {"min": 85, "max": 100},
+      "activity": {"min": 75, "max": 90},
+      "community": {"min": 85, "max": 100},
+      "maintenance": {"min": 80, "max": 95}
+    },
+    "expected_strengths": [
+      "excellent documentation",
+      "mature codebase",
+      "active community",
+      "comprehensive tests"
+    ],
+    "expected_weaknesses": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "devops_tool_terraform",
+    "description": "Terraform DevOps tool",
+    "repo_url": "hashicorp/terraform",
+    "expected_tech_stack": [
+      "go",
+      "terraform",
+      "infrastructure"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 75, "max": 90},
+      "documentation": {"min": 80, "max": 95},
+      "activity": {"min": 80, "max": 95},
+      "community": {"min": 80, "max": 95},
+      "maintenance": {"min": 75, "max": 90}
+    },
+    "expected_strengths": [
+      "documentation",
+      "active",
+      "community",
+      "tests"
+    ],
+    "expected_weaknesses": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "gaming_engine_godot",
+    "description": "Godot game engine",
+    "repo_url": "godotengine/godot",
+    "expected_tech_stack": [
+      "c++",
+      "gdscript",
+      "game engine"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 75, "max": 90},
+      "documentation": {"min": 75, "max": 90},
+      "activity": {"min": 80, "max": 95},
+      "community": {"min": 80, "max": 95},
+      "maintenance": {"min": 75, "max": 90}
+    },
+    "expected_strengths": [
+      "active development",
+      "community",
+      "documentation"
+    ],
+    "expected_weaknesses": [],
+    "expected_suggestions": []
+  },
+  {
+    "test_case_name": "blockchain_ethereum",
+    "description": "Ethereum blockchain implementation",
+    "repo_url": "ethereum/go-ethereum",
+    "expected_tech_stack": [
+      "go",
+      "ethereum",
+      "blockchain"
+    ],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 75, "max": 90},
+      "documentation": {"min": 70, "max": 85},
+      "activity": {"min": 80, "max": 95},
+      "community": {"min": 75, "max": 90},
+      "maintenance": {"min": 75, "max": 90}
+    },
+    "expected_strengths": [
+      "active development",
+      "community",
+      "tests"
+    ],
+    "expected_weaknesses": [
+      "complex codebase"
+    ],
+    "expected_suggestions": [
+      "improve documentation"
+    ]
+  },
+  {
+    "test_case_name": "api_testing_postman",
+    "description": "API testing and development tool",
+    "repo_url": "postmanlabs/postman-app-support",
+    "expected_tech_stack": [],
+    "expected_metrics_ranges": {
+      "code_quality": {"min": 40, "max": 70},
+      "documentation": {"min": 50, "max": 75},
+      "activity": {"min": 50, "max": 75},
+      "community": {"min": 60, "max": 80},
+      "maintenance": {"min": 50, "max": 75}
+    },
+    "expected_strengths": [
+      "community"
+    ],
+    "expected_weaknesses": [
+      "support repo",
+      "limited code"
+    ],
+    "expected_suggestions": [
+      "main repo analysis"
+    ]
+  }
+]

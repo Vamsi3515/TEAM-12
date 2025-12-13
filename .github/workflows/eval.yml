@@ -1,0 +1,133 @@
+name: AI Agent Evaluations
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+  push:
+    branches: [main]
+
+  schedule:
+    - cron: '0 2 * * *' # 2 AM UTC
+
+  workflow_dispatch:
+    inputs:
+      agent:
+        description: 'ats | github | all'
+        required: false
+        default: 'all'
+
+jobs:
+  evaluate-agents:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        agent: [ats, github]
+
+    # Skip matrix entries when manual trigger specifies a single agent
+    if: |
+      github.event_name != 'workflow_dispatch' ||
+      github.event.inputs.agent == 'all' ||
+      github.event.inputs.agent == matrix.agent
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('FastApi/requirements.txt') }}
+
+      - name: Install dependencies
+        working-directory: FastApi
+        run: pip install -r requirements.txt
+
+      - name: Run agent evaluation
+        working-directory: FastApi
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HF_API_KEY: ${{ secrets.HF_API_KEY }}
+        run: |
+          python -m app.eval_runner \
+            --agent ${{ matrix.agent }} \
+            --save-results \
+            --json-summary summary.json
+
+      - name: Upload evaluation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-${{ matrix.agent }}
+          path: FastApi/eval_results/
+          retention-days: 30
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const summaryPath = 'FastApi/summary.json';
+            if (!fs.existsSync(summaryPath)) {
+              console.log('No summary found');
+              return;
+            }
+
+            const report = JSON.parse(fs.readFileSync(summaryPath, 'utf8'));
+
+            const body = [
+              `## 🤖 ${report.agent.toUpperCase()} Agent Evaluation`,
+              '',
+              report.summary,
+              '',
+              '### Statistics',
+              `- Total Tests: ${report.total_tests}`,
+              `- Passed: ${report.passed} ✅`,
+              `- Failed: ${report.failed} ❌`,
+              `- Pass Rate: ${(report.pass_rate * 100).toFixed(1)}%`,
+              '',
+              '_Detailed report attached as workflow artifact._'
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
+
+  quality-gate:
+    runs-on: ubuntu-latest
+    needs: evaluate-agents
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        working-directory: FastApi
+        run: pip install -r requirements.txt
+
+      - name: Run continuous evaluation tests
+        working-directory: FastApi
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HF_API_KEY: ${{ secrets.HF_API_KEY }}
+        run: pytest tests/test_continuous_eval.py -v
