@@ -1,35 +1,52 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Sparkles, Zap, Shield, TrendingUp, Github, BarChart3 } from 'lucide-react';
+import { ArrowRight, Sparkles, Zap, Shield, Star, TrendingUp, Github, BarChart3, Code, Award, BookOpen, Workflow } from 'lucide-react';
 import Button from './Button';
 
 const Landing = () => {
   const navigate = useNavigate();
 
-  const features = [
+  const superAgents = [
+    {
+      icon: BarChart3,
+      title: 'ATS Score & Rejection Detector',
+      description: 'Get instant ATS optimization scores and receive detailed rejection analysis directly via email',
+      color: 'from-purple-500 to-pink-500',
+      isSuperAgent: true,
+    },
+    {
+      icon: Award,
+      title: 'Experience Authenticity Agent',
+      description: 'AI-powered verification of resume claims through GitHub, LeetCode, and professional presence analysis',
+      color: 'from-emerald-500 to-teal-600',
+      isSuperAgent: true,
+    },
+  ];
+
+  const otherFeatures = [
     {
       icon: Github,
       title: 'GitHub Analytics',
-      description: 'Deep insights into your repositories, commits, and contributions',
+      description: 'Comprehensive analysis of repositories and contribution patterns',
       color: 'from-blue-500 to-cyan-500',
     },
     {
-      icon: BarChart3,
-      title: 'ATS Optimization',
-      description: 'Analyze and optimize your resume for Applicant Tracking Systems',
-      color: 'from-purple-500 to-pink-500',
-    },
-    {
-      icon: TrendingUp,
-      title: 'Performance Metrics',
-      description: 'Track your progress with detailed analytics and insights',
-      color: 'from-orange-500 to-red-500',
-    },
-    {
       icon: Shield,
-      title: 'Secure & Private',
-      description: 'Your data is encrypted and never shared with third parties',
-      color: 'from-green-500 to-emerald-500',
+      title: 'Security Auditor',
+      description: 'OWASP vulnerability detection with hybrid AI analysis',
+      color: 'from-indigo-500 to-purple-600',
+    },
+    {
+      icon: Workflow,
+      title: 'Code to UML',
+      description: 'Transform code into interactive UML diagrams',
+      color: 'from-violet-500 to-fuchsia-600',
+    },
+    {
+      icon: BookOpen,
+      title: 'Learning Flow',
+      description: 'Personalized learning roadmaps with curated resources',
+      color: 'from-sky-500 to-cyan-600',
     },
   ];
 
@@ -70,55 +87,66 @@ const Landing = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20">
+        {/* Background Decoration */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float"></div>
+          <div className="absolute top-40 right-10 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style={{animationDelay: '2s'}}></div>
+          <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style={{animationDelay: '4s'}}></div>
+        </div>
+
         <div className="text-center animate-slide-up">
-          <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-            <Sparkles className="w-4 h-4" />
-            <span>Powered by AI & Advanced Analytics</span>
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 px-5 py-2.5 rounded-full text-sm font-semibold mb-6 shadow-sm border border-purple-200">
+            <Star className="w-4 h-4 fill-current" />
+            <span>AI-Powered Career Intelligence Platform</span>
           </div>
           
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-slate-900 mb-6 leading-tight">
-            Accelerate Your
-            <span className="block bg-gradient-to-r from-primary-600 via-secondary-600 to-purple-600 bg-clip-text text-transparent">
-              Career Growth
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 mb-6 leading-tight tracking-tight">
+            Transform Your
+            <span className="block mt-2 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+              Career Journey
             </span>
           </h1>
           
-          <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Unlock powerful insights with our AI-driven platform. Analyze GitHub profiles, 
-            optimize resumes for ATS, and track your professional progress all in one place.
+          <p className="text-xl text-slate-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+            Leverage cutting-edge AI agents to optimize resumes, verify experience authenticity, 
+            analyze GitHub profiles, and accelerate your professional growth.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
             <Button 
               variant="primary" 
               size="lg" 
               icon={ArrowRight}
               onClick={() => navigate('/home')}
-              className="shadow-2xl"
+              className="shadow-2xl hover:shadow-purple-500/50 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 text-lg"
             >
-              Start Free Trial
+              Get Started Free
             </Button>
-            <Button variant="outline" size="lg" icon={Zap}>
-              Watch Demo
+            <Button 
+              variant="outline" 
+              size="lg" 
+              icon={Sparkles}
+              onClick={() => navigate('/home')}
+              className="px-8 py-4 text-lg border-2 border-slate-300 hover:border-purple-500 hover:bg-purple-50"
+            >
+              Explore Agents
             </Button>
           </div>
-        </div>
 
-        {/* Hero Image/Illustration */}
-        <div className="mt-16 animate-fade-in">
-          <div className="relative mx-auto max-w-5xl">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-secondary-600 rounded-3xl blur-3xl opacity-20 animate-float"></div>
-            <div className="relative bg-white rounded-3xl shadow-2xl p-8 border border-slate-200">
-              <div className="grid grid-cols-3 gap-4">
-                {[...Array(9)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl animate-pulse"
-                    style={{ animationDelay: `${i * 0.1}s` }}
-                  ></div>
-                ))}
-              </div>
+          {/* Trust Indicators */}
+          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-slate-600 mt-12">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span>100% Free</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span>No Credit Card Required</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span>Instant Results</span>
             </div>
           </div>
         </div>
@@ -139,60 +167,134 @@ const Landing = () => {
       </section>
 
       {/* Features Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-slate-900 mb-4">
-            Everything you need to succeed
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
+            Powerful AI Agents at Your Service
           </h2>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            Powerful tools designed to help you stand out in your career journey
+            Choose from our suite of specialized AI agents designed to accelerate your career
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-            return (
-              <div
-                key={index}
-                className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-transparent hover:shadow-xl transition-all duration-300 cursor-pointer animate-slide-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className="w-6 h-6 text-white" />
+        {/* Super Agents Section */}
+        <div className="mb-16">
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <div className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg">
+              <Star className="w-4 h-4 fill-current" />
+              SUPER AGENTS
+            </div>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {superAgents.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <div
+                  key={index}
+                  onClick={() => navigate('/home')}
+                  className="group relative bg-white rounded-3xl p-8 border-2 border-purple-200 hover:border-purple-400 hover:shadow-2xl transition-all duration-300 cursor-pointer animate-slide-up overflow-hidden"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  {/* Background Gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-pink-50 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                  
+                  {/* Content */}
+                  <div className="relative">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
+                        <Icon className="w-8 h-8 text-white" />
+                      </div>
+                      <div className="bg-purple-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                        FEATURED
+                      </div>
+                    </div>
+                    
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-purple-600 transition-colors">
+                      {feature.title}
+                    </h3>
+                    <p className="text-slate-600 leading-relaxed mb-4">
+                      {feature.description}
+                    </p>
+                    
+                    <div className="flex items-center text-purple-600 font-semibold group-hover:gap-2 transition-all">
+                      <span>Get Started</span>
+                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-slate-600 text-sm">
-                  {feature.description}
-                </p>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Other Agents Section */}
+        <div>
+          <h3 className="text-2xl font-bold text-slate-900 text-center mb-8">Additional Specialized Agents</h3>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {otherFeatures.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <div
+                  key={index}
+                  onClick={() => navigate('/home')}
+                  className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-300 cursor-pointer animate-fade-in"
+                  style={{ animationDelay: `${(index + 2) * 0.1}s` }}
+                >
+                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300 shadow-md`}>
+                    <Icon className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                    {feature.title}
+                  </h3>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 mb-16">
-        <div className="relative overflow-hidden bg-gradient-to-r from-primary-600 to-secondary-600 rounded-3xl p-12 text-center shadow-2xl">
-          <div className="absolute inset-0 bg-black opacity-10"></div>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 mb-20">
+        <div className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 rounded-3xl p-16 text-center shadow-2xl">
+          {/* Animated Background */}
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
+          
           <div className="relative z-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Ready to transform your career?
+            <div className="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              🚀 Start Your Journey Today
+            </div>
+            
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+              Ready to Elevate Your Career?
             </h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Join thousands of professionals who are already using Mirai to accelerate their growth
+            <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed">
+              Join professionals leveraging AI to optimize resumes, verify credentials, and accelerate growth
             </p>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              icon={ArrowRight}
-              onClick={() => navigate('/home')}
-              className="bg-white hover:bg-slate-50 text-primary-600 border-white"
-            >
-              Get Started Now
-            </Button>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                icon={ArrowRight}
+                onClick={() => navigate('/home')}
+                className="bg-white hover:bg-gray-50 text-purple-600 border-white font-bold px-8 py-4 shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
+              >
+                Get Started Free
+              </Button>
+              <Button 
+                variant="outline" 
+                size="lg" 
+                icon={Sparkles}
+                onClick={() => navigate('/home')}
+                className="bg-transparent hover:bg-white/10 text-white border-2 border-white px-8 py-4"
+              >
+                View All Agents
+              </Button>
+            </div>
           </div>
         </div>
       </section>

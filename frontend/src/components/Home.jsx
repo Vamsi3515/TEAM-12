@@ -8,20 +8,7 @@ import Button from './Button';
 const Home = () => {
   const navigate = useNavigate();
 
-  const features = [
-    {
-      id: 'github-analyzer',
-      icon: Github,
-      title: 'GitHub Profile Analyzer',
-      description: 'Analyze GitHub profiles, repositories, and contributions with AI-powered insights',
-      gradient: 'from-blue-500 to-cyan-500',
-      route: '/github-analyzer',
-      stats: [
-        { label: 'Repositories', value: '50+' },
-        { label: 'Contributors', value: '1K+' },
-        { label: 'Languages', value: '20+' }
-      ]
-    },
+  const superAgents = [
     {
       id: 'ats-detector',
       icon: FileText,
@@ -29,24 +16,7 @@ const Home = () => {
       description: 'Optimize your resume for ATS systems and detect potential rejection reasons',
       gradient: 'from-purple-500 to-pink-500',
       route: '/Ats-score-with-rejection-detector',
-      stats: [
-        { label: 'Success Rate', value: '95%' },
-        { label: 'Analyzed', value: '10K+' },
-        { label: 'Keywords', value: '500+' }
-      ]
-    },
-    {
-      id: 'security-auditor',
-      icon: Shield,
-      title: 'Security Auditor',
-      description: 'Detect OWASP vulnerabilities using hybrid AI analysis with static patterns and RAG',
-      gradient: 'from-indigo-500 to-purple-600',
-      route: '/security-auditor',
-      stats: [
-        { label: 'OWASP Top 10', value: '8/10' },
-        { label: 'Vulnerabilities', value: '13+' },
-        { label: 'CWE Mapped', value: '100%' }
-      ]
+      isSuperAgent: true
     },
     {
       id: 'experience-authenticity',
@@ -55,11 +25,26 @@ const Home = () => {
       description: 'Verify resume claims with AI analysis of GitHub, LeetCode, and online presence',
       gradient: 'from-emerald-500 to-teal-600',
       route: '/experience-authenticity',
-      stats: [
-        { label: 'Accuracy', value: '95%' },
-        { label: 'Platforms', value: '5+' },
-        { label: 'Verified', value: '1K+' }
-      ]
+      isSuperAgent: true
+    }
+  ];
+
+  const otherAgents = [
+    {
+      id: 'github-analyzer',
+      icon: Github,
+      title: 'GitHub Profile Analyzer',
+      description: 'Analyze GitHub profiles, repositories, and contributions with AI-powered insights',
+      gradient: 'from-blue-500 to-cyan-500',
+      route: '/github-analyzer'
+    },
+    {
+      id: 'security-auditor',
+      icon: Shield,
+      title: 'Security Auditor',
+      description: 'Detect OWASP vulnerabilities using hybrid AI analysis with static patterns and RAG',
+      gradient: 'from-indigo-500 to-purple-600',
+      route: '/security-auditor'
     },
     {
       id: 'code-to-uml',
@@ -67,12 +52,7 @@ const Home = () => {
       title: 'Code to UML Diagrams',
       description: 'Transform code into interactive UML diagrams with AI-powered analysis',
       gradient: 'from-violet-500 to-fuchsia-600',
-      route: '/code-to-uml',
-      stats: [
-        { label: 'Diagram Types', value: '5+' },
-        { label: 'Languages', value: '7+' },
-        { label: 'Interactive', value: '100%' }
-      ]
+      route: '/code-to-uml'
     },
     {
       id: 'learning-flow',
@@ -80,12 +60,7 @@ const Home = () => {
       title: 'Learning Flow Generator',
       description: 'Create personalized learning roadmaps with AI-curated resources',
       gradient: 'from-sky-500 to-cyan-600',
-      route: '/learning-flow',
-      stats: [
-        { label: 'Phases', value: '4+' },
-        { label: 'Resources', value: '50+' },
-        { label: 'Projects', value: '10+' }
-      ]
+      route: '/learning-flow'
     }
   ];
 
@@ -120,114 +95,101 @@ const Home = () => {
 
       {/* Main Cards Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-            return (
-              <Card 
-                key={feature.id}
-                hover
-                className="group cursor-pointer animate-slide-up overflow-hidden"
-                style={{ animationDelay: `${index * 0.1}s` }}
-                onClick={() => handleCardClick(feature.route)}
-              >
-                {/* Header with Icon */}
-                <div className="relative mb-6">
-                  <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} opacity-10 rounded-xl blur-xl group-hover:opacity-20 transition-opacity`}></div>
-                  <div className={`relative w-16 h-16 bg-gradient-to-r ${feature.gradient} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                    <Icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-primary-600 transition-colors">
-                    {feature.title}
-                  </h2>
-                  <p className="text-slate-600">
-                    {feature.description}
-                  </p>
-                </div>
-
-                {/* Stats Grid */}
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  {feature.stats.map((stat, idx) => (
-                    <div key={idx} className="text-center p-3 bg-slate-50 rounded-lg group-hover:bg-white transition-colors">
-                      <div className="text-2xl font-bold text-slate-900 mb-1">
-                        {stat.value}
-                      </div>
-                      <div className="text-xs text-slate-600">
-                        {stat.label}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Action Button */}
-                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                  <span className="text-sm font-medium text-slate-600 group-hover:text-primary-600 transition-colors">
-                    Start Analysis
-                  </span>
-                  <div className="w-10 h-10 bg-slate-100 group-hover:bg-primary-600 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:shadow-lg">
-                    <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-white transition-colors" />
-                  </div>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Quick Stats Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <Card className="bg-gradient-to-br from-primary-600 to-secondary-600 border-none animate-fade-in">
-          <div className="text-white">
-            <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="w-6 h-6" />
-              <h3 className="text-2xl font-bold">Your Impact</h3>
-            </div>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <Users className="w-5 h-5" />
-                  <span className="text-sm font-medium">Total Analyses</span>
-                </div>
-                <div className="text-3xl font-bold">24</div>
-                <div className="text-sm opacity-90 mt-1">↑ 12% from last week</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <Sparkles className="w-5 h-5" />
-                  <span className="text-sm font-medium">Success Rate</span>
-                </div>
-                <div className="text-3xl font-bold">98%</div>
-                <div className="text-sm opacity-90 mt-1">Outstanding performance</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <TrendingUp className="w-5 h-5" />
-                  <span className="text-sm font-medium">Time Saved</span>
-                </div>
-                <div className="text-3xl font-bold">45h</div>
-                <div className="text-sm opacity-90 mt-1">Compared to manual analysis</div>
-              </div>
-            </div>
+        {/* Super Agents */}
+        <div className="mb-12">
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <Sparkles className="w-5 h-5 text-primary-600" />
+            <h2 className="text-3xl font-bold text-slate-900">Super Agents</h2>
           </div>
-        </Card>
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {superAgents.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <Card 
+                  key={feature.id}
+                  hover
+                  className="group cursor-pointer animate-slide-up overflow-hidden bg-gradient-to-br from-white to-primary-50 border-2 border-primary-200 hover:border-primary-400"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                  onClick={() => handleCardClick(feature.route)}
+                >
+                  {/* Header with Icon */}
+                  <div className="relative mb-6">
+                    <div className="absolute -top-4 -right-4 bg-primary-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10">
+                      SUPER AGENT
+                    </div>
+                    <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} opacity-10 rounded-xl blur-xl group-hover:opacity-20 transition-opacity`}></div>
+                    <div className={`relative w-16 h-16 bg-gradient-to-r ${feature.gradient} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-primary-600 transition-colors">
+                      {feature.title}
+                    </h2>
+                    <p className="text-slate-600">
+                      {feature.description}
+                    </p>
+                  </div>
+
+                  {/* Action Button */}
+                  <div className="flex items-center justify-between pt-4 border-t border-primary-200">
+                    <span className="text-sm font-medium text-slate-600 group-hover:text-primary-600 transition-colors">
+                      Start Analysis
+                    </span>
+                    <div className="w-10 h-10 bg-primary-100 group-hover:bg-primary-600 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:shadow-lg">
+                      <ArrowRight className="w-5 h-5 text-primary-600 group-hover:text-white transition-colors" />
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Other Agents */}
+        <div>
+          <div className="text-center mb-6">
+            <h2 className="text-3xl font-bold text-slate-900">Other Agents</h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {otherAgents.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <Card 
+                  key={feature.id}
+                  hover
+                  className="group cursor-pointer animate-slide-up overflow-hidden"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                  onClick={() => handleCardClick(feature.route)}
+                >
+                  {/* Header with Icon */}
+                  <div className="relative mb-6">
+                    <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} opacity-10 rounded-xl blur-xl group-hover:opacity-20 transition-opacity`}></div>
+                    <div className={`relative w-16 h-16 bg-gradient-to-r ${feature.gradient} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-primary-600 transition-colors">
+                      {feature.title}
+                    </h2>
+                    <p className="text-slate-600">
+                      {feature.description}
+                    </p>
+                  </div>
+
+                  {/* Action Button */}
+                  <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                    <span className="text-sm font-medium text-slate-600 group-hover:text-primary-600 transition-colors">
+                      Start Analysis
+                    </span>
+                    <div className="w-10 h-10 bg-slate-100 group-hover:bg-primary-600 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:shadow-lg">
+                      <ArrowRight className="w-5 h-5 text-slate-600 group-hover:text-white transition-colors" />
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
       </section>
 
-      {/* Coming Soon Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-slate-900 mb-2">Coming Soon</h2>
-          <p className="text-slate-600">More powerful tools are on the way</p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {['Interview Prep AI', 'Skill Gap Analysis', 'Career Path Planner'].map((title, idx) => (
-            <Card key={idx} className="text-center opacity-60 cursor-not-allowed">
-              <div className="w-12 h-12 bg-slate-200 rounded-xl mx-auto mb-4"></div>
-              <h3 className="font-semibold text-slate-900 mb-2">{title}</h3>
-              <p className="text-sm text-slate-600">Coming in Q1 2026</p>
-            </Card>
-          ))}
-        </div>
-      </section>
     </div>
   );
 };
