@@ -89,13 +89,27 @@ Rules:
 
 
 def _strip_code_fences(text: str) -> str:
-    if "```" not in text:
-        return text.strip()
-    parts = text.split("```")
-    # take content between first pair if present
-    if len(parts) >= 3:
-        return parts[1].strip()
-    return text.replace("```json", "").replace("```", "").strip()
+    """Remove markdown code fences and extract JSON content."""
+    if not text:
+        return ""
+    
+    text = text.strip()
+    
+    # Remove ```json or ``` markers
+    if text.startswith("```"):
+        # Find the content between code fences
+        lines = text.split("\n")
+        if lines[0].startswith("```"):
+            lines = lines[1:]  # Remove first ```json or ```
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]  # Remove last ```
+        text = "\n".join(lines).strip()
+    
+    # Also handle cases where response starts with "json"
+    if text.startswith("json"):
+        text = text[4:].strip()
+    
+    return text
 
 
 def _send_email(to_email: str, summary: str, rejection_reasons: List[str], suggestions: List[str], ats_score: int) -> bool:
@@ -151,15 +165,19 @@ async def analyze_ats(resume_text: str, job_description: Optional[str] = None, e
     prompt = build_prompt(resume_text, job_description, docs)
 
     # Step 3: call Gemini
-    raw = await _call_gemini(prompt, model="gemini-2.5-flash", max_tokens=800, temperature=0.4)
+    raw = await _call_gemini(prompt, model="gemini-2.0-flash-exp", max_tokens=1000, temperature=0.3)
+    print(f"[ATS DEBUG] Raw LLM response: {raw[:500]}...")  # Log first 500 chars
 
     # Step 4: clean fences
     cleaned = _strip_code_fences(raw or "")
+    print(f"[ATS DEBUG] Cleaned response: {cleaned[:500]}...")
 
     # Step 5: parse JSON with fallback
     try:
         data = json.loads(cleaned)
-    except Exception:
+        print("[ATS DEBUG] Successfully parsed JSON")
+    except Exception as e:
+        print(f"[ATS DEBUG] JSON parse failed: {e}")
         data = {
             "ats_score": 50,
             "rejection_reasons": ["Could not parse LLM response"],
@@ -179,15 +197,15 @@ async def analyze_ats(resume_text: str, job_description: Optional[str] = None, e
     data.setdefault("sent_to_email", False)
 
     # Optionally send email
-    sent_flag = False
-    if email:
-        sent_flag = _send_email(
-            to_email=email,
-            summary=str(data.get("summary", "")),
-            rejection_reasons=list(data.get("rejection_reasons", [])),
-            suggestions=list(data.get("actionable_suggestions", [])),
-            ats_score=int(data.get("ats_score", 50)),
-        )
+    # sent_flag = False
+    # if email:
+    #     sent_flag = _send_email(
+    #         to_email=email,
+    #         summary=str(data.get("summary", "")),
+    #         rejection_reasons=list(data.get("rejection_reasons", [])),
+    #         suggestions=list(data.get("actionable_suggestions", [])),
+    #         ats_score=int(data.get("ats_score", 50)),
+    #     )
 
     return ATSAnalyzeOutput(
         ats_score=int(data.get("ats_score", 50)),
@@ -196,5 +214,4 @@ async def analyze_ats(resume_text: str, job_description: Optional[str] = None, e
         issues=list(data.get("issues", [])),
         actionable_suggestions=list(data.get("actionable_suggestions", [])),
         summary=str(data.get("summary", "")),
-        sent_to_email=sent_flag,
     )

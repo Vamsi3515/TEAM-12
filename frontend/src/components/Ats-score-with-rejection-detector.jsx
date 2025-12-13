@@ -5,8 +5,8 @@ import Navbar from './Navbar';
 import Card from './Card';
 import Button from './Button';
 
-// Set PDF worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+// Set PDF worker from unpkg CDN matching the installed version
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
 const RejectionDetector = () => {
   const [file, setFile] = useState(null);
