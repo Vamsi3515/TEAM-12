@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.routers import github
 
 app = FastAPI(
     title="Mirai Hackathon API",
@@ -15,6 +16,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(github.router, prefix="/api")
 
 @app.get("/")
 async def root():
