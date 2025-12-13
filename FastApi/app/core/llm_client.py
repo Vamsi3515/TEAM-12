@@ -97,7 +97,8 @@ async def _call_gemini(prompt, model, max_tokens, temperature):
             generation_config=genai.GenerationConfig(
                 max_output_tokens=max_tokens,
                 temperature=temperature,
-            )
+                response_mime_type="application/json",  # enforce JSON-only output
+            ),
         )
         
         # Log finish reason to detect truncation

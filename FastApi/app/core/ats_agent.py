@@ -9,7 +9,7 @@ from typing import List, Tuple, Optional
 from app.core.embeddings import embed
 from app.core.vectorstore import get_or_create_collection
 from app.core.ats_data import ats_data
-from app.core.llm_client import _call_gemini
+from app.core.llm_client import _call_gemini, _call_huggingface, _call_huggingface
 from app.models.ats import ATSAnalyzeOutput
 
 
@@ -82,7 +82,8 @@ Return ONLY valid JSON with this exact schema:
 
 Rules:
 - Keep ats_score integer 0-100.
-- Use concise, specific bullet points for lists.
+- Use concise, specific bullet points for lists (max 5 items each).
+- Keep each string under 180 characters.
 - Do not wrap in markdown or code fences.
 - Do not add commentary outside the JSON.
 """
@@ -166,7 +167,7 @@ async def analyze_ats(resume_text: str, job_description: Optional[str] = None, e
 
     # Step 3: call Gemini
     print(f"[ATS DEBUG] Calling Gemini API...")
-    raw = await _call_gemini(prompt, model="gemini-2.0-flash-exp", max_tokens=1000, temperature=0.3)
+    raw = await _call_huggingface(prompt, model="Qwen/Qwen2.5-7B-Instruct", max_tokens=2000, temperature=0.3)
     print(f"[ATS DEBUG] Raw LLM response length: {len(raw) if raw else 0}")
     print(f"[ATS DEBUG] Raw LLM response: {raw[:500] if raw else 'None'}...")  # Log first 500 chars
 
@@ -180,14 +181,32 @@ async def analyze_ats(resume_text: str, job_description: Optional[str] = None, e
         print("[ATS DEBUG] Successfully parsed JSON")
     except Exception as e:
         print(f"[ATS DEBUG] JSON parse failed: {e}")
-        data = {
-            "ats_score": 50,
-            "rejection_reasons": ["Could not parse LLM response"],
-            "strengths": [],
-            "issues": [],
-            "actionable_suggestions": ["Retry analysis"],
-            "summary": "Partial analysis; parsing failed.",
-        }
+        # Try trimming to the last closing brace in case of truncation
+        trimmed = cleaned
+        if "{" in cleaned and "}" in cleaned:
+            trimmed = cleaned[cleaned.find("{"): cleaned.rfind("}") + 1]
+            try:
+                data = json.loads(trimmed)
+                print("[ATS DEBUG] Parsed JSON after trimming trailing content")
+            except Exception as e2:
+                print(f"[ATS DEBUG] Secondary parse failed: {e2}")
+                data = {
+                    "ats_score": 50,
+                    "rejection_reasons": ["Could not parse LLM response"],
+                    "strengths": [],
+                    "issues": [],
+                    "actionable_suggestions": ["Retry analysis"],
+                    "summary": "Partial analysis; parsing failed.",
+                }
+        else:
+            data = {
+                "ats_score": 50,
+                "rejection_reasons": ["Could not parse LLM response"],
+                "strengths": [],
+                "issues": [],
+                "actionable_suggestions": ["Retry analysis"],
+                "summary": "Partial analysis; parsing failed.",
+            }
 
     # Ensure required fields with defaults
     data.setdefault("ats_score", 50)
