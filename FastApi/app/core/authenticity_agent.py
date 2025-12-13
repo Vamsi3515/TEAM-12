@@ -11,6 +11,9 @@ import json
 import re
 from typing import List, Dict, Any, Tuple, Optional
 from app.core.llm_client import call_chat
+from app.core.embeddings import embed
+from app.core.vectorstore import get_or_create_collection
+from app.core.authenticity_rag_data import authenticity_knowledge
 from app.models.authenticity import (
     AuthenticityAnalysisInput,
     AuthenticityAnalysisOutput,
@@ -159,6 +162,9 @@ CRITICAL GUIDELINES:
 
 Output ONLY the JSON, no other text."""
     
+    if additional_context:
+        prompt += f"\n=== ADDITIONAL CONTEXT ===\n{additional_context}\n"
+    
     return prompt
 
 
@@ -189,13 +195,55 @@ async def analyze_authenticity(
             print(f"[Authenticity Agent] WARNING: Resume text truncated from {len(raw_text)} to 20000 chars")
             input_data.resume.raw_text = raw_text[:20000] + "... [truncated]"
     
+    # Prepare lightweight RAG context (best-effort; non-fatal on failure)
+    rag_snippets: List[Dict[str, str]] = []
+    try:
+        col = get_or_create_collection("authenticity_knowledge")
+        if col.count() == 0:
+            # Seed knowledge base
+            texts = [x["text"] for x in authenticity_knowledge]
+            ids = [x["id"] for x in authenticity_knowledge]
+            emb = embed(texts)
+            col.add(documents=texts, ids=ids, embeddings=emb)
+
+        # Build simple query from resume content and claimed skills
+        query_parts: List[str] = []
+        if input_data.resume:
+            if input_data.resume.skills:
+                query_parts.append("Skills: " + ", ".join(input_data.resume.skills))
+            if input_data.resume.raw_text:
+                query_parts.append(input_data.resume.raw_text[:1000])
+        query_text = "\n".join(query_parts) or "skill evidence alignment guidance"
+
+        q_emb = embed([query_text])[0]
+        res = col.query(query_embeddings=[q_emb], n_results=4)
+        docs = res.get("documents", [[]])[0] if res else []
+        ids = res.get("ids", [[]])[0] if res else []
+        for i, d in enumerate(docs):
+            rag_snippets.append({"id": ids[i] if i < len(ids) else f"kb-{i}", "text": d})
+    except Exception as _e:
+        # Best-effort: proceed without RAG if unavailable
+        rag_snippets = []
+
+    # Compose additional context block from RAG
+    rag_context_block = ""
+    if rag_snippets:
+        joined = "\n\n".join([f"ID:{s['id']}\n{s['text']}" for s in rag_snippets])
+        rag_context_block = f"=== AUTHENTICITY KNOWLEDGE (RAG) ===\n{joined}\n"
+
+    # Merge user-provided context with RAG context
+    combined_additional_context = "".join([
+        rag_context_block,
+        input_data.additional_context or "",
+    ]) or None
+
     # Generate analysis prompt
     system_prompt = _create_authenticity_system_prompt()
     analysis_prompt = _create_authenticity_analysis_prompt(
         resume=input_data.resume,
         github=input_data.github,
         leetcode=input_data.leetcode,
-        additional_context=input_data.additional_context,
+        additional_context=combined_additional_context,
     )
     
     # Call LLM with strict JSON output requirement
