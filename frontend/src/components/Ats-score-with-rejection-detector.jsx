@@ -172,7 +172,7 @@ const RejectionDetector = () => {
                 {/* Job Description */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Job Description (Optional)
+                    Job Description
                   </label>
                   <textarea
                     value={jobDescription}
