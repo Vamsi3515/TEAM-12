@@ -1,7 +1,10 @@
-"""ATS analyzer agent with RAG + Gemini."""
+"""ATS analyzer agent with RAG + Gemini and email delivery."""
 
 import json
-from typing import Dict, List, Tuple, Optional
+import os
+import smtplib
+from email.message import EmailMessage
+from typing import List, Tuple, Optional
 
 from app.core.embeddings import embed
 from app.core.vectorstore import get_or_create_collection
@@ -67,14 +70,15 @@ BEST-PRACTICE CONTEXT (RAG):
 {context_block}
 
 Return ONLY valid JSON with this exact schema:
-{{
-  "ats_score": 0-100,
-  "rejection_reasons": ["string"],
-  "strengths": ["string"],
-  "issues": ["string"],
-  "actionable_suggestions": ["string"],
-  "summary": "string",
-}}
+{
+    "ats_score": 0-100,
+    "rejection_reasons": ["string"],
+    "strengths": ["string"],
+    "issues": ["string"],
+    "actionable_suggestions": ["string"],
+    "summary": "string",
+    "sent_to_email": true
+}
 
 Rules:
 - Keep ats_score integer 0-100.
@@ -92,6 +96,50 @@ def _strip_code_fences(text: str) -> str:
     if len(parts) >= 3:
         return parts[1].strip()
     return text.replace("```json", "").replace("```", "").strip()
+
+
+def _send_email(to_email: str, summary: str, rejection_reasons: List[str], suggestions: List[str], ats_score: int) -> bool:
+    """Send rejection email with reasons and suggestions. Returns success flag."""
+    host = os.getenv("SMTP_HOST")
+    port = int(os.getenv("SMTP_PORT", "587"))
+    user = os.getenv("SMTP_USER")
+    password = os.getenv("SMTP_PASSWORD")
+    sender = os.getenv("SMTP_FROM", user or "noreply@example.com")
+
+    if not host or not user or not password:
+        print("[ATS Email] SMTP settings missing; skipping email send")
+        return False
+
+    body_lines = [
+        f"ATS Score: {ats_score}",
+        "",
+        "Summary:",
+        summary,
+        "",
+        "Rejection Reasons:",
+        *((f"- {r}" for r in rejection_reasons) if rejection_reasons else ["- None provided"]),
+        "",
+        "Actionable Suggestions:",
+        *((f"- {s}" for s in suggestions) if suggestions else ["- None provided"]),
+    ]
+    
+    body = "\n".join(body_lines)
+
+    msg = EmailMessage()
+    msg["Subject"] = "Your ATS Analysis Results"
+    msg["From"] = sender
+    msg["To"] = to_email
+    msg.set_content(body)
+
+    try:
+        with smtplib.SMTP(host, port, timeout=15) as smtp:
+            smtp.starttls()
+            smtp.login(user, password)
+            smtp.send_message(msg)
+        return True
+    except Exception as exc:
+        print(f"[ATS Email] Send failed: {exc}")
+        return False
 
 
 async def analyze_ats(resume_text: str, job_description: Optional[str] = None, email: Optional[str] = None) -> ATSAnalyzeOutput:
@@ -128,9 +176,18 @@ async def analyze_ats(resume_text: str, job_description: Optional[str] = None, e
     data.setdefault("issues", [])
     data.setdefault("actionable_suggestions", [])
     data.setdefault("summary", "")
+    data.setdefault("sent_to_email", False)
 
-    # Add evidence from RAG
-    evidence_snippets = [{"id": i, "snippet": d[:300]} for i, d in zip(ids, docs)]
+    # Optionally send email
+    sent_flag = False
+    if email:
+        sent_flag = _send_email(
+            to_email=email,
+            summary=str(data.get("summary", "")),
+            rejection_reasons=list(data.get("rejection_reasons", [])),
+            suggestions=list(data.get("actionable_suggestions", [])),
+            ats_score=int(data.get("ats_score", 50)),
+        )
 
     return ATSAnalyzeOutput(
         ats_score=int(data.get("ats_score", 50)),
@@ -139,4 +196,5 @@ async def analyze_ats(resume_text: str, job_description: Optional[str] = None, e
         issues=list(data.get("issues", [])),
         actionable_suggestions=list(data.get("actionable_suggestions", [])),
         summary=str(data.get("summary", "")),
+        sent_to_email=sent_flag,
     )
