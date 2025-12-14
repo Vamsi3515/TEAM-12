@@ -6,8 +6,11 @@ from app.models.schemas import SecurityAuditInput, SecurityAuditOutput
 from app.core.Agents.security_agent import analyze_code_security
 from app.core.Agents.github_agent import fetch_github_repo
 import base64
+from app.core.Agents.github_agent import parse_owner_repo
+from app.core.Agents.security_agent import VULNERABILITY_PATTERNS
 
-router = APIRouter(prefix="/api/security", tags=["Security Auditor"])
+
+router = APIRouter(prefix="/security", tags=["Security Auditor"])
 
 
 @router.post("/analyze", response_model=SecurityAuditOutput)
@@ -67,7 +70,7 @@ async def analyze_code(request: SecurityAuditInput):
                 )
             
             # Parse owner and repo from URL
-            from app.core.github_agent import parse_owner_repo
+            
             import os
             import httpx
             
@@ -235,7 +238,6 @@ async def get_vulnerability_types():
     - CWE mapping
     """
     
-    from app.core.security_agent import VULNERABILITY_PATTERNS
     
     vulnerability_info = []
     for vuln_type, config in VULNERABILITY_PATTERNS.items():

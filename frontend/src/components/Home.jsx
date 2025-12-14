@@ -46,14 +46,14 @@ const Home = () => {
       gradient: 'from-indigo-500 to-purple-600',
       route: '/security-auditor'
     },
-    {
-      id: 'code-to-uml',
-      icon: Workflow,
-      title: 'Code to UML Diagrams',
-      description: 'Transform code into interactive UML diagrams with AI-powered analysis',
-      gradient: 'from-violet-500 to-fuchsia-600',
-      route: '/code-to-uml'
-    },
+    // {
+    //   id: 'code-to-uml',
+    //   icon: Workflow,
+    //   title: 'Code to UML Diagrams',
+    //   description: 'Transform code into interactive UML diagrams with AI-powered analysis',
+    //   gradient: 'from-violet-500 to-fuchsia-600',
+    //   route: '/code-to-uml'
+    // },
     {
       id: 'learning-flow',
       icon: BookOpen,
@@ -149,7 +149,7 @@ const Home = () => {
           <div className="text-center mb-6">
             <h2 className="text-3xl font-bold text-slate-900">Other Agents</h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto">
             {otherAgents.map((feature, index) => {
               const Icon = feature.icon;
               return (

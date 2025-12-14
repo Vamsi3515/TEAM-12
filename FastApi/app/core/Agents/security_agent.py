@@ -9,6 +9,67 @@ import time
 
 SECURITY_LOG: List[Dict[str, Any]] = []
 
+# Public catalog of vulnerability patterns for API consumers (e.g., router metadata)
+# NOTE: These are descriptive; static analysis below uses its own compiled patterns.
+VULNERABILITY_PATTERNS: Dict[str, Dict[str, Any]] = {
+    "path_traversal": {
+        "severity": "high",
+        "category": "A01:2021 - Broken Access Control",
+        "patterns": [
+            r"open\s*\(\s*f[\"\'][^\n\"\']*\{[^}]+\}[^\n\"\']*[\"\']\s*,",
+            r"open\s*\(\s*[\"\'][^\n\"\']*[\"\']\s*\+\s*\w+\s*,",
+        ],
+    },
+    "sql_injection": {
+        "severity": "critical",
+        "category": "A03:2021 - Injection",
+        "patterns": [
+            r'execute\s*\(\s*f["\'].*?(SELECT|INSERT|UPDATE|DELETE)',
+            r'execute\s*\(\s*["\'].*?\{.*?(SELECT|INSERT|UPDATE|DELETE)',
+            r'(SELECT|INSERT|UPDATE|DELETE).*?\+.*?',
+        ],
+    },
+    "hardcoded_secret": {
+        "severity": "critical",
+        "category": "A02:2021 - Cryptographic Failures",
+        "patterns": [
+            r'(API_KEY|TOKEN|PASSWORD|SECRET)\s*=\s*["\'][^"\'\n]{10,}["\']',
+            r'(api_key|token|password|secret)\s*:\s*["\'][^"\'\n]{10,}["\']',
+        ],
+    },
+    "command_injection": {
+        "severity": "critical",
+        "category": "A03:2021 - Injection",
+        "patterns": [
+            r'child_process\.exec\s*\(',
+            r'\bos\.system\s*\(',
+            r'subprocess\.run\s*\(.*shell\s*=\s*True',
+        ],
+    },
+    "ssrf": {
+        "severity": "high",
+        "category": "A10:2021 - Server-Side Request Forgery",
+        "patterns": [
+            r'requests\.get\s*\(',
+        ],
+    },
+    "xss": {
+        "severity": "high",
+        "category": "A03:2021 - Injection",
+        "patterns": [r'innerHTML'],
+    },
+    "insecure_deserialization": {
+        "severity": "critical",
+        "category": "A08:2021 - Software and Data Integrity Failures",
+        "patterns": [r'pickle\.loads\s*\(', r'pickle\.load\s*\('],
+    },
+    "weak_crypto_md5": {
+        "severity": "medium",
+        "category": "A02:2021 - Cryptographic Failures",
+        "patterns": [r'hashlib\.md5\s*\(', r'MD5'],
+    },
+}
+
 
 # -------------------------------------------------------------------
 # 1. Seed RAG
