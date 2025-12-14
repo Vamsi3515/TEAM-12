@@ -1,0 +1,38 @@
+[
+  {
+    "test_case_name": "frontend_web_development",
+    "description": "Learning flow for frontend web development (beginner)",
+    "topic": "Frontend Web Development",
+    "experience_level": "beginner",
+    "weekly_hours": "5-10",
+    "expected_phases_min": 4,
+    "expected_phases_max": 6,
+    "expected_projects_min": 4,
+    "expected_youtube_min": 3,
+    "max_duration_ms": 60000
+  },
+  {
+    "test_case_name": "data_science_ml",
+    "description": "Learning flow for Data Science & ML (intermediate)",
+    "topic": "Data Science and Machine Learning",
+    "experience_level": "intermediate",
+    "weekly_hours": "5-10",
+    "expected_phases_min": 4,
+    "expected_phases_max": 6,
+    "expected_projects_min": 4,
+    "expected_youtube_min": 3,
+    "max_duration_ms": 90000
+  },
+  {
+    "test_case_name": "devops_ci_cd",
+    "description": "Learning flow for DevOps / CI-CD (advanced)",
+    "topic": "DevOps and CI/CD",
+    "experience_level": "advanced",
+    "weekly_hours": "10-20",
+    "expected_phases_min": 4,
+    "expected_phases_max": 6,
+    "expected_projects_min": 4,
+    "expected_youtube_min": 3,
+    "max_duration_ms": 90000
+  }
+]
