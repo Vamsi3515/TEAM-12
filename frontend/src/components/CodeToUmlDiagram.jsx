@@ -308,7 +308,7 @@ class OrderItem:
               }`}
             >
               <GitBranch className="w-4 h-4" />
-              Repository URL
+              File URL
             </button>
           </div>
 
@@ -331,7 +331,7 @@ class OrderItem:
           {inputType === 'repository' && (
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                GitHub Repository URL
+                GitHub File URL
               </label>
               <input
                 type="url"
@@ -341,7 +341,7 @@ class OrderItem:
                 className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
               />
               <p className="mt-2 text-sm text-slate-500">
-                Enter a public GitHub repository URL to analyze its structure
+                Enter a public GitHub File URL to analyze its structure
               </p>
             </div>
           )}
@@ -550,7 +550,7 @@ class OrderItem:
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-2">Ready to Generate Diagrams</h3>
             <p className="text-slate-600 mb-6">
-              Enter your code or repository URL above to generate UML diagrams
+              Enter your code or GitHub File URL above to generate UML diagrams
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-slate-500">
               <div className="flex items-center gap-2">
