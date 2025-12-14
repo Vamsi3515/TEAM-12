@@ -10,10 +10,10 @@ This is a SUPPORTIVE, ETHICAL decision-support system - NOT a fraud detector.
 import json
 import re
 from typing import List, Dict, Any, Tuple, Optional
-from app.core.llm_client import call_chat
-from app.core.embeddings import embed
-from app.core.vectorstore import get_or_create_collection
-from app.core.authenticity_rag_data import authenticity_knowledge
+from app.core.Utils.llm_client import call_chat
+from app.core.RAGANDEMBEDDINGS.embeddings import embed
+from app.core.RAGANDEMBEDDINGS.vectorstore import get_or_create_collection
+from app.core.RAGANDEMBEDDINGS.authenticity_rag_data import authenticity_knowledge
 from app.models.authenticity import (
     AuthenticityAnalysisInput,
     AuthenticityAnalysisOutput,
@@ -330,13 +330,16 @@ def _extract_evidences_from_resume(resume: ResumeData) -> List[EvidenceItem]:
     if not raw:
         return evidences
 
-    # Simple URL regex (greedy but bounded by whitespace)
-    url_pattern = re.compile(r"(https?://[^\s]+|www\.[^\s]+)", re.IGNORECASE)
+    # Enhanced URL regex: matches http://, https://, www., and bare domains (github.com, linkedin.com, etc.)
+    url_pattern = re.compile(
+        r"(https?://[^\s]+|www\.[^\s]+|(?:github|linkedin|leetcode|kaggle|codeforces|hackerrank|medium|dev\.to|hashnode)\.com/[^\s]+)",
+        re.IGNORECASE
+    )
     seen: set[str] = set()
 
     def _norm(url: str) -> str:
         u = url.strip().rstrip(').,;')
-        if u.startswith("www."):
+        if u.startswith("www.") or (not u.startswith("http://") and not u.startswith("https://")):
             u = "https://" + u
         return u
 
@@ -415,6 +418,40 @@ async def analyze_authenticity(
 
     all_evidences = _dedup_evidences(provided_evidences + auto_evidences)
 
+    # Auto-fetch GitHub profile if URL provided but no GitHubEvidence
+    github_evidence = input_data.github
+    if not github_evidence:
+        # Look for GitHub URLs in evidences
+        github_urls = [ev.url for ev in all_evidences if ev.type == "github_profile" and ev.url]
+        if github_urls:
+            github_url = github_urls[0]  # Use first GitHub URL found
+            print(f"[Authenticity Agent] Auto-fetching GitHub profile from: {github_url}")
+            try:
+                # Extract username from URL
+                from app.core.github_agent import fetch_github_profile
+                # Parse username: github.com/username or github.com/username/repo
+                parts = github_url.replace("https://", "").replace("http://", "").split("/")
+                username = None
+                for i, part in enumerate(parts):
+                    if part == "github.com" and i + 1 < len(parts):
+                        username = parts[i + 1]
+                        break
+                
+                if username:
+                    profile_data = await fetch_github_profile(username)
+                    # Convert to GitHubEvidence model
+                    from app.models.authenticity import GitHubEvidence
+                    github_evidence = GitHubEvidence(**profile_data)
+                    print(f"[Authenticity Agent] Successfully fetched GitHub profile for {username}")
+                    print(f"  - Languages: {github_evidence.languages[:3]}...")
+                    print(f"  - Repos: {github_evidence.repo_count}")
+                    print(f"  - Commit frequency: {github_evidence.commit_frequency}")
+                else:
+                    print(f"[Authenticity Agent] Could not extract username from URL: {github_url}")
+            except Exception as e:
+                print(f"[Authenticity Agent] Failed to fetch GitHub profile: {e}")
+                # Continue without GitHub data - don't fail the whole analysis
+
     # Prepare lightweight RAG context (best-effort; non-fatal on failure)
     rag_snippets: List[Dict[str, str]] = []
     try:
@@ -461,7 +498,7 @@ async def analyze_authenticity(
     system_prompt = _create_authenticity_system_prompt()
     analysis_prompt = _create_authenticity_analysis_prompt(
         resume=input_data.resume,
-        github=input_data.github,
+        github=github_evidence,  # Use auto-fetched or provided GitHub data
         leetcode=input_data.leetcode,
         additional_context=combined_additional_context,
     )
@@ -485,7 +522,7 @@ async def analyze_authenticity(
         extracted_claims = _extract_claims(
             resume=input_data.resume,
             evidences=all_evidences,
-            github=input_data.github,
+            github=github_evidence,  # Use auto-fetched data
             leetcode=input_data.leetcode,
         )
 
@@ -495,23 +532,7 @@ async def analyze_authenticity(
             evidences=all_evidences,
         )
 
-        # Apply deterministic overrides when critical conditions are met
-        try:
-            override_score = _deterministic_score_override(
-                resume=input_data.resume,
-                github=input_data.github,
-                leetcode=input_data.leetcode,
-            )
-            if override_score is not None:
-                print(f"[Authenticity Agent] Applying deterministic override score: {override_score}")
-                analysis_result["authenticity_score"] = override_score
-                # Ensure risk indicators include note about the override
-                ri = analysis_result.get("risk_indicators") or []
-                if isinstance(ri, list):
-                    ri.append("deterministic_override_applied")
-                analysis_result["risk_indicators"] = ri
-        except Exception as _e:
-            print(f"[Authenticity Agent] Override check failed: {_e}")
+        # Deterministic overrides removed - LLM handles scoring via detailed prompt formula
 
         output = AuthenticityExtendedOutput(
             confidence_level=analysis_result.get("confidence_level", "Medium"),

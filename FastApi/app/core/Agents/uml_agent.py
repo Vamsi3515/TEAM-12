@@ -3,10 +3,10 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field, ValidationError
 
-from app.core.llm_client import _call_gemini, _call_groq
-from app.core.vectorstore import get_or_create_collection
-from app.core.embeddings import embed
-from app.core.uml_rag_data import uml_knowledge
+from app.core.Utils.llm_client import _call_gemini, _call_groq
+from app.core.RAGANDEMBEDDINGS.vectorstore import get_or_create_collection
+from app.core.RAGANDEMBEDDINGS.embeddings import embed
+from app.core.RAGANDEMBEDDINGS.uml_rag_data import uml_knowledge
 
 # --------- Limits & Defaults ---------
 MAX_DESC_LEN = 2000

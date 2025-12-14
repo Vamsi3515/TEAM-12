@@ -11,16 +11,16 @@ from pathlib import Path
 from typing import Dict, List, Any
 import pytest
 
-from app.core.ats_agent import analyze_ats
-from app.core.github_agent import analyze_github_repo
-from app.core.authenticity_agent import analyze_authenticity
+from app.core.Agents.ats_agent import analyze_ats
+from app.core.Agents.github_agent import analyze_github_repo
+from app.core.Agents.authenticity_agent import analyze_authenticity
 from app.models.authenticity import (
     ResumeData,
     GitHubEvidence,
     LeetCodeEvidence,
     AuthenticityExtendedInput
 )
-from app.core.eval_metrics import (
+from app.core.Utils.eval_metrics import (
     score_accuracy,
     keyword_overlap,
     substring_match,

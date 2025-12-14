@@ -1,8 +1,8 @@
 import json
-from app.core.llm_client import call_chat
-from app.core.vectorstore import get_or_create_collection
-from app.core.embeddings import embed
-from app.core.learning_rag_data import learning_knowledge
+from app.core.Utils.llm_client import call_chat
+from app.core.RAGANDEMBEDDINGS.vectorstore import get_or_create_collection
+from app.core.RAGANDEMBEDDINGS.embeddings import embed
+from app.core.RAGANDEMBEDDINGS.learning_rag_data import learning_knowledge
 
 def seed_learning_collection():
     """Seed learning knowledge into vector database for RAG."""

@@ -7,7 +7,7 @@ from pathlib import Path
 # Add parent to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.core.security_agent import analyze_code_security
+from app.core.Agents.security_agent import analyze_code_security
 
 
 # Test cases

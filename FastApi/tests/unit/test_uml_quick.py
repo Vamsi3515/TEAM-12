@@ -6,7 +6,7 @@ import asyncio
 import sys
 sys.path.insert(0, '.')
 
-from app.core.uml_agent import get_uml_agent
+from app.core.Agents.uml_agent import get_uml_agent
 
 
 async def test_uml_generation():

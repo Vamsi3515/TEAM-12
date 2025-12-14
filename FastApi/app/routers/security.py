@@ -3,8 +3,8 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from app.models.schemas import SecurityAuditInput, SecurityAuditOutput
-from app.core.security_agent import analyze_code_security
-from app.core.github_agent import fetch_github_repo
+from app.core.Agents.security_agent import analyze_code_security
+from app.core.Agents.github_agent import fetch_github_repo
 import base64
 
 router = APIRouter(prefix="/api/security", tags=["Security Auditor"])

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.models.schemas import LearningFlowInput, LearningFlowOutput
-from app.core.learning_agent import generate_learning_flow
+from app.core.Agents.learning_agent import generate_learning_flow
 
 router = APIRouter(prefix="/api/learning-flow", tags=["Learning Flow Generator"])
 

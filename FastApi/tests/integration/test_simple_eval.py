@@ -2,6 +2,17 @@
 
 import json
 from pathlib import Path
+from app.core.Utils.eval_metrics import (
+        score_accuracy,
+        keyword_overlap,
+        substring_match,
+        json_structure_validity,
+        response_time_check,
+        aggregate_metrics
+    )
+from app.core.Agents.ats_agent import analyze_ats
+from app.core.Utils.eval_reporter import EvalReporter
+from app.core.Agents.github_agent import analyze_github_repo
 
 
 def test_ats_fixtures_exist():
@@ -46,14 +57,7 @@ def test_github_fixtures_exist():
 
 def test_eval_metrics_importable():
     """Verify evaluation metrics module can be imported."""
-    from app.core.eval_metrics import (
-        score_accuracy,
-        keyword_overlap,
-        substring_match,
-        json_structure_validity,
-        response_time_check,
-        aggregate_metrics
-    )
+    
     
     # Test a simple metric calculation
     result = score_accuracy(75, 70, 80)
@@ -66,21 +70,18 @@ def test_eval_metrics_importable():
 
 def test_ats_agent_importable():
     """Verify ATS agent can be imported."""
-    from app.core.ats_agent import analyze_ats
     
     print("✅ ATS agent imported successfully")
 
 
 def test_github_agent_importable():
     """Verify GitHub agent can be imported."""
-    from app.core.github_agent import analyze_github_repo
     
     print("✅ GitHub agent imported successfully")
 
 
 def test_eval_reporter_importable():
     """Verify evaluation reporter can be imported."""
-    from app.core.eval_reporter import EvalReporter
     
     reporter = EvalReporter()
     assert reporter.results_dir.exists()

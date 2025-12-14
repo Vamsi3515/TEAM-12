@@ -16,12 +16,13 @@ from app.models.authenticity import (
     AuthenticityAnalysisInput,
     SkillAlignment,
 )
-from app.core.authenticity_agent import (
+from app.core.Agents.authenticity_agent import (
     analyze_authenticity,
     _parse_json_response,
     _calculate_confidence_metrics,
 )
-
+from app.core.Agents.authenticity_agent import _create_authenticity_system_prompt
+from app.models.authenticity import LeetCodeEvidence
 
 class TestAuthenticityAgent:
     """Test suite for authenticity analysis agent."""
@@ -234,7 +235,6 @@ class TestAuthenticityAgent:
         
         # In production, verify output doesn't contain forbidden terms
         # For now, test that the system prompt includes safeguards
-        from app.core.authenticity_agent import _create_authenticity_system_prompt
         system_prompt = _create_authenticity_system_prompt()
         
         # Should mention these are NOT appropriate

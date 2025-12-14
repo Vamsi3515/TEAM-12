@@ -10,7 +10,7 @@ import pytest
 from pathlib import Path
 from typing import Dict, Any
 
-from app.core.eval_reporter import EvalReporter
+from app.core.Utils.eval_reporter import EvalReporter
 
 
 # Configuration

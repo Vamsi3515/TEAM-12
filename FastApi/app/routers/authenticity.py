@@ -6,7 +6,7 @@ from app.models.authenticity import (
     AuthenticityExtendedInput,
     AuthenticityExtendedOutput,
 )
-from app.core.authenticity_agent import analyze_authenticity
+from app.core.Agents.authenticity_agent import analyze_authenticity
 
 router = APIRouter(tags=["Authenticity & Skill Consistency"])
 

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.models.ats import ATSAnalyzeInput, ATSAnalyzeOutput
-from app.core.ats_agent import analyze_ats as analyze_ats_core
+from app.core.Agents.ats_agent import analyze_ats as analyze_ats_core
 
 router = APIRouter(tags=["ATS Analyzer"])
 

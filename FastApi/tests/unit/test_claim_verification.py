@@ -1,6 +1,6 @@
 import pytest
 from app.models.authenticity import ResumeData, EvidenceItem, AuthenticityExtendedInput
-from app.core.authenticity_agent import analyze_authenticity
+from app.core.Agents.authenticity_agent import analyze_authenticity
 
 @pytest.mark.asyncio
 async def test_claim_extraction_and_verification_basic():

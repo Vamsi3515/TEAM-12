@@ -18,7 +18,7 @@ from typing import Optional
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import pytest
-from app.core.eval_reporter import EvalReporter
+from app.core.Utils.eval_reporter import EvalReporter
 
 
 class EvalRunner:

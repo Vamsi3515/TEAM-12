@@ -1,7 +1,7 @@
 """Quick test for Learning Flow Generator"""
 import asyncio
 import json
-from app.core.learning_agent import generate_learning_flow
+from app.core.Agents.learning_agent import generate_learning_flow
 
 async def test_learning_flow():
     """Test the learning flow generator"""

@@ -6,10 +6,10 @@ import smtplib
 from email.message import EmailMessage
 from typing import List, Tuple, Optional
 
-from app.core.embeddings import embed
-from app.core.vectorstore import get_or_create_collection
-from app.core.ats_data import ats_data
-from app.core.llm_client import _call_gemini, _call_huggingface, _call_groq
+from app.core.RAGANDEMBEDDINGS.embeddings import embed
+from app.core.RAGANDEMBEDDINGS.vectorstore import get_or_create_collection
+from app.core.RAGANDEMBEDDINGS.ats_data import ats_data
+from app.core.Utils.llm_client import _call_gemini, _call_huggingface, _call_groq
 from app.models.ats import ATSAnalyzeOutput
 
 

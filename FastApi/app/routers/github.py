@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from app.models.schemas import GitHubAnalyzeInput, GitHubAnalyzeOutput
-from app.core.github_agent import analyze_github_repo
+from app.core.Agents.github_agent import analyze_github_repo
 
 router = APIRouter(prefix="", tags=["GitHub Analyzer"])  # Empty prefix, full path in route
 

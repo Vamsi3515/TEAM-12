@@ -3,10 +3,10 @@ import os
 import httpx
 from fastapi import HTTPException
 from typing import Any, Dict, List
-from app.core.llm_client import call_chat, _call_gemini, _call_groq
-from app.core.vectorstore import get_or_create_collection
-from app.core.embeddings import embed
-from app.core.github_rag_data import github_knowledge
+from app.core.Utils.llm_client import call_chat, _call_gemini, _call_groq
+from app.core.RAGANDEMBEDDINGS.vectorstore import get_or_create_collection
+from app.core.RAGANDEMBEDDINGS.embeddings import embed
+from app.core.RAGANDEMBEDDINGS.github_rag_data import github_knowledge
 
 GITHUB_API = "https://api.github.com"
 
@@ -117,6 +117,205 @@ async def fetch_github_repo(repo_url: str):
         "readme": readme_text,
         "languages": languages,
         "commits": commits[:20]  # limit
+    }
+
+
+# -------------------- GitHub Profile fetch (for Authenticity Agent) --------------------
+async def fetch_github_profile(username: str) -> Dict[str, Any]:
+    """
+    Fetch aggregated GitHub profile data for authenticity analysis.
+    Returns data matching GitHubEvidence model format:
+    - languages: aggregated across all repos
+    - repo_count: total public repos
+    - commit_frequency: commits in last year
+    - readme_quality: average quality assessment
+    - contribution_pattern: based on commit distribution
+    - top_projects: sorted by stars
+    """
+    if not username or not username.strip():
+        raise HTTPException(status_code=400, detail="Provide a GitHub username")
+    
+    username = username.strip().lstrip("@")
+    github_token = os.getenv("GITHUB_TOKEN") or os.getenv("GITHUB_PAT")
+    base_headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "fastapi/1.0",
+    }
+    if github_token:
+        base_headers["Authorization"] = f"Bearer {github_token}"
+    
+    async with httpx.AsyncClient(timeout=30, headers=base_headers) as client:
+        # 1. Get user profile
+        try:
+            user_resp = await client.get(f"{GITHUB_API}/users/{username}")
+            user_resp.raise_for_status()
+            user_data = user_resp.json()
+        except httpx.HTTPStatusError as exc:
+            status = exc.response.status_code if exc.response else 500
+            if status == 403:
+                detail = "GitHub API returned 403 (rate limit). Set GITHUB_TOKEN/GITHUB_PAT for authenticated requests."
+            elif status == 404:
+                detail = f"GitHub user '{username}' not found"
+            else:
+                detail = f"GitHub API returned {status} for user {username}"
+            raise HTTPException(status_code=status, detail=detail)
+        except httpx.RequestError as exc:
+            raise HTTPException(status_code=502, detail=f"GitHub API request failed: {exc}")
+        
+        repo_count = user_data.get("public_repos", 0)
+        
+        # 2. Get user's repos (limited to first 100 for performance)
+        repos = []
+        try:
+            repos_resp = await client.get(
+                f"{GITHUB_API}/users/{username}/repos",
+                params={"sort": "updated", "per_page": 100}
+            )
+            if repos_resp.is_success:
+                repos = repos_resp.json()
+        except Exception:
+            repos = []
+        
+        # 3. Aggregate languages across all repos
+        language_counts = {}
+        for repo in repos:
+            if repo.get("fork"):  # Skip forks
+                continue
+            try:
+                lang_resp = await client.get(f"{GITHUB_API}/repos/{username}/{repo['name']}/languages")
+                if lang_resp.is_success:
+                    langs = lang_resp.json()
+                    for lang, bytes_count in langs.items():
+                        language_counts[lang] = language_counts.get(lang, 0) + bytes_count
+            except Exception:
+                continue
+        
+        # Sort languages by usage
+        sorted_langs = sorted(language_counts.items(), key=lambda x: x[1], reverse=True)
+        languages = [lang for lang, _ in sorted_langs[:10]]  # Top 10 languages
+        
+        # 4. Estimate commit frequency (from user events API)
+        commit_count_last_year = 0
+        try:
+            events_resp = await client.get(
+                f"{GITHUB_API}/users/{username}/events/public",
+                params={"per_page": 100}
+            )
+            if events_resp.is_success:
+                events = events_resp.json()
+                # Count PushEvents in last year
+                from datetime import datetime, timedelta
+                one_year_ago = datetime.now() - timedelta(days=365)
+                for event in events:
+                    if event.get("type") == "PushEvent":
+                        created_at = event.get("created_at", "")
+                        try:
+                            event_date = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
+                            if event_date > one_year_ago:
+                                # Each PushEvent can contain multiple commits
+                                commits = event.get("payload", {}).get("commits", [])
+                                commit_count_last_year += len(commits) if commits else 1
+                        except:
+                            continue
+        except Exception:
+            pass
+        
+        # Categorize commit frequency
+        if commit_count_last_year >= 500:
+            commit_frequency = f"Very Active - {commit_count_last_year}+ commits in last year"
+        elif commit_count_last_year >= 200:
+            commit_frequency = f"Active - {commit_count_last_year} commits in last year"
+        elif commit_count_last_year >= 100:
+            commit_frequency = f"Moderate - {commit_count_last_year} commits in last year"
+        elif commit_count_last_year > 0:
+            commit_frequency = f"Low - {commit_count_last_year} commits in last year"
+        else:
+            commit_frequency = "None"
+        
+        # 5. Assess README quality (sample top repos)
+        readme_scores = []
+        for repo in repos[:10]:  # Check top 10 repos
+            if repo.get("fork"):
+                continue
+            try:
+                readme_resp = await client.get(
+                    f"{GITHUB_API}/repos/{username}/{repo['name']}/readme"
+                )
+                if readme_resp.is_success:
+                    readme_data = readme_resp.json()
+                    content = readme_data.get("content", "")
+                    import base64
+                    readme_text = base64.b64decode(content).decode("utf-8", errors="ignore")
+                    
+                    # Simple quality heuristic
+                    length = len(readme_text)
+                    if length > 2000:
+                        readme_scores.append(4)  # Excellent
+                    elif length > 1000:
+                        readme_scores.append(3)  # Good
+                    elif length > 300:
+                        readme_scores.append(2)  # Fair
+                    else:
+                        readme_scores.append(1)  # Poor
+            except Exception:
+                continue
+        
+        # Average README quality
+        if readme_scores:
+            avg_score = sum(readme_scores) / len(readme_scores)
+            if avg_score >= 3.5:
+                readme_quality = "Excellent - detailed documentation"
+            elif avg_score >= 2.5:
+                readme_quality = "Good - basic documentation"
+            elif avg_score >= 1.5:
+                readme_quality = "Fair - minimal documentation"
+            else:
+                readme_quality = "Poor - minimal documentation"
+        else:
+            readme_quality = "N/A"
+        
+        # 6. Contribution pattern (based on commit distribution)
+        if commit_count_last_year >= 250:
+            contribution_pattern = "Consistent - daily commits"
+        elif commit_count_last_year >= 100:
+            contribution_pattern = "Periodic - weekly commits"
+        elif commit_count_last_year >= 50:
+            contribution_pattern = "Growing - increasing activity"
+        elif commit_count_last_year > 0:
+            contribution_pattern = "Sporadic - monthly commits"
+        else:
+            contribution_pattern = "No public activity"
+        
+        # 7. Top projects (sorted by stars)
+        top_projects = []
+        sorted_repos = sorted(
+            [r for r in repos if not r.get("fork")],
+            key=lambda x: x.get("stargazers_count", 0),
+            reverse=True
+        )
+        for repo in sorted_repos[:5]:  # Top 5 projects
+            top_projects.append({
+                "name": repo.get("name", ""),
+                "language": repo.get("language", "Unknown"),
+                "stars": repo.get("stargazers_count", 0),
+                "description": repo.get("description", "") or "No description"
+            })
+    
+    return {
+        "username": username,
+        "languages": languages,
+        "repo_count": repo_count,
+        "commit_frequency": commit_frequency,
+        "readme_quality": readme_quality,
+        "contribution_pattern": contribution_pattern,
+        "top_projects": top_projects,
+        "raw_profile_data": {
+            "name": user_data.get("name"),
+            "bio": user_data.get("bio"),
+            "followers": user_data.get("followers"),
+            "following": user_data.get("following"),
+            "created_at": user_data.get("created_at"),
+        }
     }
 
 

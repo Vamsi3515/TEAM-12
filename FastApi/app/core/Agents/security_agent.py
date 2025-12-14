@@ -1,10 +1,10 @@
 import json
 import re
 from typing import Any, Dict, List
-from app.core.embeddings import embed
-from app.core.vectorstore import get_or_create_collection
-from app.core.llm_client import call_chat
-from app.core.security_rag_data import security_knowledge
+from app.core.RAGANDEMBEDDINGS.embeddings import embed
+from app.core.RAGANDEMBEDDINGS.vectorstore import get_or_create_collection
+from app.core.Utils.llm_client import call_chat
+from app.core.RAGANDEMBEDDINGS.security_rag_data import security_knowledge
 import time
 
 SECURITY_LOG: List[Dict[str, Any]] = []

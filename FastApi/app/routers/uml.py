@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.models.schemas import UMLRequest, UMLResponse, CodeDiagramInput, CodeDiagramUIOutput
-from app.core.uml_agent import generate_uml
+from app.core.Agents.uml_agent import generate_uml
 
 router = APIRouter(prefix="", tags=["UML Generator"])
 
