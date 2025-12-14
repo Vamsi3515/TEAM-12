@@ -475,14 +475,14 @@ const GitHubAnalyzer = () => {
               >
                 Analyze Another Repository
               </Button>
-              <Button
+              {/* <Button
                 variant="primary"
                 size="lg"
                 icon={TrendingUp}
                 className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
               >
                 Export Report
-              </Button>
+              </Button> */}
             </div>
           </div>
         )}

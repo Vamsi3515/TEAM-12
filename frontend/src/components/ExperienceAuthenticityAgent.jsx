@@ -348,7 +348,7 @@ const ExperienceAuthenticityAgent = () => {
               <div className="mb-6">
                 <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
                   <Github className="w-4 h-4" />
-                  GitHub Profile URL <span className="text-slate-400 text-xs">(Optional)</span>
+                  GitHub Profile URL
                 </label>
                 <input
                   type="url"

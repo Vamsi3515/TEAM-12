@@ -48,7 +48,7 @@ Below is the **latest measured snapshot** from the generated evaluation artifact
 **GitHub Analyzer (status)**
 - Latest `FastApi/eval_results/eval_github_2025-12-14T04-56-46-555574.json` indicates **no tests executed**.
 - To generate a measurable GitHub pass rate, run:
-  - `pytest tests/test_evals.py::TestGitHubAgent -v -s`
+  - `pytest tests/integration/test_evals.py::TestGitHubAgent -v -s`
   - ensure `GITHUB_TOKEN` / `GITHUB_PAT` is set to avoid rate-limit skips.
 
 ---
@@ -57,7 +57,7 @@ Below is the **latest measured snapshot** from the generated evaluation artifact
 
 ### 1.1) Which metrics apply to which agent (how we score)
 
-This project centralizes reusable evaluation functions in `FastApi/app/core/eval_metrics.py`. The pytest suite then applies those functions per agent in `FastApi/tests/test_evals.py`.
+This project centralizes reusable evaluation functions in `FastApi/app/core/Utils/eval_metrics.py`. The pytest suite then applies those functions per agent in `FastApi/tests/integration/test_evals.py`.
 
 **ATS Agent**
 - `score_accuracy(...)`: verifies `ats_score` falls within each fixture’s `expected_score_range`.
@@ -125,15 +125,15 @@ pip install -r requirements.txt
 ### B) Run all evaluation tests
 ```bash
 cd FastApi
-pytest tests/test_evals.py -v -s
+pytest tests/integration/test_evals.py -v -s
 ```
 
 ### C) Run per-agent suites
 ```bash
 cd FastApi
-pytest tests/test_evals.py::TestATSAgent -v -s
-pytest tests/test_evals.py::TestSecurityAgent -v -s
-pytest tests/test_evals.py::TestLearningFlowGenerator -v -s
+pytest tests/integration/test_evals.py::TestATSAgent -v -s
+pytest tests/integration/test_evals.py::TestSecurityAgent -v -s
+pytest tests/integration/test_evals.py::TestLearningFlowGenerator -v -s
 ```
 
 ### D) Run eval runner (produces JSON + HTML reports)
