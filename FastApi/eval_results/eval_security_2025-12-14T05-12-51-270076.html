@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation Report - security</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px 8px 0 0;
+        }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .header p { opacity: 0.9; }
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #F44336;
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .content { padding: 30px; }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 8px;
+        }
+        .section h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+        }
+        .test-case {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border-left: 4px solid #ddd;
+        }
+        .test-case.passed { border-left-color: #4CAF50; }
+        .test-case.failed { border-left-color: #F44336; }
+        .test-case.skipped { border-left-color: #FF9800; }
+        .test-case h3 { font-size: 1.1em; margin-bottom: 5px; }
+        .test-case p { color: #666; font-size: 0.9em; }
+        .metrics {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .metric {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+        .failure {
+            background: #ffebee;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border-left: 4px solid #F44336;
+        }
+        .failure h3 { color: #c62828; margin-bottom: 8px; }
+        .failure .error { 
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>❌ Evaluation Report</h1>
+            <p><strong>Agent:</strong> security</p>
+            <p><strong>Timestamp:</strong> 2025-12-14T05:12:51.270076</p>
+            <div class="status-badge">
+                Pass Rate: 6.7%
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>📊 Summary</h2>
+                <p>Ran 15 test(s): 1 passed, 14 failed. Pass rate: 6.7%. ❌ Poor performance - requires attention.</p>
+            </div>
+            
+            <div class="section">
+                <h2>📈 Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Tests</h3>
+                        <div class="value">15</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Passed</h3>
+                        <div class="value" style="color: #4CAF50;">1</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Failed</h3>
+                        <div class="value" style="color: #F44336;">14</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Avg Score Accuracy</h3>
+                        <div class="value">0.0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Avg Duration</h3>
+                        <div class="value">6516ms</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🧪 Test Cases</h2>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 2559ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 927ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 868ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 926ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 763ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 732ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 8038ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 12639ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 10168ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 9962ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 10030ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 10130ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 10008ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 10168ms</p>
+<div class="metrics"></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <p><strong>Duration:</strong> 9816ms</p>
+<div class="metrics"></div>
+                </div>
+
+            </div>
+
+            <div class="section">
+                <h2>❌ Failures</h2>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'sql_injection' not found in ['sql injection']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x0000018927F101E0>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'command_injection' not found in ['command injection']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x00000189286A57D0>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'hardcoded_secrets' not found in ['hardcoded secret', 'missing authentication']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x00000189286A6740>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'path_traversal' not found in ['path traversal vulnerability', 'missing input validation']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x00000189286A6CF0>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'insecure_deserialization' not found in ['unsafe deserialization']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x00000189286A6DC0>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'weak_crypto' not found in ['weak cryptography']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x0000018928706C20>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'debug_enabled' not found in ['debug mode enabled in production', 'missing security headers']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x00000189287079F0>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'xss_vulnerability' not found in []
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x0000018928705F20>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'ssrf_vulnerability' not found in ['xss', 'eval_code_execution', 'hardcoded_secrets']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x00000189286A7B90>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'idor_vulnerability' not found in ['sql injection vulnerability']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x00000189286A6740>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'command_injection' not found in ['hardcoded secret', 'command injection', 'unsafe deserialization']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x00000189286A5150>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'sensitive_data_exposure' not found in ['hardcoded api token', 'debug mode enabled in production']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x0000018928715700>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'csrf_vulnerability' not found in ['sql injection', 'missing authentication']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x0000018928716740>)</div>
+                </div>
+
+                <div class="failure">
+                    <h3>unknown</h3>
+                    <p></p>
+                    <div class="error">tests\test_evals.py:332: in test_security_analysis
+    assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+E   AssertionError: Expected vulnerability 'command_injection' not found in ['arbitrary code execution (eval)']
+E   assert False
+E    +  where False = any(<generator object TestSecurityAgent.test_security_analysis.<locals>.<genexpr> at 0x00000189287169B0>)</div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

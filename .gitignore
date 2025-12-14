@@ -14,5 +14,4 @@ FastApi/data/
 
 # Evaluation results (except baselines)
 FastApi/eval_results/*.json
-FastApi/eval_results/*.html
 !FastApi/eval_results/baselines/

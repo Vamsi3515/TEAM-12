@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation Report - ats</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px 8px 0 0;
+        }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .header p { opacity: 0.9; }
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .content { padding: 30px; }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 8px;
+        }
+        .section h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+        }
+        .test-case {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border-left: 4px solid #ddd;
+        }
+        .test-case.passed { border-left-color: #4CAF50; }
+        .test-case.failed { border-left-color: #F44336; }
+        .test-case.skipped { border-left-color: #FF9800; }
+        .test-case h3 { font-size: 1.1em; margin-bottom: 5px; }
+        .test-case p { color: #666; font-size: 0.9em; }
+        .metrics {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .metric {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+        .failure {
+            background: #ffebee;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border-left: 4px solid #F44336;
+        }
+        .failure h3 { color: #c62828; margin-bottom: 8px; }
+        .failure .error { 
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✅ Evaluation Report</h1>
+            <p><strong>Agent:</strong> ats</p>
+            <p><strong>Timestamp:</strong> 2025-12-14T04:45:29.964448</p>
+            <div class="status-badge">
+                Pass Rate: 93.8%
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>📊 Summary</h2>
+                <p>Ran 16 test(s): 15 passed, 1 failed. Pass rate: 93.8%. ✅ Excellent performance!</p>
+            </div>
+            
+            <div class="section">
+                <h2>📈 Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Tests</h3>
+                        <div class="value">16</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Passed</h3>
+                        <div class="value" style="color: #4CAF50;">15</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Failed</h3>
+                        <div class="value" style="color: #F44336;">1</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Avg Score Accuracy</h3>
+                        <div class="value">99.4%</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Avg Duration</h3>
+                        <div class="value">5850ms</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🧪 Test Cases</h2>
+
+                <div class="test-case passed">
+                    <h3>excellent_match_senior_engineer</h3>
+                    <p>Senior software engineer with perfect match to job requirements</p>
+                    <p><strong>Duration:</strong> 1485ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>strengths:</strong> 71.4%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>junior_developer_missing_experience</h3>
+                    <p>Junior developer applying for senior role - experience mismatch</p>
+                    <p><strong>Duration:</strong> 947ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>rejection_reasons:</strong> 33.3%</div><div class="metric"><strong>strengths:</strong> 100.0%</div><div class="metric"><strong>issues:</strong> 66.7%</div><div class="metric"><strong>suggestions:</strong> 25.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>career_changer_transferable_skills</h3>
+                    <p>Career changer with transferable skills but lacking direct experience</p>
+                    <p><strong>Duration:</strong> 972ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>rejection_reasons:</strong> 0.0%</div><div class="metric"><strong>strengths:</strong> 25.0%</div><div class="metric"><strong>issues:</strong> 0.0%</div><div class="metric"><strong>suggestions:</strong> 0.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>data_scientist_for_backend_role</h3>
+                    <p>Data scientist applying for backend engineering role - skill mismatch</p>
+                    <p><strong>Duration:</strong> 1022ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>rejection_reasons:</strong> 100.0%</div><div class="metric"><strong>strengths:</strong> 66.7%</div><div class="metric"><strong>issues:</strong> 33.3%</div><div class="metric"><strong>suggestions:</strong> 0.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>overqualified_principal_engineer</h3>
+                    <p>Principal engineer applying for mid-level role - overqualified</p>
+                    <p><strong>Duration:</strong> 1013ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>rejection_reasons:</strong> 33.3%</div><div class="metric"><strong>strengths:</strong> 50.0%</div><div class="metric"><strong>issues:</strong> 0.0%</div><div class="metric"><strong>suggestions:</strong> 0.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>missing_keywords_good_experience</h3>
+                    <p>Good experience but resume lacks ATS keywords</p>
+                    <p><strong>Duration:</strong> 1029ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>rejection_reasons:</strong> 0.0%</div><div class="metric"><strong>strengths:</strong> 0.0%</div><div class="metric"><strong>issues:</strong> 0.0%</div><div class="metric"><strong>suggestions:</strong> 25.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>strong_education_weak_experience</h3>
+                    <p>Recent PhD graduate with limited industry experience</p>
+                    <p><strong>Duration:</strong> 4025ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>rejection_reasons:</strong> 0.0%</div><div class="metric"><strong>strengths:</strong> 20.0%</div><div class="metric"><strong>issues:</strong> 0.0%</div><div class="metric"><strong>suggestions:</strong> 25.0%</div></div>
+                </div>
+
+                <div class="test-case failed">
+                    <h3>frontend_specialist_fullstack_role</h3>
+                    <p>Frontend specialist applying for full-stack role</p>
+                    <p><strong>Duration:</strong> 9104ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 90.0%</div><div class="metric"><strong>rejection_reasons:</strong> 0.0%</div><div class="metric"><strong>strengths:</strong> 75.0%</div><div class="metric"><strong>issues:</strong> 25.0%</div><div class="metric"><strong>suggestions:</strong> 0.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>perfect_keywords_limited_depth</h3>
+                    <p>Resume with all keywords but shallow experience</p>
+                    <p><strong>Duration:</strong> 10192ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>rejection_reasons:</strong> 0.0%</div><div class="metric"><strong>strengths:</strong> 0.0%</div><div class="metric"><strong>issues:</strong> 0.0%</div><div class="metric"><strong>suggestions:</strong> 25.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>freelancer_diverse_projects</h3>
+                    <p>Freelancer with diverse project experience</p>
+                    <p><strong>Duration:</strong> 9258ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>strengths:</strong> 66.7%</div><div class="metric"><strong>issues:</strong> 0.0%</div><div class="metric"><strong>suggestions:</strong> 0.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>bootcamp_graduate_entry_level</h3>
+                    <p>Recent bootcamp graduate applying for entry-level position</p>
+                    <p><strong>Duration:</strong> 9104ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>strengths:</strong> 42.9%</div><div class="metric"><strong>issues:</strong> 0.0%</div><div class="metric"><strong>suggestions:</strong> 0.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>devops_engineer_backend_role</h3>
+                    <p>DevOps engineer applying for backend development role</p>
+                    <p><strong>Duration:</strong> 10040ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>rejection_reasons:</strong> 0.0%</div><div class="metric"><strong>strengths:</strong> 50.0%</div><div class="metric"><strong>issues:</strong> 25.0%</div><div class="metric"><strong>suggestions:</strong> 0.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>strong_github_weak_resume</h3>
+                    <p>Strong open source contributions but poorly written resume</p>
+                    <p><strong>Duration:</strong> 7049ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>rejection_reasons:</strong> 0.0%</div><div class="metric"><strong>strengths:</strong> 33.3%</div><div class="metric"><strong>issues:</strong> 0.0%</div><div class="metric"><strong>suggestions:</strong> 20.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>international_candidate_strong_skills</h3>
+                    <p>International candidate with strong skills, work authorization needed</p>
+                    <p><strong>Duration:</strong> 10226ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>rejection_reasons:</strong> 50.0%</div><div class="metric"><strong>strengths:</strong> 83.3%</div><div class="metric"><strong>issues:</strong> 50.0%</div><div class="metric"><strong>suggestions:</strong> 0.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>gap_in_employment_good_skills</h3>
+                    <p>Candidate with employment gap but strong skills</p>
+                    <p><strong>Duration:</strong> 10043ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>rejection_reasons:</strong> 0.0%</div><div class="metric"><strong>strengths:</strong> 20.0%</div><div class="metric"><strong>issues:</strong> 0.0%</div><div class="metric"><strong>suggestions:</strong> 0.0%</div></div>
+                </div>
+
+                <div class="test-case passed">
+                    <h3>no_job_description_provided</h3>
+                    <p>Test case with no job description - should still analyze resume</p>
+                    <p><strong>Duration:</strong> 8094ms</p>
+<div class="metrics"><div class="metric"><strong>score_accuracy:</strong> 100.0%</div><div class="metric"><strong>strengths:</strong> 50.0%</div><div class="metric"><strong>suggestions:</strong> 0.0%</div></div>
+                </div>
+
+            </div>
+
+            <div class="section">
+                <h2>❌ Failures</h2>
+
+                <div class="failure">
+                    <h3>frontend_specialist_fullstack_role</h3>
+                    <p>Frontend specialist applying for full-stack role</p>
+                    <div class="error">tests\test_evals.py:187: in test_ats_analysis
+    assert score_metric["passed"], f"Score {result.ats_score} not in expected range {expected_range}"
+E   AssertionError: Score 45 not in expected range {'min': 55, 'max': 70}
+E   assert False</div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
