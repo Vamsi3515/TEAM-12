@@ -35,6 +35,7 @@ FIXTURES_DIR = Path(__file__).parent / "fixtures"
 ATS_FIXTURES = FIXTURES_DIR / "ats_test_cases.json"
 GITHUB_FIXTURES = FIXTURES_DIR / "github_test_cases.json"
 AUTHENTICITY_FIXTURES = FIXTURES_DIR / "authenticity_test_cases.json"
+LEARNING_FIXTURES = FIXTURES_DIR / "learning_flow_test_cases.json"
 RESPONSE_TIME_THRESHOLD_MS = 30000  # 30 seconds
 
 
@@ -195,7 +196,7 @@ class TestGitHubAgent:
     """Test suite for GitHub analysis agent."""
     
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("test_idx", range(2))  # Start with 2 test cases for quick validation
+    @pytest.mark.parametrize("test_idx", range(len(load_test_cases(GITHUB_FIXTURES))))  # Run all GitHub fixture cases
     async def test_github_analysis(self, test_idx):
         """Test GitHub analysis against expected outputs."""
         github_test_cases = load_test_cases(GITHUB_FIXTURES)
@@ -294,7 +295,110 @@ class TestGitHubAgent:
             raise
 
 
-# Authenticity Agent Tests
+# Security Agent Tests
+class TestSecurityAgent:
+    """Test suite for Security analyzer."""
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("test_idx", range(len(load_test_cases(Path(__file__).parent / "fixtures" / "security_test_cases.json"))))
+    async def test_security_analysis(self, test_idx):
+        security_cases = load_test_cases(Path(__file__).parent / "fixtures" / "security_test_cases.json")
+        if test_idx >= len(security_cases):
+            pytest.skip(f"Test case {test_idx} not found")
+
+        tc = security_cases[test_idx]
+        print(f"\n{'='*60}")
+        print(f"Testing Security Case: {tc['test_case_name']}")
+        print(f"Description: {tc['description']}")
+        print(f"{'='*60}")
+
+        start = time.time()
+        from app.core.security_agent import analyze_code_security
+
+        result = await analyze_code_security(tc["code"], language=tc.get("language", "python"))
+        duration_ms = (time.time() - start) * 1000
+
+        print(f"\n✓ Response Time: {duration_ms:.0f}ms")
+
+        # Basic structure
+        assert isinstance(result, dict), "Result must be a dict"
+        assert "vulnerabilities" in result and isinstance(result["vulnerabilities"], list)
+        assert "security_score" in result
+
+        # Check expected vulnerabilities are reported (if any)
+        expected = [e.lower() for e in tc.get("expected_vulnerabilities", [])]
+        found = [v.get("issue", "").lower() for v in result.get("vulnerabilities", [])]
+        for exp in expected:
+            assert any(exp in f for f in found), f"Expected vulnerability '{exp}' not found in {found}"
+
+        # Check score bounds if provided
+        if tc.get("expected_score_range"):
+            rng = tc["expected_score_range"]
+            sc = float(result.get("security_score", 0))
+            assert rng["min"] <= sc <= rng["max"], f"Security score {sc} not in expected range {rng}"
+
+        print(f"\n✅ Security Test '{tc['test_case_name']}' PASSED")
+
+
+# Learning Flow Generator Tests
+class TestLearningFlowGenerator:
+            """Test suite for the Learning Flow generator."""
+
+            @pytest.mark.asyncio
+            @pytest.mark.parametrize("test_idx", range(len(load_test_cases(LEARNING_FIXTURES))))
+            async def test_learning_flow(self, test_idx):
+                """Verify generated learning flows match required structure and contents."""
+                cases = load_test_cases(LEARNING_FIXTURES)
+                if test_idx >= len(cases):
+                    pytest.skip(f"Test case {test_idx} not found")
+
+                tc = cases[test_idx]
+                print(f"\n{'='*60}")
+                print(f"Testing Learning Flow: {tc['test_case_name']}")
+                print(f"Description: {tc['description']}")
+                print(f"{'='*60}")
+
+                import time
+                start = time.time()
+
+                from app.core.learning_agent import generate_learning_flow
+
+                result = await generate_learning_flow(
+                    topic=tc["topic"],
+                    experience_level=tc["experience_level"],
+                    weekly_hours=tc["weekly_hours"]
+                )
+
+                duration_ms = (time.time() - start) * 1000
+                print(f"\n✓ Response Time: {duration_ms:.0f}ms (threshold: {tc.get('max_duration_ms', RESPONSE_TIME_THRESHOLD_MS)}ms)")
+
+                # Basic structure checks
+                assert isinstance(result, dict), "Result must be a dict-like JSON"
+                assert "phases" in result and isinstance(result["phases"], list), "Missing phases array"
+                phases = result["phases"]
+                assert tc["expected_phases_min"] <= len(phases) <= tc["expected_phases_max"], f"Expected phases between {tc['expected_phases_min']}-{tc['expected_phases_max']}, got {len(phases)}"
+
+                # Each phase should have at least 5 keyTopics
+                for p in phases:
+                    assert "keyTopics" in p and isinstance(p["keyTopics"], list), "Phase must include keyTopics list"
+                    assert len(p["keyTopics"]) >= 5, "Each phase must include at least 5 keyTopics"
+
+                # Projects and youtubeChannels checks
+                assert "projects" in result and isinstance(result["projects"], list), "Missing projects array"
+                assert len(result["projects"]) >= tc["expected_projects_min"], f"Expected at least {tc['expected_projects_min']} projects"
+                assert "youtubeChannels" in result and isinstance(result["youtubeChannels"], list), "Missing youtubeChannels"
+                assert len(result["youtubeChannels"]) >= tc["expected_youtube_min"], f"Expected at least {tc['expected_youtube_min']} YouTube channels"
+
+                # Mermaid diagram must use graph TD and include newlines
+                assert "mermaidDiagram" in result and "graph TD" in result["mermaidDiagram"], "Missing or invalid mermaidDiagram"
+                assert "\n" in result["mermaidDiagram"], "mermaidDiagram must contain newlines"
+
+                # Timeline should mention weeks and weekly hours
+                assert "timeline" in result and str(tc["weekly_hours"]) in result["timeline"], "Timeline should include weekly hours"
+
+                print(f"\n✅ Learning Flow '{tc['test_case_name']}' PASSED")
+        
+        # Authenticity Agent Tests
 class TestAuthenticityAgent:
     """Test suite for Experience Authenticity agent."""
     

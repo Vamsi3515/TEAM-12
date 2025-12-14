@@ -278,6 +278,112 @@ class EvalRunner:
             return report
         
         return eval_results
+
+    def run_learning_evals(self, save_results: bool = True) -> dict:
+        """Run Learning Flow generator evaluations.
+
+        Args:
+            save_results: Whether to save results to disk
+
+        Returns:
+            Evaluation results dictionary
+        """
+        print("🚀 Running Learning Flow Evaluations...")
+        print("=" * 60)
+
+        # Run pytest for Learning Flow tests
+        test_file = Path(__file__).parent.parent / "tests" / "test_evals.py"
+        json_report_path = self.results_dir / f"pytest_report_learning_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+
+        pytest_args = [
+            str(test_file),
+            "-v",
+            "-k", "TestLearningFlowGenerator",
+            "--tb=short",
+            "-p", "no:warnings",
+            f"--json-report",
+            f"--json-report-file={json_report_path}",
+            "--json-report-indent=2"
+        ]
+
+        if self.verbose:
+            pytest_args.append("-s")
+
+        exit_code = pytest.main(pytest_args)
+
+        eval_results = {
+            "agent": "learning",
+            "timestamp": datetime.now().isoformat(),
+            "test_cases": [],
+            "exit_code": exit_code
+        }
+
+        if json_report_path.exists():
+            with open(json_report_path, 'r', encoding='utf-8') as f:
+                pytest_report = json.load(f)
+                eval_results = self._parse_pytest_report(pytest_report, "learning")
+
+        if save_results:
+            print("\n📊 Generating evaluation report...")
+            report = self.reporter.generate_report(eval_results, "learning", save=True)
+            print(f"✅ Report saved to: {report.get('report_path')}")
+            print(f"📄 HTML report: {report.get('html_report_path')}")
+            return report
+
+        return eval_results
+
+    def run_security_evals(self, save_results: bool = True) -> dict:
+        """Run Security analyzer evaluations.
+
+        Args:
+            save_results: Whether to save results to disk
+
+        Returns:
+            Evaluation results dictionary
+        """
+        print("🚀 Running Security Agent Evaluations...")
+        print("=" * 60)
+
+        # Run pytest for Security tests
+        test_file = Path(__file__).parent.parent / "tests" / "test_evals.py"
+        json_report_path = self.results_dir / f"pytest_report_security_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+
+        pytest_args = [
+            str(test_file),
+            "-v",
+            "-k", "TestSecurityAgent",
+            "--tb=short",
+            "-p", "no:warnings",
+            f"--json-report",
+            f"--json-report-file={json_report_path}",
+            "--json-report-indent=2"
+        ]
+
+        if self.verbose:
+            pytest_args.append("-s")
+
+        exit_code = pytest.main(pytest_args)
+
+        eval_results = {
+            "agent": "security",
+            "timestamp": datetime.now().isoformat(),
+            "test_cases": [],
+            "exit_code": exit_code
+        }
+
+        if json_report_path.exists():
+            with open(json_report_path, 'r', encoding='utf-8') as f:
+                pytest_report = json.load(f)
+                eval_results = self._parse_pytest_report(pytest_report, "security")
+
+        if save_results:
+            print("\n📊 Generating evaluation report...")
+            report = self.reporter.generate_report(eval_results, "security", save=True)
+            print(f"✅ Report saved to: {report.get('report_path')}")
+            print(f"📄 HTML report: {report.get('html_report_path')}")
+            return report
+
+        return eval_results
     
     def run_all_evals(self, save_results: bool = True) -> dict:
         """Run all agent evaluations.
@@ -421,7 +527,7 @@ Examples:
     
     parser.add_argument(
         "--agent",
-        choices=["ats", "github", "authenticity"],
+        choices=["ats", "github", "authenticity", "learning", "security"],
         help="Which agent to evaluate"
     )
     
@@ -506,6 +612,12 @@ Examples:
         
         elif args.agent == "authenticity":
             runner.run_authenticity_evals(save_results)
+            return 0
+        elif args.agent == "learning":
+            runner.run_learning_evals(save_results)
+            return 0
+        elif args.agent == "security":
+            runner.run_security_evals(save_results)
             return 0
         
         else:

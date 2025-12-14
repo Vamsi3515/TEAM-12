@@ -1,4 +1,5 @@
 import json
+from types import SimpleNamespace
 import os
 import httpx
 from fastapi import HTTPException
@@ -478,4 +479,17 @@ Return ONLY valid JSON, no markdown fences."""
         })
         parsed["metrics"] = metrics
 
-    return parsed
+    # Convert parsed dict into an object with attribute access for tests
+    try:
+        # Convert metrics entries to SimpleNamespace for attribute-style access
+        metrics_objs = []
+        for m in parsed.get("metrics", []):
+            metrics_objs.append(SimpleNamespace(**{k: v for k, v in m.items()}))
+
+        parsed_obj = SimpleNamespace(
+            **{k: v for k, v in parsed.items() if k not in ["metrics"]}
+        )
+        setattr(parsed_obj, "metrics", metrics_objs)
+        return parsed_obj
+    except Exception:
+        return parsed
