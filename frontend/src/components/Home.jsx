@@ -46,14 +46,14 @@ const Home = () => {
       gradient: 'from-indigo-500 to-purple-600',
       route: '/security-auditor'
     },
-    {
-      id: 'code-to-uml',
-      icon: Workflow,
-      title: 'Code to UML Diagrams',
-      description: 'Transform code into interactive UML diagrams with AI-powered analysis',
-      gradient: 'from-violet-500 to-fuchsia-600',
-      route: '/code-to-uml'
-    },
+    // {
+    //   id: 'code-to-uml',
+    //   icon: Workflow,
+    //   title: 'Code to UML Diagrams',
+    //   description: 'Transform code into interactive UML diagrams with AI-powered analysis',
+    //   gradient: 'from-violet-500 to-fuchsia-600',
+    //   route: '/code-to-uml'
+    // },
     {
       id: 'learning-flow',
       icon: BookOpen,

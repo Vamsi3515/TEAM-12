@@ -19,7 +19,7 @@ const App = () => {
         <Route path="/github-analyzer" element={<GitHubAnalyzer />} />
         <Route path="/security-auditor" element={<SecurityAuditor />} />
         <Route path="/experience-authenticity" element={<ExperienceAuthenticityAgent />} />
-        <Route path="/code-to-uml" element={<CodeToUmlDiagram />} />
+        {/* <Route path="/code-to-uml" element={<CodeToUmlDiagram />} /> */}
         <Route path="/learning-flow" element={<LearningFlowGenerator />} />
       </Routes>
     </div>
