@@ -3,6 +3,7 @@ from app.core.Utils.llm_client import call_chat
 from app.core.RAGANDEMBEDDINGS.vectorstore import get_or_create_collection
 from app.core.RAGANDEMBEDDINGS.embeddings import embed
 from app.core.RAGANDEMBEDDINGS.learning_rag_data import learning_knowledge
+from app.core.Utils.llm_client import _call_gemini
 
 def seed_learning_collection():
     """Seed learning knowledge into vector database for RAG."""
@@ -156,7 +157,6 @@ CRITICAL RULES:
 Generate the COMPLETE JSON now:"""
 
     # Use Gemini for complex JSON generation (better than HF/Groq for structured output)
-    from app.core.llm_client import _call_gemini
     raw_response = await _call_gemini(prompt, model="gemini-2.5-flash", max_tokens=4096, temperature=0.6)
     
     # Clean markdown fences
