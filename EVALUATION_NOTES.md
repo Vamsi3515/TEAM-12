@@ -31,19 +31,27 @@ Below is the **latest measured snapshot** from the generated evaluation artifact
 - Performance: avg **5747 ms**, median **7621 ms**, max **10055 ms**
 - Reports: `FastApi/eval_results/eval_ats_2025-12-14T04-50-00-043031.json` and `.html`
 
+![ATS Agent Evaluation Results](assets/eval-results-eval-ats.png)
+
 **Security Auditor (latest)**
 - Pass rate: **100%** (15/15)
 - Performance: avg **6435 ms**, median **9847 ms**, max **12088 ms**
 - Report: `FastApi/eval_results/eval_security_2025-12-14T05-51-19-982127.json` and `.html`
+
+![Security Auditor Evaluation Results](assets/eval-results-eval-security.png)
 
 **Learning Flow (latest)**
 - Pass rate: **100%** (3/3)
 - Performance: avg **19094 ms**, median **19152 ms**, max **19653 ms**
 - Report: `FastApi/eval_results/eval_learning_2025-12-14T05-09-08-084732.json` and `.html`
 
+![Learning Flow Evaluation Results](assets/eval-results-eval-learning.png)
+
 **Authenticity (latest pytest report)**
 - Pass rate: **100%** (6/6)
 - Report: `FastApi/eval_results/pytest_report_authenticity_20251214_043939.json`
+
+![Authenticity Agent Evaluation Results](assets/eval-results-eval-authenticity.png)
 
 **GitHub Analyzer (status)**
 - Latest `FastApi/eval_results/eval_github_2025-12-14T04-56-46-555574.json` indicates **no tests executed**.
